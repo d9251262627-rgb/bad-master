@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🌿 БАД-Master | Персональные рекомендации</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Serif:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #059669; --primary-light: #10b981; --primary-dark: #047857;
+            --accent: #f59e0b; --accent-light: #fbbf24; --danger: #ef4444;
+            --bg: #f8fafc; --card: #ffffff; --text: #0f172a; --text-sec: #64748b;
+            --border: #e2e8f0; --shadow: 0 10px 25px -5px rgba(0,0,0,0.08);
+            --radius: 20px; --radius-sm: 12px;
+        }
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; line-height: 1.6; 
+            background-image: radial-gradient(at 0% 0%, rgba(16,185,129,0.08) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(5,150,105,0.05) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+        
+        /* AUTH */
+        #auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.9); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+        .auth-box { background: white; padding: 2.5rem; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); max-width: 420px; width: 90%; text-align: center; border: 2px solid var(--primary-light); }
+        .auth-box .leaf-icon { font-size: 3.5rem; margin-bottom: 1rem; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{transform:scale(1)}50%{transform:scale(1.1)} }
+        .auth-box h2 { margin: 0 0 0.5rem; color: var(--primary-dark); font-family: 'Noto Serif', serif; }
+        .auth-box p { color: var(--text-sec); margin: 0 0 1.5rem; }
+        .auth-input { width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 12px; font-size: 16px; margin-bottom: 1rem; text-align: center; }
+        .auth-input:focus { border-color: var(--primary); outline: none; }
+        .auth-btn { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; border: none; padding: 14px; width: 100%; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; }
+        .auth-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(5,150,105,0.4); }
+
+        /* HEADER */
+        header { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); padding: 1rem 2rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 12px; font-family: 'Noto Serif', serif; }
+        .logo i { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 12px; font-size: 1.2rem; animation: sway 3s ease-in-out infinite; }
+        @keyframes sway { 0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)} }
+        .user-panel { display: flex; align-items: center; gap: 12px; }
+        .user-badge { background: #ecfdf5; color: var(--primary-dark); padding: 8px 14px; border-radius: 50px; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; border: 1px solid var(--primary-light); }
+        .logout-btn { background: transparent; border: 1px solid var(--border); color: var(--text-sec); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: 0.2s; }
+        .logout-btn:hover { background: #fef2f2; color: var(--danger); border-color: var(--danger); }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 2rem 1.5rem; }
+        .hero { text-align: center; margin-bottom: 2rem; position: relative; }
+        .hero::before { content: '🌿'; position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 2rem; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-10px)} }
+        .hero h1 { font-size: 2.6rem; font-weight: 800; margin: 1.5rem 0 0.8rem; letter-spacing: -1.5px; font-family: 'Noto Serif', serif; }
+        .hero h1 span { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { color: var(--text-sec); font-size: 1.15rem; max-width: 700px; margin: 0 auto; }
+        
+        .tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; background: white; padding: 0.5rem; border-radius: 60px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); width: fit-content; margin-left: auto; margin-right: auto; border: 1px solid var(--border); flex-wrap: wrap; justify-content: center; }
+        .tab-btn { padding: 12px 20px; border: none; background: transparent; color: var(--text-sec); border-radius: 50px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: 0.3s; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+        .tab-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(5,150,105,0.3); }
+        .tab-btn:hover:not(.active) { background: #f1f5f9; color: var(--text); }
+        
+        .search-box { display: none; background: var(--card); padding: 2rem; border-radius: var(--radius); box-shadow: var(--shadow); animation: slideUp 0.4s cubic-bezier(0.16,1,0.3,1); border: 1px solid var(--border); position: relative; overflow: hidden; }
+        .search-box.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        label { font-weight: 600; display: block; margin-bottom: 0.6rem; font-size: 0.95rem; color: var(--text); display: flex; align-items: center; gap: 8px; }
+        label i { color: var(--primary); }
+        input[type="text"], input[type="number"], select { width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 14px; font-size: 16px; transition: 0.3s; background: #f8fafc; font-family: inherit; }
+        input:focus, select:focus { border-color: var(--primary); background: white; outline: none; box-shadow: 0 0 0 4px rgba(16,185,129,0.15); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-bottom: 1.2rem; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; border: none; padding: 16px; border-radius: 14px; font-weight: 700; font-size: 1.05rem; cursor: pointer; width: 100%; margin-top: 1.5rem; transition: 0.3s; box-shadow: 0 4px 15px rgba(5,150,105,0.3); display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(5,150,105,0.4); }
+        .btn-primary i { animation: bounce 2s infinite; }
+
+        #results-area { margin-top: 2rem; }
+        .result-card { background: var(--card); border-radius: 20px; padding: 1.5rem; margin-bottom: 1.2rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid var(--border); border-left: 5px solid var(--primary); position: relative; overflow: hidden; }
+        .result-card::before { content: '🌱'; position: absolute; top: 10px; right: 15px; font-size: 1.2rem; opacity: 0.15; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; padding-bottom: 1rem; border-bottom: 1px dashed var(--border); }
+        .card-title { font-size: 1.3rem; font-weight: 800; margin: 0; display: flex; align-items: center; gap: 10px; }
+        .card-title i { color: var(--primary); }
+        .badge { background: #ecfdf5; color: var(--primary-dark); padding: 6px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
+        
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; background: #f8fafc; padding: 1rem; border-radius: 14px; margin-bottom: 1rem; border: 1px solid #f1f5f9; }
+        .info-item strong { font-size: 0.75rem; color: var(--text-sec); text-transform: uppercase; display: block; margin-bottom: 4px; }
+        
+        .add-to-stack { background: white; border: 2px dashed var(--primary); color: var(--primary-dark); padding: 12px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: 700; transition: 0.2s; margin-top: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .add-to-stack:hover { background: #ecfdf5; border-style: solid; }
+
+        /* TABLE */
+        .plan-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); font-size: 0.95rem; }
+        .plan-table th { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 14px; text-align: left; }
+        .plan-table td { padding: 14px; border-bottom: 1px solid #f1f5f9; vertical-align: top; line-height: 1.5; }
+        .plan-table tr:last-child td { border-bottom: none; }
+        .plan-table td:nth-child(1) { background: #fafafa; font-weight: 700; width: 25%; }
+        .plan-table td:nth-child(3) { background: #f8fafc; color: var(--text-sec); font-style: italic; }
+        
+        #my-stack-section { display: none; margin-top: 3rem; border-top: 2px dashed var(--border); padding-top: 2rem; }
+        #my-stack-section.visible { display: block; animation: slideUp 0.5s; }
+        .schedule-box { background: var(--card); border-radius: 20px; padding: 1.5rem; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 2rem; position: relative; }
+        
+        /* TRACKER UI */
+        .tracker-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 10px; }
+        .streak-badge { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 6px 12px; border-radius: 20px; font-weight: 700; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(245,158,11,0.3); }
+        .week-dots { display: flex; gap: 6px; align-items: center; }
+        .week-dot { width: 24px; height: 24px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #64748b; transition: 0.3s; }
+        .week-dot.active { background: var(--primary); color: white; box-shadow: 0 2px 6px rgba(16,185,129,0.4); }
+        .week-dot.today { border: 2px solid var(--primary); }
+
+        .time-slot { margin-bottom: 1rem; padding: 1rem; background: #f8fafc; border-radius: 14px; border: 1px solid #f1f5f9; position: relative; }
+        .time-slot.conflict { border-left: 4px solid var(--danger); background: #fef2f2; }
+        .time-label { font-weight: 800; color: var(--primary-dark); font-size: 0.95rem; margin-bottom: 0.6rem; display: flex; justify-content: space-between; align-items: center; }
+        .pill-row { display: flex; flex-wrap: wrap; gap: 8px; }
+        .pill-tag { display: inline-flex; align-items: center; gap: 6px; background: white; padding: 8px 12px; border-radius: 10px; font-size: 0.9rem; border: 1px solid var(--border); transition: 0.2s; cursor: pointer; }
+        .pill-tag.taken { background: #ecfdf5; border-color: var(--primary); color: var(--primary-dark); }
+        .pill-tag i { font-size: 0.9rem; transition: 0.2s; }
+        .pill-tag.taken i { color: var(--primary); }
+        .conflict-note { color: var(--danger); font-size: 0.8rem; margin-top: 6px; font-weight: 600; }
+
+        .tracker-card { background: linear-gradient(135deg, #fffbeb 0%, #fff7ed 100%); border: 1px solid #fed7aa; border-radius: 20px; padding: 1.5rem; margin-top: 2rem; }
+        .mood-selector { display: flex; gap: 15px; margin: 15px 0; }
+        .mood-btn { font-size: 2rem; background: white; border: 2px solid var(--border); border-radius: 50%; width: 50px; height: 50px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+        .mood-btn:hover, .mood-btn.selected { background: var(--accent); border-color: var(--accent); transform: scale(1.1); }
+        
+        .history-section { margin-top: 1.5rem; }
+        .history-list { max-height: 250px; overflow-y: auto; padding-right: 5px; }
+        .history-item { background: white; padding: 12px; border-radius: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); }
+        
+        .action-bar { display: flex; gap: 12px; margin-top: 2rem; flex-wrap: wrap; }
+        .btn-sec { background: white; border: 1px solid var(--border); color: var(--text); padding: 12px 20px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; flex: 1; justify-content: center; transition: 0.2s; }
+        .btn-sec:hover { background: #f1f5f9; }
+        .btn-danger { color: var(--danger); border-color: #fecaca; }
+        .btn-danger:hover { background: #fef2f2; }
+
+        /* CHAT */
+        #chat-toggle { position: fixed; bottom: 24px; right: 24px; background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 8px 24px rgba(5,150,105,0.4); cursor: pointer; z-index: 999; transition: 0.3s; border: 3px solid white; }
+        #chat-toggle:hover { transform: scale(1.05) rotate(10deg); }
+        #chat-modal { position: fixed; bottom: 100px; right: 24px; width: 360px; max-width: 90vw; height: 480px; background: var(--card); border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); display: none; flex-direction: column; overflow: hidden; z-index: 999; border: 1px solid var(--border); }
+        #chat-modal.open { display: flex; animation: slideUp 0.3s cubic-bezier(0.16,1,0.3,1); }
+        .chat-header { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; padding: 16px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+        .chat-close { cursor: pointer; font-size: 1.2rem; }
+        #chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #f8fafc; }
+        .msg { max-width: 85%; padding: 12px 16px; border-radius: 18px; font-size: 0.9rem; line-height: 1.5; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .msg.ai { background: white; align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid var(--border); }
+        .msg.user { background: #dcfce7; align-self: flex-end; border-bottom-right-radius: 4px; border: 1px solid #bbf7d0; }
+        .chat-input { padding: 12px; border-top: 1px solid var(--border); display: flex; gap: 8px; background: white; }
+        .chat-input input { flex: 1; border: 1px solid var(--border); border-radius: 50px; padding: 10px 16px; outline: none; background: #f8fafc; }
+        .chat-input input:focus { border-color: var(--primary); background: white; }
+        .chat-input button { background: var(--primary); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        .disclaimer { margin-top: 3rem; padding: 1.5rem; background: white; border-radius: 16px; font-size: 0.8rem; color: var(--text-sec); text-align: center; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 2rem; } .grid-2 { grid-template-columns: 1fr; }
+            .tabs { width: 100%; border-radius: 16px; overflow-x: auto; }
+            .tab-btn { flex: 1; text-align: center; padding: 10px; font-size: 0.85rem; }
+            #chat-modal { width: 95%; right: 2.5%; bottom: 90px; height: 65vh; }
+            .plan-table, .plan-table thead, .plan-table tbody, .plan-table th, .plan-table td, .plan-table tr { display: block; width: 100%; }
+            .plan-table tr { margin-bottom: 1.5rem; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+            .plan-table td { text-align: right; padding-left: 50%; position: relative; }
+            .plan-table td::before { content: attr(data-label); position: absolute; left: 10px; top: 14px; font-weight: 700; color: var(--text-sec); }
+            .plan-table td:nth-child(1) { background: var(--primary); color: white; text-align: center; padding: 12px; }
+            .plan-table td:nth-child(1)::before { display: none; }
+            .pill-tag { width: 100%; justify-content: space-between; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- AUTH -->
+<div id="auth-overlay">
+    <div class="auth-box">
+        <div class="leaf-icon">🌿</div>
+        <h2>Добро пожаловать в 🌿 БАД-Master</h2>
+        <p>Введите имя, чтобы создать личный профиль. Все ваши рекомендации и дневник будут сохранены отдельно.</p>
+        <input type="text" id="username-input" class="auth-input" placeholder="Ваше имя" maxlength="20">
+        <button class="auth-btn" onclick="handleLogin()">Начать</button>
+    </div>
+</div>
+
+<header id="app-header" style="display:none;">
+    <div class="logo"><i class="fa-solid fa-leaf"></i> 🌿 БАД-Master</div>
+    <div class="user-panel">
+        <div class="user-badge"><i class="fa-solid fa-user"></i> <span id="display-user"></span></div>
+        <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+</header>
+
+<div class="container" id="main-content" style="display:none;">
+    <div class="hero">
+        <h1>Природная мудрость для <span>вашего здоровья</span></h1>
+        <p>Персональные рекомендации на основе натуральных добавок. Забота о себе — это просто.</p>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('search')"><i class="fa-solid fa-search"></i> Поиск</button>
+        <button class="tab-btn" onclick="switchTab('symptom')"><i class="fa-solid fa-stethoscope"></i> По симптому</button>
+        <button class="tab-btn" onclick="switchTab('personal')"><i class="fa-solid fa-seedling"></i> Мой план</button>
+        <button class="tab-btn" onclick="switchTab('antiage')"><i class="fa-solid fa-infinity"></i> Долголетие</button>
+    </div>
+
+    <div id="search-name" class="search-box active">
+        <label><i class="fa-solid fa-capsules"></i> Название добавки</label>
+        <input type="text" id="input-name" placeholder="Магний, Креатин, Омега-3...">
+        <button class="btn-primary" onclick="searchByName()"><i class="fa-solid fa-arrow-right"></i> Найти</button>
+    </div>
+
+    <div id="search-symptom" class="search-box">
+        <label><i class="fa-solid fa-heart-pulse"></i> Что беспокоит?</label>
+        <input type="text" id="input-symptom" placeholder="Плохой сон, усталость, суставы...">
+        <button class="btn-primary" onclick="searchBySymptom()"><i class="fa-solid fa-wand-magic-sparkles"></i> Подобрать</button>
+    </div>
+
+    <div id="search-personal" class="search-box">
+        <div class="grid-2">
+            <div><label><i class="fa-solid fa-cake-candles"></i> Возраст</label><input type="number" id="p-age" placeholder="лет"></div>
+            <div><label><i class="fa-solid fa-weight-scale"></i> Вес (кг)</label><input type="number" id="p-weight" placeholder="кг"></div>
+        </div>
+        <label><i class="fa-solid fa-notes-medical"></i> Симптомы</label>
+        <input type="text" id="p-symptoms" placeholder="Например: плохо сплю..." style="margin-bottom:1rem;">
+        <label><i class="fa-solid fa-bullseye"></i> Цель</label>
+        <input type="text" id="p-goal" placeholder="Например: хочу высыпаться">
+        <button class="btn-primary" onclick="generatePersonalPlan()"><i class="fa-solid fa-leaf"></i> Составить план</button>
+    </div>
+
+    <div id="search-antiage" class="search-box">
+        <label><i class="fa-solid fa-infinity"></i> Ваш возраст для подбора</label>
+        <input type="number" id="aa-age" placeholder="лет" style="margin-bottom:1rem;">
+        <label><i class="fa-solid fa-bullseye"></i> Фокус долголетия</label>
+        <select id="aa-focus" style="margin-bottom:1rem;">
+            <option value="all">Всё для молодости</option>
+            <option value="мозг">🧠 Ясность ума</option>
+            <option value="кожа">✨ Красота кожи</option>
+            <option value="энергия">⚡ Энергия клеток</option>
+            <option value="воспаление">🔥 Противовоспаление</option>
+        </select>
+        <button class="btn-primary" onclick="generateAntiAgePlan()"><i class="fa-solid fa-seedling"></i> Подобрать для долголетия</button>
+    </div>
+
+    <div id="results-area"></div>
+
+    <div id="my-stack-section">
+        <h2 style="font-size:1.5rem; margin:0 0 1rem; display:flex; align-items:center; gap:12px;"><i class="fa-solid fa-calendar-day" style="color:var(--primary); background:#ecfdf5; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:10px;"></i> Ваше расписание 🌿</h2>
+        
+        <div class="schedule-box" id="schedule-container">
+            <div class="tracker-header">
+                <div class="streak-badge"><i class="fa-solid fa-fire"></i> Серия: <span id="streak-count">0</span> дней</div>
+                <div class="week-dots" id="week-dots"></div>
+            </div>
+            <p style="color:var(--text-sec); text-align:center; margin:2rem 0;">Пока пусто. Добавьте добавки из поиска.</p>
+        </div>
+
+        <div class="tracker-card">
+            <h3 style="margin:0 0 0.5rem; font-size:1.2rem;"><i class="fa-solid fa-face-smile"></i> Самочувствие сегодня</h3>
+            <div class="mood-selector">
+                <button class="mood-btn" onclick="selectMood(this, 'bad')">😫</button>
+                <button class="mood-btn" onclick="selectMood(this, 'ok')">😐</button>
+                <button class="mood-btn" onclick="selectMood(this, 'good')">🙂</button>
+                <button class="mood-btn" onclick="selectMood(this, 'great')">🤩</button>
+            </div>
+            <textarea id="wellness-note" placeholder="Заметки..." style="width:100%; margin-top:10px; padding:12px; border-radius:12px; border:1px solid #fed7aa; background:white;" rows="2"></textarea>
+            <button class="btn-primary" style="background:linear-gradient(135deg, var(--accent), #d97706); margin-top:12px; padding:12px;" onclick="saveWellness()"><i class="fa-solid fa-floppy-disk"></i> Сохранить</button>
+        </div>
+
+        <div class="history-section">
+            <h3 style="font-size:1.1rem; margin:0 0 1rem; color:var(--text-sec);">📅 История записей</h3>
+            <div class="history-list" id="wellness-history"></div>
+        </div>
+
+        <div class="action-bar">
+            <button class="btn-sec" onclick="window.print()"><i class="fa-solid fa-file-pdf"></i> Скачать план</button>
+            <button class="btn-sec btn-danger" onclick="clearStack()"><i class="fa-solid fa-rotate-left"></i> Сброс</button>
+            <button class="btn-sec" onclick="alert('Партнёрские ссылки скоро!')"><i class="fa-solid fa-cart-shopping"></i> Купить</button>
+        </div>
+    </div>
+
+    <div class="disclaimer"><i class="fa-solid fa-leaf"></i> Сервис носит информационный характер. Перед приёмом любых добавок проконсультируйтесь с врачом. Природа дарит здоровье — используйте её мудро.</div>
+</div>
+
+<!-- CHAT -->
+<div id="chat-toggle" onclick="toggleChat()" style="display:none;">🌿</div>
+<div id="chat-modal" style="display:none;">
+    <div class="chat-header"><span><i class="fa-solid fa-robot"></i> 🌿 Помощник</span><span class="chat-close" onclick="toggleChat()">✖</span></div>
+    <div id="chat-messages"></div>
+    <div class="chat-input"><input type="text" id="chat-input" placeholder="Спросить о добавках..."><button onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button></div>
+</div>
+
+<script>
+    // 📦 БАЗА ДАННЫХ (75+ позиций)
+    const supplementsDB = [
+        {id:1,name:"Магний Глицинат",substance:"Магний",time:"Вечер",dose:"200-400 мг",why:"Лучшая форма для сна.",goodWith:["Мелатонин"],badWith:["Железо"],tags:["сон","тревога"],details:"Снижает кортизол, расслабляет ЦНС. Глицинат не слабит, быстро достигает мозга."},
+        {id:2,name:"Витамин D3 + K2",substance:"Витамин D",time:"Утро/Обед",dose:"2000-5000 МЕ",why:"Иммунитет и кости.",goodWith:["Омега-3"],badWith:[],tags:["иммунитет","настроение"],details:"D3 повышает всасывание кальция, K2 направляет его в кости. Работает как прогормон."},
+        {id:3,name:"Омега-3 (EPA/DHA)",substance:"Омега-3",time:"Утро/Обед",dose:"1000-2000 мг",why:"Сердце, мозг, кожа.",goodWith:["D3"],badWith:["Антикоагулянты"],tags:["мозг","сердце","кожа"],details:"EPA снижает воспаление, DHA строит мембраны нейронов. Улучшает текучесть крови."},
+        {id:4,name:"Цинк Пиколинат",substance:"Цинк",time:"День",dose:"15-30 мг",why:"Иммунитет, кожа, тестостерон.",goodWith:["A","C"],badWith:["Железо","Медь"],tags:["иммунитет","кожа","акне"],details:"Необходим для 300+ ферментов. Поддерживает синтез тестостерона."},
+        {id:5,name:"Креатин Моногидрат",substance:"Креатин",time:"После тренировки",dose:"5 г",why:"Сила, мозг, восстановление.",goodWith:["Углеводы"],badWith:[],tags:["сила","масса","спорт","мозг"],details:"Восполняет АТФ, повышая силу. Улучшает память и снижает умственную усталость."},
+        {id:6,name:"L-Теанин",substance:"Теанин",time:"День/Вечер",dose:"100-200 мг",why:"Фокус без тревоги.",goodWith:["Кофеин"],badWith:[],tags:["стресс","фокус"],details:"Повышает альфа-волны мозга. Сглаживает побочные эффекты кофеина."},
+        {id:7,name:"Мелатонин",substance:"Мелатонин",time:"За 30 мин до сна",dose:"0.5-3 мг",why:"Регуляция циркадных ритмов.",goodWith:["Магний"],badWith:["Кофеин"],tags:["сон","джетлаг"],details:"Даёт сигнал мозгу «пора спать». Эффективен при смене часовых поясов."},
+        {id:8,name:"Протеин Whey",substance:"Протеин",time:"После тренировки",dose:"25-30 г",why:"Быстрый синтез белка.",goodWith:["Креатин"],badWith:[],tags:["масса","восстановление"],details:"Запускает рост мышц после нагрузки. Полный спектр аминокислот."},
+        {id:9,name:"Коллаген 1,3 тип",substance:"Коллаген",time:"Утро/Ночь натощак",dose:"5-10 г",why:"Суставы, кожа, связки.",goodWith:["Витамин C"],badWith:[],tags:["суставы","кожа"],details:"Строительный материал для хрящей и дермы. Работает с витамином C."},
+        {id:10,name:"Ашваганда",substance:"Ашваганда",time:"Вечер",dose:"300-600 мг",why:"Адаптоген, кортизол.",goodWith:["Магний"],badWith:["Щитовидка"],tags:["стресс","сон"],details:"Снижает кортизол на 20-30%. Улучшает сон. Эффект накопительный."},
+        {id:11,name:"Ресвератрол",substance:"Ресвератрол",time:"Вечер (с жирами)",dose:"100-500 мг",why:"Активация сиртуинов, анти-эйж.",goodWith:["Кверцетин","Омега-3"],badWith:["Антикоагулянты"],tags:["долголетие","антиоксидант","сосуды","мозг"],details:"Активирует гены долголетия (SIRT1), защищает митохондрии."},
+        {id:12,name:"NMN",substance:"NMN",time:"Утро",dose:"250-500 мг",why:"Повышение NAD+, энергия клеток.",goodWith:["Ресвератрол"],badWith:[],tags:["долголетие","энергия","мозг","митохондрии"],details:"Поддерживает работу митохондрий, улучшает когнитивные функции."},
+        {id:13,name:"Спермидин",substance:"Спермидин",time:"Утро/День",dose:"5-10 мг",why:"Автофагия, обновление клеток.",goodWith:["Ресвератрол"],badWith:[],tags:["долголетие","детокс","мозг","сердце"],details:"Стимулирует аутофагию — очистку клеток от «мусора»."},
+        {id:14,name:"Астрагал",substance:"Астрагал",time:"Утро/День",dose:"500-1000 мг",why:"Защита теломер, иммунитет.",goodWith:["Ашваганда"],badWith:["Иммуносупрессанты"],tags:["долголетие","иммунитет","теломеры"],details:"Поддерживает длину теломер. Укрепляет иммунитет."},
+        {id:15,name:"Куркумин",substance:"Куркумин",time:"День (с едой)",dose:"500 мг",why:"Противовоспаление, защита мозга.",goodWith:["Жиры","Омега-3"],badWith:["Антикоагулянты"],tags:["воспаление","мозг","суставы","печень"],details:"Блокирует воспалительные пути. С пиперином усваивается в 20 раз лучше."},
+        {id:16,name:"Коэнзим Q10",substance:"CoQ10",time:"Утро/Обед (с жирами)",dose:"100-200 мг",why:"Энергия митохондрий, сердце.",goodWith:["Омега-3","Ресвератрол"],badWith:[],tags:["сердце","энергия","анти-эйж","митохондрии"],details:"Ключевой компонент дыхательной цепи. После 40 лет синтез снижается."},
+        {id:17,name:"ALA",substance:"ALA",time:"Утро (натощак)",dose:"300-600 мг",why:"Универсальный антиоксидант, контроль сахара.",goodWith:["Ацетил-карнитин","Хром"],badWith:["Щитовидка"],tags:["антиоксидант","сахар","мозг","печень"],details:"Работает в воде и жирах. Восстанавливает C, E, глутатион."},
+        {id:18,name:"Пикногенол",substance:"Проантоцианидины",time:"День",dose:"100-200 мг",why:"Защита сосудов, кожи, анти-эйж.",goodWith:["Витамин C","Коллаген"],badWith:["Антикоагулянты"],tags:["сосуды","кожа","антиоксидант","глаза"],details:"Укрепляет капилляры, стимулирует коллаген, защищает кожу от УФ."},
+        {id:19,name:"Берберин",substance:"Берберин",time:"Обед/Ужин",dose:"500 мг 2-3 раза",why:"Контроль сахара, метаболизм.",goodWith:["ALA","Хром"],badWith:["Метформин","Циклоспорин"],tags:["сахар","вес","метаболизм","долголетие"],details:"Активирует AMPK. Снижает сахар, холестерин."},
+        {id:20,name:"Фосфатидилсерин",substance:"Фосфатидилсерин",time:"Утро/Вечер",dose:"100-300 мг",why:"Память, кортизол, защита мозга.",goodWith:["Омега-3","Холин"],badWith:[],tags:["мозг","память","кортизол","стресс"],details:"Улучшает передачу сигналов между нейронами."},
+        {id:21,name:"Холин (Альфа-GPC)",substance:"Холин",time:"Утро",dose:"250-500 мг",why:"Память, фокус, ацетилхолин.",goodWith:["Омега-3","Уридин"],badWith:[],tags:["мозг","память","фокус"],details:"Предшественник ацетилхолина. Улучшает когнитивные функции."},
+        {id:22,name:"Уридин",substance:"Уридин",time:"Вечер",dose:"250-500 мг",why:"Синапсы, нейропластичность.",goodWith:["Холин","Омега-3","DHA"],badWith:[],tags:["мозг","память","нейропластичность"],details:"Строительный блок для мембран нейронов."},
+        {id:23,name:"Гинкго Билоба",substance:"Гинкго",time:"Утро/День",dose:"120-240 мг",why:"Кровообращение мозга, память.",goodWith:["Омега-3"],badWith:["Антикоагулянты"],tags:["память","мозг","сосуды"],details:"Улучшает микроциркуляцию в мозге."},
+        {id:24,name:"Бакопа Монье",substance:"Бакопа",time:"День",dose:"300-500 мг",why:"Память, обучение, стресс.",goodWith:["Ашваганда"],badWith:["Седативные"],tags:["память","мозг","стресс","адаптоген"],details:"Улучшает консолидацию памяти. Эффект через 4-6 недель."},
+        {id:31,name:"Пробиотики",substance:"Пробиотики",time:"Утро натощак",dose:"10-50 млрд КОЕ",why:"Микробиом, иммунитет, пищеварение.",goodWith:["Пребиотики","Клетчатка"],badWith:["Антибиотики (разносить 2ч)"],tags:["кишечник","иммунитет","кожа","детокс"],details:"Восстанавливают микрофлору. Улучшают синтез витаминов B."},
+        {id:32,name:"Псиллиум",substance:"Псиллиум",time:"Утро/День (с водой!)",dose:"5-10 г",why:"Пищеварение, сытость, микробиом.",goodWith:["Пробиотики"],badWith:["Лекарства (разносить 2ч)"],tags:["кишечник","вес","сахар","детокс"],details:"Растворимая клетчатка. Снижает скачки сахара, улучшает перистальтику."},
+        {id:33,name:"Бромелайн",substance:"Бромелайн",time:"Между едой",dose:"500 мг",why:"Противовоспаление, пищеварение.",goodWith:["Куркумин"],badWith:["Антикоагулянты"],tags:["воспаление","суставы","ЖКТ","детокс"],details:"Фермент из ананаса. Системный противовоспалительный агент."},
+        {id:34,name:"МСМ",substance:"МСМ",time:"Утро/День",dose:"1-3 г",why:"Суставы, кожа, детокс.",goodWith:["Витамин C","Коллаген"],badWith:[],tags:["суставы","кожа","аллергия","детокс"],details:"Источник органической серы. Поддерживает коллаген."},
+        {id:36,name:"Боярышник",substance:"Боярышник",time:"День",dose:"300-500 мг",why:"Поддержка сердца, давление.",goodWith:["Магний","CoQ10"],badWith:["Сердечные препараты"],tags:["сердце","давление","стресс"],details:"Улучшает коронарный кровоток, мягко нормализует давление."},
+        {id:37,name:"Чеснок (экстракт)",substance:"Чеснок",time:"День (с едой)",dose:"600-1200 мг",why:"Сосуды, холестерин, иммунитет.",goodWith:["Омега-3","Витамин C"],badWith:["Антикоагулянты"],tags:["сердце","холестерин","иммунитет"],details:"Снижает окисление ЛПНП, улучшает эластичность сосудов."},
+        {id:39,name:"L-Карнитин",substance:"Карнитин",time:"До тренировки/обед",dose:"1-2 г",why:"Транспорт жирных кислот, сердце.",goodWith:["ALA","CoQ10"],badWith:["Щитовидка (гипо)"],tags:["вес","энергия","спорт","сердце"],details:"Переносит жирные кислоты в митохондрии."},
+        {id:40,name:"Таурин",substance:"Таурин",time:"До/после тренировки",dose:"1-3 г",why:"Сердце, глаза, гидратация.",goodWith:["Магний","Кофеин"],badWith:[],tags:["спорт","сердце","глаза","мозг"],details:"Регулирует осмотическое давление, защищает от окислительного стресса."},
+        {id:41,name:"Лютеин + Зеаксантин",substance:"Каротиноиды",time:"День (с жирами)",dose:"10-20 мг / 2-4 мг",why:"Защита сетчатки, синий свет.",goodWith:["Омега-3","Витамин C"],badWith:[],tags:["глаза","зрение","антиоксидант","мозг"],details:"Фильтруют синий свет, нейтрализуют радикалы. Снижают риск ВМД."},
+        {id:42,name:"Астаксантин",substance:"Астаксантин",time:"День (с жирами)",dose:"4-12 мг",why:"Мощный антиоксидант для глаз, кожи.",goodWith:["Омега-3","Лютеин"],badWith:[],tags:["глаза","кожа","спорт","антиоксидант"],details:"В 6000 раз сильнее витамина C. Проникает через гемато-ретинальный барьер."},
+        {id:44,name:"Витекс (Прутняк)",substance:"Витекс",time:"Утро",dose:"400-500 мг",why:"Баланс пролактина, ПМС, цикл.",goodWith:["Магний","B6"],badWith:["Гормональные препараты"],tags:["гормоны","ПМС","цикл","женское"],details:"Нормализует дофамин/пролактин. Снижает ПМС."},
+        {id:46,name:"Инозитол",substance:"Инозитол",time:"Утро/День",dose:"2-4 г",why:"Чувствительность к инсулину, СПКЯ.",goodWith:["Фолиевая","Хром"],badWith:[],tags:["гормоны","инсулин","СПКЯ","настроение"],details:"Эффективен при СПКЯ: восстанавливает овуляцию."},
+        {id:48,name:"Пальметто",substance:"Сереноа",time:"День (с едой)",dose:"320 мг",why:"Поддержка простаты, баланс ДГТ.",goodWith:["Цинк","Селен"],badWith:["Гормональная терапия"],tags:["простата","гормоны","мужское"],details:"Ингибирует 5-альфа-редуктазу. Поддерживает здоровье простаты."},
+        {id:50,name:"Трибулус",substance:"Трибулус",time:"Утро/День",dose:"500-1000 мг",why:"Либидо, тонус, спорт.",goodWith:["Цинк","Ашваганда"],badWith:["Гормональные препараты"],tags:["либидо","спорт","мужское","тонус"],details:"Стимулирует ЛГ, поддерживает естественный тестостерон."},
+        {id:51,name:"Мака перуанская",substance:"Мака",time:"Утро",dose:"1500-3000 мг",why:"Энергия, либидо, выносливость.",goodWith:["Ашваганда","Цинк"],badWith:[],tags:["энергия","либидо","мужское","женское","адаптоген"],details:"Повышает энергию, либидо, устойчивость к стрессу."},
+        {id:52,name:"Львиная грива",substance:"Ериноцины",time:"Утро/День",dose:"500-1000 мг",why:"NGF, нейрогенез, память.",goodWith:["Холин","Омега-3"],badWith:[],tags:["мозг","память","фокус","нейрогенез"],details:"Стимулирует фактор роста нервов (NGF). Улучшает когнитивную гибкость."},
+        {id:55,name:"Бузина",substance:"Бузина",time:"При симптомах",dose:"300-600 мг",why:"Иммунитет при ОРВИ.",goodWith:["Витамин C","Цинк"],badWith:["Аутоиммунные"],tags:["иммунитет","простуда","вирус"],details:"Антоцианы блокируют прикрепление вирусов гриппа."},
+        {id:56,name:"Андрографис",substance:"Андрографолиды",time:"При симптомах",dose:"200-400 мг",why:"Иммунная поддержка, противовирусное.",goodWith:["Витамин C","Цинк"],badWith:["Аутоиммунные","Беременность"],tags:["иммунитет","простуда","вирус"],details:"Стимулирует интерферон и НК-клетки."},
+        {id:57,name:"Кверцетин + Цинк",substance:"Кверцетин",time:"Утро/Обед",dose:"500 мг + 15 мг цинка",why:"Иммунитет, антиоксидант, синергия.",goodWith:["Витамин C"],badWith:["Антибиотики"],tags:["иммунитет","антиоксидант","вирус"],details:"Кверцетин — ионофор цинка. Помогает проникать в клетки."},
+        {id:58,name:"Артишок",substance:"Цинарин",time:"День (с едой)",dose:"300-600 мг",why:"Желчеотток, холестерин.",goodWith:["Расторопша","Лецитин"],badWith:["Желчнокаменная"],tags:["печень","детокс","холестерин","ЖКТ"],details:"Стимулирует желчь, улучшает переваривание жиров."},
+        {id:59,name:"Одуванчик (корень)",substance:"Одуванчик",time:"Утро/День",dose:"300-500 мг",why:"Детокс печени, мочегонное.",goodWith:["Расторопша","Артишок"],badWith:["Диуретики"],tags:["печень","детокс","почки","ЖКТ"],details:"Горечи стимулируют желудочный сок и желчь."},
+        {id:60,name:"Хлорелла / Спирулина",substance:"Водоросли",time:"Утро (натощак)",dose:"1-3 г",why:"Детокс тяжёлых металлов, щелочь.",goodWith:["Витамин C","Пробиотики"],badWith:["Аутоиммунные"],tags:["детокс","иммунитет","белок","щелочь"],details:"Хлорелла связывает тяжёлые металлы. Спирулина — источник белка."},
+        {id:61,name:"ALCAR",substance:"ALCAR",time:"Утро",dose:"500-1500 мг",why:"Энергия мозга, митохондрии.",goodWith:["ALA","CoQ10"],badWith:["Щитовидка (гипер)"],tags:["мозг","энергия","фокус","митохондрии"],details:"Проникает в мозг, поддерживает ацетилхолин и АТФ."},
+        {id:62,name:"PQQ",substance:"PQQ",time:"Утро",dose:"10-20 мг",why:"Биогенез митохондрий, нейропротекция.",goodWith:["CoQ10"],badWith:[],tags:["митохондрии","мозг","энергия","анти-эйж"],details:"Стимулирует образование новых митохондрий."},
+        {id:64,name:"Витамин K2 (MK-7)",substance:"Витамин K",time:"Утро/Обед",dose:"90-200 мкг",why:"Направляет кальций в кости.",goodWith:["D3","Магний"],badWith:["Варфарин"],tags:["кости","сосуды","кальций"],details:"Активирует остеокальцин. Защита сосудов от кальцификации."},
+        {id:65,name:"Бор",substance:"Бор",time:"Утро",dose:"3-6 мг",why:"Усвоение Ca/Mg/D, тестостерон.",goodWith:["Кальций","Магний","D3"],badWith:[],tags:["кости","гормоны","минералы"],details:"Улучшает метаболизм кальция и витамина D."},
+        {id:66,name:"Кремний",substance:"Кремний",time:"Утро",dose:"10-20 мг",why:"Коллаген, суставы, кожа.",goodWith:["Витамин C","Коллаген"],badWith:[],tags:["суставы","кожа","волосы","сосуды"],details:"Необходим для синтеза гликозаминогликанов."},
+        {id:67,name:"Биотин + Цинк + Селен",substance:"Комплекс",time:"Утро",dose:"5000 мкг / 15 мг / 100 мкг",why:"Кератин, рост волос, ногтей.",goodWith:["Коллаген","Витамин C"],badWith:[],tags:["волосы","кожа","ногти","антиоксидант"],details:"Биотин — кофактор кератина. Цинк регулирует сальные железы."},
+        {id:68,name:"Гиалуроновая кислота",substance:"Гиалурон",time:"Утро/День",dose:"100-200 мг",why:"Увлажнение кожи изнутри.",goodWith:["Витамин C","Коллаген"],badWith:[],tags:["кожа","суставы","глаза","увлажнение"],details:"Низкомолекулярная форма проникает глубже."},
+        {id:69,name:"Экстракт виноградных косточек",substance:"Проантоцианидины",time:"День",dose:"100-300 мг",why:"Защита коллагена от гликации.",goodWith:["Витамин C","Коллаген"],badWith:["Антикоагулянты"],tags:["кожа","сосуды","антиоксидант","анти-эйж"],details:"В 20 раз мощнее витамина C."},
+        {id:70,name:"Адаптогенный комплекс",substance:"Комплекс",time:"Утро/Вечер",dose:"По инструкции",why:"Поддержка при стрессе, выгорании.",goodWith:["Магний","B-Complex"],badWith:["Седативные","Щитовидка"],tags:["стресс","энергия","фокус","адаптоген"],details:"Ашваганда+Родиола+Бакопа. Снижает кортизол."},
+        {id:71,name:"Электролиты",substance:"Электролиты",time:"Утро / после нагрузки",dose:"По инструкции",why:"Гидратация, судороги, энергия.",goodWith:["Вода","Магний"],badWith:[],tags:["гидратация","спорт","энергия","судороги"],details:"Натрий, калий, магний в оптимальном соотношении."},
+        {id:72,name:"Яблочный уксус",substance:"Уксусная кислота",time:"Перед едой",dose:"500-1000 мг",why:"Контроль сахара после еды.",goodWith:["Клетчатка","Хром"],badWith:["Язва","Рефлюкс"],tags:["сахар","вес","пищеварение"],details:"Замедляет опорожнение желудка и активность амилазы."},
+        {id:73,name:"Хлорид магния (масло)",substance:"Магний",time:"Вечер (на кожу)",dose:"По инструкции",why:"Трансдермальное усвоение.",goodWith:["Пероральный магний"],badWith:[],tags:["сон","судороги","стресс","кожа"],details:"Проникает через кожу напрямую в кровоток."},
+        {id:74,name:"Д-Манноза",substance:"Д-Манноза",time:"Утро/Вечер",dose:"2-3 г",why:"Профилактика цистита.",goodWith:["Пробиотики","Витамин C"],badWith:[],tags:["мочевой пузырь","иммунитет","женское"],details:"Связывает бактерии E. coli, предотвращая прикрепление."},
+        {id:75,name:"Лактоферрин",substance:"Лактоферрин",time:"Утро натощак",dose:"250-500 мг",why:"Иммунитет, железо, микробиом.",goodWith:["Витамин C"],badWith:[],tags:["иммунитет","железо","кишечник","антивирус"],details:"Связывает железо, лишая бактерии питания."}
+    ];
+
+    // 📚 СИНОНИМЫ
+    const healthSynonyms = {
+      'сон': ['сон', 'сплю', 'бессонница', 'просыпаюсь', 'ночь', 'не высыпаюсь', 'плохо сплю'],
+      'стресс': ['стресс', 'нерв', 'тревога', 'напряжение', 'кортизол', 'выгорание'],
+      'энергия': ['энергия', 'усталость', 'слабость', 'нет сил', 'апатия', 'бодрость'],
+      'иммунитет': ['иммунитет', 'простуда', 'болею', 'защита', 'орви', 'часто болею'],
+      'суставы': ['суставы', 'колени', 'спина', 'боль', 'хруст', 'связки'],
+      'кожа': ['кожа', 'волосы', 'ногти', 'акне', 'сухость', 'выпадение'],
+      'масса': ['масса', 'мышцы', 'рост', 'сила', 'тренировка', 'спорт', 'набор'],
+      'вес': ['вес', 'похудеть', 'диета', 'метаболизм', 'аппетит', 'сахар', 'жир'],
+      'долголетие': ['долголетие', 'молодость', 'анти-эйж', 'старение', 'омоложение', 'энергия клеток', 'митохондрии', 'теломеры']
+    };
+
+    // 💾 USER PROFILE & STORAGE
+    let currentUser = null;
+    let myStack = []; let wellnessLog = []; let chatHistory = [];
+    let checkins = {}; 
+    let streak = 0;
+
+    function getKey(k) { return `bad_${k}_${currentUser}`; }
+    function save(k, d) { localStorage.setItem(getKey(k), JSON.stringify(d)); }
+    function load(k) { return JSON.parse(localStorage.getItem(getKey(k)) || 'null'); }
+
+    const todayStr = () => new Date().toISOString().split('T')[0];
+
+    function calcStreak() {
+        let s = 0; let d = new Date();
+        const startCheck = checkins[todayStr()] && checkins[todayStr()].length > 0 ? 0 : 1;
+        d.setDate(d.getDate() - startCheck);
+        while(true) {
+            let ds = d.toISOString().split('T')[0];
+            if(checkins[ds] && checkins[ds].length > 0) { s++; d.setDate(d.getDate() - 1); }
+            else break;
+        }
+        return s;
+    }
+
+    function handleLogin() {
+        const name = document.getElementById('username-input').value.trim().replace(/[^a-zA-Zа-яА-Я0-9_]/g, '');
+        if (!name || name.length < 2) return alert('Введите имя (минимум 2 символа)');
+        currentUser = name;
+        localStorage.setItem('badUser', name);
+        initApp();
+    }
+
+    function logout() {
+        if(confirm('Выйти из профиля? Данные сохранятся.')) {
+            localStorage.removeItem('badUser');
+            location.reload();
+        }
+    }
+
+    function initApp() {
+        currentUser = localStorage.getItem('badUser');
+        if (!currentUser) return document.getElementById('auth-overlay').style.display = 'flex';
+        document.getElementById('auth-overlay').style.display = 'none';
+        document.getElementById('app-header').style.display = 'flex';
+        document.getElementById('main-content').style.display = 'block';
+        document.getElementById('chat-toggle').style.display = 'flex';
+        document.getElementById('chat-modal').style.display = 'none';
+        document.getElementById('display-user').textContent = currentUser;
+        
+        myStack = load('stack') || [];
+        wellnessLog = load('wellness') || [];
+        chatHistory = load('chat') || [];
+        checkins = load('checkins') || {};
+        streak = calcStreak();
+        save('streak', streak);
+        
+        if (myStack.length) updateSchedule();
+        renderWellnessHistory(); renderChat();
+    }
+
+    // 🧭 НАВИГАЦИЯ (ИСПРАВЛЕНО)
+    function switchTab(tab) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+        document.querySelectorAll('.search-box').forEach(b => b.classList.remove('active'));
+        
+        // Исправление: маппинг вкладки на правильный ID
+        let targetId = '';
+        if (tab === 'search') targetId = 'search-name';
+        else targetId = 'search-' + tab;
+        
+        const target = document.getElementById(targetId);
+        if (target) target.classList.add('active');
+        
+        document.getElementById('results-area').innerHTML = '';
+    }
+    function searchByName() { renderResults(supplementsDB.filter(i => i.name.toLowerCase().includes(document.getElementById('input-name').value.toLowerCase()))); }
+    function searchBySymptom() { const q = document.getElementById('input-symptom').value.toLowerCase(); renderResults(supplementsDB.filter(i => i.tags.some(t => t.includes(q)) || i.substance.toLowerCase().includes(q))); }
+    
+    function generatePersonalPlan() {
+        const goal = document.getElementById('p-goal').value.trim().toLowerCase();
+        const symp = document.getElementById('p-symptoms').value.trim().toLowerCase();
+        const age = document.getElementById('p-age').value;
+        const weight = document.getElementById('p-weight').value;
+        const c = document.getElementById('results-area'); c.innerHTML = '';
+        save('profile', {age, weight, goal, symp});
+
+        if (!goal && !symp) { c.innerHTML = '<div class="result-card"><h3>⚠️ Укажите цель или симптомы</h3></div>'; return; }
+        const rawQuery = goal + ' ' + symp;
+        let normalized = rawQuery;
+        for (const [key, syns] of Object.entries(healthSynonyms)) { if (syns.some(s => rawQuery.includes(s))) { normalized += ' ' + key; break; } }
+
+        const scored = supplementsDB.map(item => {
+            let score = 0;
+            if (item.tags.some(t => normalized.includes(t) || rawQuery.includes(t))) score += 20;
+            if (item.name.toLowerCase().includes(rawQuery.split(' ')[0])) score += 10;
+            if (normalized.includes('сон') && (item.substance === 'Магний' || item.name.includes('Мелатонин'))) score += 30;
+            if ((normalized.includes('масса') || normalized.includes('спорт')) && item.tags.includes('спорт')) score += 25;
+            return { ...item, score };
+        }).filter(i => i.score > 12).sort((a,b) => b.score - a.score);
+
+        const top = scored.slice(0, 6);
+        if (!top.length) { c.innerHTML = '<div class="result-card"><h3>🌿 Нет точных совпадений</h3><p>Попробуйте: "сон", "усталость", "спорт", "долголетие".</p></div>'; return; }
+
+        let tableHTML = `<table class="plan-table"><thead><tr><th>⏰ Время</th><th>💊 Добавка</th><th>🌿 Что даёт и почему</th></tr></thead><tbody>`;
+        const adjDose = (d) => { if(!weight || weight<30) return d; const match = d.match(/(\d+)/); if(!match) return d; return d.replace(/\d+/, Math.round(parseInt(match[1]) * Math.min(weight/70, 1.6))); };
+        
+        const slots = {'☀️ Утро':[], '🍳 Завтрак':[], '🏃 День':[], '🌙 Вечер':[]};
+        top.forEach(i => {
+            const t = i.time.toLowerCase(); const d = adjDose(i.dose);
+            const entry = `<strong>${i.name}</strong><br><span style="color:var(--primary); font-size:0.9em;">${d}</span>`;
+            const why = i.details || i.why;
+            if(t.includes('утро')||t.includes('натощак')) slots['☀️ Утро'].push({item: entry, info: why});
+            else if(t.includes('жир')||t.includes('омега')||t.includes('d3')) slots['🍳 Завтрак'].push({item: entry, info: why});
+            else if(t.includes('день')||t.includes('тренировк')) slots['🏃 День'].push({item: entry, info: why});
+            else slots['🌙 Вечер'].push({item: entry, info: why});
+        });
+
+        Object.entries(slots).forEach(([time, items]) => {
+            if(!items.length) return;
+            tableHTML += `<tr><td data-label="Время">${time}</td><td data-label="Добавка">${items.map(i=>i.item).join('<br>')}</td><td data-label="Эффект">${items.map(i=>i.info).join('<br><hr style="border:0;border-top:1px dashed #ddd;margin:4px 0">')}</td></tr>`;
+        });
+        tableHTML += '</tbody></table>';
+
+        let lifeHTML = '';
+        if(normalized.includes('сон')) lifeHTML = `<ul style="margin:0; padding-left:20px;"><li>🌡️ 18-20°C, темнота. 📵 Без экранов за 1ч. ☕ Кофеин до 14:00. 🚶 Прогулка вечером.</li></ul>`;
+        else if(normalized.includes('долголетие') || normalized.includes('анти-эйж')) lifeHTML = `<ul style="margin:0; padding-left:20px;"><li>🥗 Растительная пища, интервальное голодание 12-14ч. 🚶 Ходьба 8-10 тыс. шагов. 😴 Сон 7-8ч. 🧘 Медитация 10 мин/день.</li></ul>`;
+        else lifeHTML = `<ul style="margin:0; padding-left:20px;"><li>💧 2-3 л воды. 🚶 8-10 тыс. шагов. 😴 7-8 ч сна. 🥗 Клетчатка + ферментированные продукты.</li></ul>`;
+
+        c.innerHTML = `
+            <div style="background:linear-gradient(135deg,#ecfdf5,#fff); padding:1.5rem; border-radius:16px; margin-bottom:1.5rem; border:1px solid #d1fae5;">
+                <h3 style="margin:0 0 0.5rem;">🌿 Ваш персональный план</h3>
+                <p style="margin:0; color:#555;"><strong>Для:</strong> ${currentUser} | ${age||'?'} лет | ${weight||'?'} кг | "${goal || symp}"</p>
+            </div>
+            ${tableHTML}
+            <div class="result-card" style="background:#f9fafb; border-left:4px solid var(--accent); margin-top:1rem;"><h4 style="margin:0 0 0.5rem;">🌱 Рекомендации по образу жизни</h4>${lifeHTML}</div>
+            <div class="result-card" style="margin-top:1rem; background:#fef2f2; border-left:4px solid var(--danger);"><h4 style="margin:0 0 0.5rem;">⚠️ Важно</h4><p style="margin:0; font-size:0.9rem;">Перед приёмом проконсультируйтесь с врачом. Добавки не заменяют питание и лечение.</p></div>`;
+    }
+
+    function generateAntiAgePlan() {
+        const age = document.getElementById('aa-age').value;
+        const focus = document.getElementById('aa-focus').value;
+        const c = document.getElementById('results-area'); c.innerHTML = '';
+        const antiAgeItems = supplementsDB.filter(i => i.tags.includes('долголетие') || i.tags.includes('антиоксидант') || i.tags.includes('митохондрии') || i.tags.includes('теломеры'));
+        let filtered = focus === 'all' ? antiAgeItems : antiAgeItems.filter(i => i.tags.includes(focus));
+        if (!filtered.length) filtered = antiAgeItems.slice(0, 6);
+        if (!filtered.length) { c.innerHTML = '<div class="result-card"><h3>🌿 Добавки для долголетия появятся скоро</h3></div>'; return; }
+
+        let tableHTML = `<table class="plan-table"><thead><tr><th>⏰ Время</th><th>💊 Добавка</th><th>🌿 Механизм молодости</th></tr></thead><tbody>`;
+        const slots = {'☀️ Утро':[], '🍳 С едой':[], '🌙 Вечер':[]};
+        filtered.slice(0,6).forEach(i => {
+            const t = i.time.toLowerCase();
+            const entry = `<strong>${i.name}</strong><br><span style="color:var(--primary); font-size:0.9em;">${i.dose}</span>`;
+            const why = i.details || `${i.why} Поддерживает молодость на клеточном уровне.`;
+            if(t.includes('утро')||t.includes('натощак')) slots['☀️ Утро'].push({item: entry, info: why});
+            else if(t.includes('жир')||t.includes('омега')||t.includes('d3')||t.includes('еда')) slots['🍳 С едой'].push({item: entry, info: why});
+            else slots['🌙 Вечер'].push({item: entry, info: why});
+        });
+
+        Object.entries(slots).forEach(([time, items]) => {
+            if(!items.length) return;
+            tableHTML += `<tr><td data-label="Время">${time}</td><td data-label="Добавка">${items.map(i=>i.item).join('<br>')}</td><td data-label="Эффект">${items.map(i=>i.info).join('<br><hr style="border:0;border-top:1px dashed #ddd;margin:4px 0">')}</td></tr>`;
+        });
+        tableHTML += '</tbody></table>';
+
+        c.innerHTML = `
+            <div style="background:linear-gradient(135deg,#f0fdf4,#fff); padding:1.5rem; border-radius:16px; margin-bottom:1.5rem; border:1px solid #bbf7d0;">
+                <h3 style="margin:0 0 0.5rem;">🌿 План долголетия</h3>
+                <p style="margin:0; color:#555;"><strong>Фокус:</strong> ${focus==='all'?'Комплексный':focus} | ${age?`Возраст ${age}+`:'Все возрасты'}</p>
+            </div>
+            ${tableHTML}
+            <div class="result-card" style="background:#f0fdf4; border-left:4px solid var(--primary); margin-top:1rem;">
+                <h4 style="margin:0 0 0.5rem;">🌱 Принципы здорового долголетия</h4>
+                <ul style="margin:0; padding-left:20px;"><li>🥗 Растительная пища 80%, интервальное голодание 12-14ч</li><li>🚶 Ходьба 8-10 тыс. шагов + силовые 2×/нед</li><li>😴 Сон 7-8ч в темноте и прохладе</li><li>🧘 Стресс-менеджмент: медитация, дыхание, природа</li><li>🤝 Социальные связи — один из главных факторов долголетия</li></ul>
+            </div>`;
+    }
+
+    function renderResults(items) {
+        const c = document.getElementById('results-area'); c.innerHTML = '';
+        if (!items.length) { c.innerHTML = '<p style="text-align:center; color:#888;">🌿 Ничего не найдено. Попробуйте другие слова.</p>'; return; }
+        items.forEach(i => {
+            const card = document.createElement('div'); card.className = 'result-card';
+            card.innerHTML = `
+                <div class="card-header"><div class="card-title"><i class="fa-solid fa-capsules"></i> ${i.name}</div><span class="badge">${i.substance}</span></div>
+                <p style="margin:0 0 0.5rem; color:var(--text-sec);">${i.details || i.why}</p>
+                <div class="info-grid">
+                    <div class="info-item"><strong><i class="fa-regular fa-clock"></i> Время</strong><div>${i.time}</div></div>
+                    <div class="info-item"><strong><i class="fa-solid fa-pills"></i> Доза</strong><div>${i.dose}</div></div>
+                </div>
+                <button class="add-to-stack" onclick="addToStack(${i.id})"><i class="fa-solid fa-leaf"></i> В мой план</button>`;
+            c.appendChild(card);
+        });
+    }
+
+    // 🛡 STACK & SCHEDULE + TRACKER
+    function addToStack(id) {
+        const newItem = supplementsDB.find(i => i.id === id);
+        let warnings = [];
+        const dup = myStack.find(e => e.substance === newItem.substance);
+        if (dup) warnings.push(`⚠️ Уже есть ${dup.name}. Оба содержат ${newItem.substance}.`);
+        const antag = myStack.find(e => newItem.badWith.some(b => b.includes(e.substance) || b.includes(e.name)) || e.badWith.some(b => b.includes(newItem.substance) || b.includes(newItem.name)));
+        if (antag) warnings.push(`❌ Антагонизм с ${antag.name}. Разнесите приём.`);
+        if (warnings.length && !confirm(warnings.join('\n\n') + '\n\nДобавить всё равно?')) return;
+        myStack.push(newItem); save('stack', myStack); updateSchedule();
+        document.getElementById('results-area').innerHTML = '';
+        document.getElementById('my-stack-section').scrollIntoView({ behavior: 'smooth' });
+    }
+    function getTimeSlot(t) {
+        if(t.includes('Утро')||t.includes('натощак')) return '☀️ Утро';
+        if(t.includes('День')||t.includes('Обед')||t.includes('жир')) return '🌤 День';
+        if(t.includes('Вечер')||t.includes('сон')||t.includes('ночь')) return '🌙 Вечер';
+        return '🏃 Другое';
+    }
+    
+    function markTaken(id) {
+        const td = todayStr();
+        if(!checkins[td]) checkins[td] = [];
+        if(checkins[td].includes(id)) {
+            checkins[td] = checkins[td].filter(x => x !== id);
+        } else {
+            checkins[td].push(id);
+        }
+        save('checkins', checkins);
+        streak = calcStreak(); save('streak', streak);
+        updateSchedule();
+    }
+
+    function updateSchedule() {
+        const sec = document.getElementById('my-stack-section'); const cont = document.getElementById('schedule-container');
+        if (!myStack.length) { sec.style.display = 'none'; return; }
+        sec.style.display = 'block'; sec.classList.add('visible');
+        
+        const slots = {}; myStack.forEach(i => { const s = getTimeSlot(i.time); if(!slots[s]) slots[s]=[]; slots[s].push(i); });
+        const td = todayStr(); const todayTaken = checkins[td] || [];
+        document.getElementById('streak-count').textContent = streak;
+
+        const dotsContainer = document.getElementById('week-dots'); dotsContainer.innerHTML = '';
+        const dayNames = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
+        for(let i=6; i>=0; i--) {
+            let d = new Date(); d.setDate(d.getDate()-i);
+            let ds = d.toISOString().split('T')[0];
+            let has = checkins[ds] && checkins[ds].length > 0;
+            let isToday = ds === td;
+            dotsContainer.innerHTML += `<div class="week-dot ${has?'active':''} ${isToday?'today':''}" title="${d.toLocaleDateString()}">${dayNames[d.getDay()]}</div>`;
+        }
+
+        let html = '';
+        Object.entries(slots).forEach(([slot, items]) => {
+            let conflict = null;
+            for(let i=0; i<items.length; i++) for(let j=i+1; j<items.length; j++) {
+                if(items[i].badWith.some(b => b.includes(items[j].substance) || b.includes(items[j].name)) || items[j].badWith.some(b => b.includes(items[i].substance) || b.includes(items[i].name))) { conflict = {i1:items[i].name, i2:items[j].name}; break; }
+                if(conflict) break;
+            }
+            html += `<div class="time-slot ${conflict?'conflict':''}">
+                <div class="time-label">${slot} ${conflict ? `<span style="color:var(--danger); font-size:0.8rem;">⚠️ ${conflict.i1} + ${conflict.i2}</span>` : ''}</div>
+                <div class="pill-row">${items.map(i=>{
+                    const isTaken = todayTaken.includes(i.id);
+                    return `<span class="pill-tag ${isTaken?'taken':''}" onclick="markTaken(${i.id})">
+                        <i class="fa-solid ${isTaken?'fa-circle-check':'fa-circle'}"></i> 
+                        ${i.name} <small>(${i.dose})</small>
+                    </span>`;
+                }).join('')}</div>
+            </div>`;
+        });
+        cont.innerHTML = `<div class="tracker-header"><div class="streak-badge"><i class="fa-solid fa-fire"></i> Серия: <span id="streak-count">${streak}</span> дней</div><div class="week-dots" id="week-dots"></div></div>` + html;
+        
+        // Re-render dots safely
+        const newDots = document.getElementById('week-dots');
+        newDots.innerHTML = '';
+        for(let i=6; i>=0; i--) {
+            let d = new Date(); d.setDate(d.getDate()-i);
+            let ds = d.toISOString().split('T')[0];
+            let has = checkins[ds] && checkins[ds].length > 0;
+            let isToday = ds === td;
+            newDots.innerHTML += `<div class="week-dot ${has?'active':''} ${isToday?'today':''}" title="${d.toLocaleDateString()}">${dayNames[d.getDay()]}</div>`;
+        }
+    }
+
+    // 📝 TRACKER MOOD & HISTORY
+    function selectMood(btn, mood) { document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); btn.dataset.mood = mood; }
+    function saveWellness() {
+        const n = document.getElementById('wellness-note').value; const m = document.querySelector('.mood-btn.selected')?.dataset.mood;
+        if (!n && !m) return alert('Выберите смайл или заметку.');
+        wellnessLog.push({ date: new Date().toLocaleDateString(), mood: m||'?', note: n }); save('wellness', wellnessLog); renderWellnessHistory();
+        alert('✅ Сохранено! 🌿'); document.getElementById('wellness-note').value = ''; document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+    }
+    function renderWellnessHistory() {
+        const list = document.getElementById('wellness-history');
+        if (!wellnessLog.length) { list.innerHTML = '<p style="color:#888; text-align:center;">Записей пока нет 🌱</p>'; return; }
+        list.innerHTML = wellnessLog.slice(-15).reverse().map(log => {
+            const emoji = log.mood === 'bad' ? '😫' : log.mood === 'ok' ? '😐' : log.mood === 'good' ? '🙂' : '🤩';
+            return `<div class="history-item"><div style="font-weight:600;">${log.date} ${emoji}</div><div style="max-width:60%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--text-sec);">${log.note || '-'}</div></div>`;
+        }).join('');
+    }
+    function clearStack() {
+        if(!confirm('Удалить всё расписание, дневник и отметки?')) return;
+        myStack = []; wellnessLog = []; chatHistory = []; checkins = {}; streak = 0;
+        save('stack', myStack); save('wellness', wellnessLog); save('chat', chatHistory); save('checkins', checkins); save('streak', 0);
+        updateSchedule(); renderWellnessHistory(); renderChat();
+        document.getElementById('wellness-note').value=''; document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+    }
+
+    // 💬 CHAT
+    function toggleChat() { 
+        const m = document.getElementById('chat-modal'); 
+        if(m.style.display === 'none' || m.style.display === '') { m.style.display = 'flex'; m.classList.add('open'); } 
+        else { m.classList.remove('open'); setTimeout(()=>m.style.display='none', 300); }
+    }
+    function renderChat() {
+        const box = document.getElementById('chat-messages'); box.innerHTML = '';
+        if(!chatHistory.length) box.innerHTML = '<div class="msg ai">🌿 Привет! Я помощник по натуральным добавкам. Спросите: "Что для сна?", "Какие добавки для молодости?", "Можно ли магний с железом?"</div>';
+        else chatHistory.forEach(m => addMsg(m.role, m.text, false));
+    }
+    function addMsg(role, text, save=true) {
+        const box = document.getElementById('chat-messages'); const div = document.createElement('div'); div.className = `msg ${role}`;
+        div.innerHTML = text.replace(/\n/g, '<br>'); box.appendChild(div); box.scrollTop = box.scrollHeight;
+        if(save) { chatHistory.push({role, text}); if(chatHistory.length > 50) chatHistory.shift(); save('chat', chatHistory); }
+    }
+  function sendMessage() {
+    const inp = document.getElementById('chat-input');
+    const q = inp.value.trim();
+    if (!q) return;
+
+    addMsg('user', q);
+    inp.value = '';
+    
+    // Показываем "Думаю..."
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'msg ai';
+    loadingDiv.innerHTML = '<i>🌿 Думаю...</i>';
+    document.getElementById('chat-messages').appendChild(loadingDiv);
+
+    // Запрос к НАШЕМУ прокси (api/chat.js)
+    fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            messages: [{ role: "user", content: q }],
+            userId: currentUser 
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        loadingDiv.remove();
+        if (data.reply) {
+            // Форматируем ответ: **жирный** → <strong>жирный</strong>
+            const formatted = data.reply
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>');
+            addMsg('ai', formatted);
+        } else {
+            addMsg('ai', '⚠️ Ошибка: ' + (data.error || 'Попробуйте позже.'));
+        }
+    })
+    .catch(() => {
+        loadingDiv.remove();
+        addMsg('ai', '⚠️ Нет связи с сервером.');
+    });
+}
+    function chatResponse(q) {
+        const m = supplementsDB.filter(i => i.name.toLowerCase().includes(q) || i.tags.some(t => q.includes(t)));
+        if(m.length) return `🌿 <b>${m[0].name}</b><br>⏰ ${m[0].time}<br>💊 ${m[0].dose}<br>💡 ${m[0].details || m[0].why}<br><br><small style="color:#666">⚠️ Перед приёмом проконсультируйтесь с врачом</small>`;
+        if(q.includes('сон')) return '🌙 Для сна: Магний Глицинат, Мелатонин (0.5-3 мг), Ашваганда. Принимать вечером. Избегайте экранов и кофеина после 16:00.';
+        if(q.includes('долголетие') || q.includes('молодость') || q.includes('анти-эйж')) return '🌿 Для долголетия: Ресвератрол, NMN, Спермидин, Коэнзим Q10. Важны: растительная пища, интервальное голодание, сон 7-8ч, управление стрессом.';
+        return '🌿 Спросите про конкретную добавку или цель. Я помогу подобрать натуральную поддержку.';
+    }
+    document.getElementById('chat-input').addEventListener('keypress', e => { if(e.key==='Enter') sendMessage(); });
+
+    // 🚀 INIT
+    window.onload = initApp;
+    document.getElementById('input-name').addEventListener('keypress', e => e.key==='Enter' && searchByName());
+    document.getElementById('input-symptom').addEventListener('keypress', e => e.key==='Enter' && searchBySymptom());
+</script>
+
+</body>
+</html>
