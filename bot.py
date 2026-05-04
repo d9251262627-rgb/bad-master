@@ -2,7 +2,7 @@ import telebot
 import requests
 
 # === НАСТРОЙКИ (Ваши ключи уже вставлены) ===
-TELEGRAM_TOKEN = "8639726243:AAHexC6uPDvLxAyajzM9eRnb1m8ertphsqs"
+TELEGRAM_TOKEN = "8639726243:AAFlclplxzOR2DFMyVmb47SB_lAmLcv6Yc8"
 POLZA_API_KEY = "pza_ObhBUNca_A3wAZ5OJEHMeR3jyLN-KPQL"
 SITE_URL = "https://bad-master.vercel.app"  # Потом заменим на vita.care / zhivilegko.ru
 
