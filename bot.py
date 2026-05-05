@@ -3,7 +3,7 @@ import requests
 
 # === НАСТРОЙКИ (Ваши ключи уже вставлены) ===
 TELEGRAM_TOKEN = "8639726243:AAFlclplxzOR2DFMyVmb47SB_lAmLcv6Yc8"
-POLZA_API_KEY = "pza_ObhBUNca_A3wAZ5OJEHMeR3jyLN-KPQL"
+POLZA_API_KEY = "pza_nqIev9iYwJYpLB2WTJ_bUPRl5S43nISM"
 SITE_URL = "https://bad-master.vercel.app"  # Потом заменим на vita.care / zhivilegko.ru
 
 # Инициализация бота
