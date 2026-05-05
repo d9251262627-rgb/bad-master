@@ -3,12 +3,13 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { messages, userId } = req.body;
   const POLZA_API_KEY = process.env.POLZA_API_KEY;
-  
   if (!POLZA_API_KEY) {
+    console.error('❌ POLZA_API_KEY не найден в переменных окружения');
     return res.status(500).json({ error: 'API key not configured' });
   }
+
+  const { messages } = req.body;
 
   try {
     const response = await fetch('https://api.polza.ai/v1/chat/completions', {
@@ -22,9 +23,9 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "system",
-            content: `Ты — эксперт-нутрициолог помощник сервиса БАД-Master 🌿. Отвечай кратко, на русском. Всегда добавляй: "⚠️ Перед приёмом проконсультируйтесь с врачом".`
+            content: "Ты — ЖивиЛегко, помощник по здоровью от VITA. Отвечай кратко, тепло на русском. Всегда добавляй: '️ Перед приёмом проконсультируйтесь с врачом.'"
           },
-          ...messages
+          ...(messages || [])
         ],
         max_tokens: 600,
         temperature: 0.3
@@ -32,12 +33,15 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
-    if (data.choices?.[0]?.message) {
-      res.status(200).json({ reply: data.choices[0].message.content });
-    } else {
-      res.status(500).json({ error: 'AI service error' });
+
+    if (!response.ok) {
+      console.error(' Ошибка Polza API:', data);
+      return res.status(response.status).json({ error: data.error?.message || 'AI service error' });
     }
+
+    res.status(200).json({ reply: data.choices[0].message.content });
   } catch (error) {
+    console.error(' Ошибка сервера:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 }
