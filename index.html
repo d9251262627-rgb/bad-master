@@ -330,32 +330,66 @@
 // ==========================================
 // 📦 РАСШИРЕННАЯ БАЗА ДАННЫХ (25+ добавок)
 // ==========================================
-const supplementsDB = [
-    {id:1,name:"Магний Глицинат",substance:"Магний",time:"Вечер",dose:"200-400 мг",why:"Лучшая форма для сна и расслабления",goodWith:["Мелатонин","B6"],badWith:["Железо","Кальций"],tags:["сон","тревога","стресс"],icon:"😴",ozon:"https://ozon.ru/search/?text=магний+глицинат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+глицинат",iherb:"https://ru.iherb.com/c/magnesium"},
-    {id:2,name:"Витамин D3",substance:"Витамин D",time:"Утро",dose:"2000-5000 МЕ",why:"Иммунитет, кости, настроение",goodWith:["K2","Омега-3"],badWith:[],tags:["иммунитет","настроение","кости"],icon:"☀️",ozon:"https://ozon.ru/search/?text=витамин+d3",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+d3",iherb:"https://ru.iherb.com/c/vitamin-d"},
-    {id:3,name:"Омега-3",substance:"Омега-3",time:"Утро/Обед",dose:"1000-2000 мг",why:"Сердце, мозг, кожа, противовоспалительное",goodWith:["D3","E"],badWith:["Антикоагулянты"],tags:["мозг","сердце","кожа"],icon:"🐟",ozon:"https://ozon.ru/search/?text=омега-3",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=омега-3",iherb:"https://ru.iherb.com/c/omega-3"},
-    {id:4,name:"Цинк",substance:"Цинк",time:"День",dose:"15-30 мг",why:"Иммунитет, кожа, заживление",goodWith:["A","C","D3"],badWith:["Железо","Медь","Кальций"],tags:["иммунитет","кожа"],icon:"🛡️",ozon:"https://ozon.ru/search/?text=цинк",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=цинк",iherb:"https://ru.iherb.com/c/zinc"},
-    {id:5,name:"Креатин",substance:"Креатин",time:"После тренировки",dose:"5 г",why:"Сила, мышцы, выносливость",goodWith:["Углеводы","Протеин"],badWith:[],tags:["спорт","масса","сила"],icon:"💪",ozon:"https://ozon.ru/search/?text=креатин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=креатин",iherb:"https://ru.iherb.com/c/creatine"},
-    {id:6,name:"Витамин C",substance:"Аскорбиновая кислота",time:"Утро",dose:"500-1000 мг",why:"Иммунитет, антиоксидант, коллаген",goodWith:["Цинк","E"],badWith:["B12"],tags:["иммунитет","кожа"],icon:"🍊",ozon:"https://ozon.ru/search/?text=витамин+c",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+c",iherb:"https://ru.iherb.com/c/vitamin-c"},
-    {id:7,name:"Мелатонин",substance:"Гормон сна",time:"За 30 мин до сна",dose:"1-5 мг",why:"Быстрое засыпание, качественный сон",goodWith:["Магний","GABA"],badWith:["Кофеин","Алкоголь"],tags:["сон"],icon:"🌙",ozon:"https://ozon.ru/search/?text=мелатонин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=мелатонин",iherb:"https://ru.iherb.com/c/melatonin"},
-    {id:8,name:"Витамины B-Complex",substance:"Группа B",time:"Утро",dose:"1 таблетка",why:"Энергия, нервная система, метаболизм",goodWith:["Магний","D3"],badWith:["C (раздельно)"],tags:["энергия","нервы"],icon:"⚡",ozon:"https://ozon.ru/search/?text=витамины+группы+b",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамины+b",iherb:"https://ru.iherb.com/c/vitamin-b-complex"},
-    {id:9,name:"Железо",substance:"Fe",time:"Утро натощак",dose:"18-30 мг",why:"Гемоглобин, энергия, кислород",goodWith:["C","B12"],badWith:["Кальций","Цинк","Кофе"],tags:["энергия","анемия"],icon:"🩸",ozon:"https://ozon.ru/search/?text=железо",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=железо",iherb:"https://ru.iherb.com/c/iron"},
-    {id:10,name:"Кальций",substance:"Ca",time:"Вечер",dose:"500-1000 мг",why:"Кости, зубы, мышцы",goodWith:["D3","K2"],badWith:["Железо","Цинк","Магний (раздельно)"],tags:["кости"],icon:"🦴",ozon:"https://ozon.ru/search/?text=кальций",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=кальций",iherb:"https://ru.iherb.com/c/calcium"},
-    {id:11,name:"Ашваганда",substance:"Адаптоген",time:"Утро/Вечер",dose:"300-600 мг",why:"Снижение стресса, баланс кортизола",goodWith:["Магний","B-комплекс"],badWith:["Седативные"],tags:["стресс","тревога","энергия"],icon:"🌿",ozon:"https://ozon.ru/search/?text=ашваганда",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=ашваганда",iherb:"https://ru.iherb.com/c/ashwagandha"},
-    {id:12,name:"Куркума",substance:"Куркумин",time:"Обед",dose:"500-1000 мг",why:"Противовоспалительное, суставы",goodWith:["Черный перец","Омега-3"],badWith:["Антикоагулянты"],tags:["воспаление","суставы"],icon:"🧡",ozon:"https://ozon.ru/search/?text=куркума",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=куркума",iherb:"https://ru.iherb.com/c/turmeric"},
-    {id:13,name:"Пробиотики",substance:"Полезные бактерии",time:"Утро натощак",dose:"10-50 млрд КОЕ",why:"Кишечник, иммунитет, пищеварение",goodWith:["Пребиотики","Клетчатка"],badWith:["Антибиотики (раздельно 2ч)"],tags:["кишечник","иммунитет"],icon:"🦠",ozon:"https://ozon.ru/search/?text=пробиотики",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=пробиотики",iherb:"https://ru.iherb.com/c/probiotics"},
-    {id:14,name:"Коллаген",substance:"Белок",time:"Утро/Перед сном",dose:"5-10 г",why:"Кожа, суставы, волосы, ногти",goodWith:["Витамин C","Гиалуроновая кислота"],badWith:[],tags:["кожа","суставы","красота"],icon:"✨",ozon:"https://ozon.ru/search/?text=коллаген",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=коллаген",iherb:"https://ru.iherb.com/c/collagen"},
-    {id:15,name:"L-Теанин",substance:"Аминокислота",time:"Утро/День",dose:"100-200 мг",why:"Расслабление без сонливости, фокус",goodWith:["Кофеин","Магний"],badWith:[],tags:["фокус","расслабление","стресс"],icon:"🧘",ozon:"https://ozon.ru/search/?text=l-теанин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=l-теанин",iherb:"https://ru.iherb.com/c/l-theanine"},
-    {id:16,name:"Коэнзим Q10",substance:"CoQ10",time:"Утро с едой",dose:"100-200 мг",why:"Энергия клеток, сердце, антиоксидант",goodWith:["Омега-3","E"],badWith:[],tags:["сердце","энергия","антиоксидант"],icon:"❤️",ozon:"https://ozon.ru/search/?text=коэнзим+q10",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=коэнзим+q10",iherb:"https://ru.iherb.com/c/coq10"},
-    {id:17,name:"Селен",substance:"Se",time:"Утро",dose:"100-200 мкг",why:"Щитовидка, иммунитет, антиоксидант",goodWith:["Йод","E","C"],badWith:[],tags:["щитовидка","иммунитет"],icon:"🦋",ozon:"https://ozon.ru/search/?text=селен",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=селен",iherb:"https://ru.iherb.com/c/selenium"},
-    {id:18,name:"Йод",substance:"I",time:"Утро",dose:"150-300 мкг",why:"Щитовидка, метаболизм, энергия",goodWith:["Селен","Цинк"],badWith:["Бром"],tags:["щитовидка","метаболизм"],icon:"🔷",ozon:"https://ozon.ru/search/?text=йод",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=йод",iherb:"https://ru.iherb.com/c/iodine"},
-    {id:19,name:"Витамин E",substance:"Токоферол",time:"Утро с едой",dose:"100-400 МЕ",why:"Антиоксидант, кожа, иммунитет",goodWith:["C","Селен","Омега-3"],badWith:["Железо (раздельно)"],tags:["кожа","антиоксидант","иммунитет"],icon:"🌟",ozon:"https://ozon.ru/search/?text=витамин+e",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+e",iherb:"https://ru.iherb.com/c/vitamin-e"},
-    {id:20,name:"Биотин",substance:"B7",time:"Утро",dose:"5000-10000 мкг",why:"Волосы, ногти, кожа",goodWith:["Коллаген","Цинк"],badWith:[],tags:["волосы","ногти","кожа","красота"],icon:"💅",ozon:"https://ozon.ru/search/?text=биотин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=биотин",iherb:"https://ru.iherb.com/c/biotin"},
-    {id:21,name:"GABA",substance:"ГАМК",time:"Вечер",dose:"250-750 мг",why:"Расслабление, сон, снижение тревоги",goodWith:["Магний","Мелатонин"],badWith:["Алкоголь"],tags:["сон","тревога","расслабление"],icon:"😌",ozon:"https://ozon.ru/search/?text=gaba",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=gaba",iherb:"https://ru.iherb.com/c/gaba"},
-    {id:22,name:"Ресвератрол",substance:"Полифенол",time:"Вечер",dose:"100-500 мг",why:"Долголетие, антиоксидант, сердце",goodWith:["Кверцетин","NMN"],badWith:[],tags:["долголетие","антиоксидант","сердце"],icon:"🍇",ozon:"https://ozon.ru/search/?text=ресвератрол",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=ресвератрол",iherb:"https://ru.iherb.com/c/resveratrol"},
-    {id:23,name:"NMN",substance:"Никотинамид мононуклеотид",time:"Утро",dose:"250-500 мг",why:"Долголетие, энергия клеток, NAD+",goodWith:["Ресвератрол","TMG"],badWith:[],tags:["долголетие","энергия","anti-age"],icon:"⏳",ozon:"https://ozon.ru/search/?text=nmn",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=nmn",iherb:"https://ru.iherb.com/c/nmn"},
-    {id:24,name:"Протеин",substance:"Белок",time:"После тренировки",dose:"20-30 г",why:"Рост мышц, восстановление",goodWith:["Креатин","BCAA"],badWith:[],tags:["спорт","мышцы","восстановление"],icon:"🥤",ozon:"https://ozon.ru/search/?text=протеин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=протеин",iherb:"https://ru.iherb.com/c/protein-powders"},
-    {id:25,name:"Витамин K2",substance:"Менахинон",time:"Утро с едой",dose:"100-200 мкг",why:"Направляет кальций в кости, сердце",goodWith:["D3","Кальций"],badWith:["Антикоагулянты"],tags:["кости","сердце"],icon:"",ozon:"https://ozon.ru/search/?text=витамин+k2",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+k2",iherb:"https://ru.iherb.com/c/vitamin-k2"}
+const supplementsDB = [const supplementsDB = [
+    {id:1,name:"Магний Глицинат",substance:"Магний (хелатная форма)",time:"Вечер",dose:"200-400 мг",why:"Лучшая форма для сна и расслабления. Не вызывает расстройства ЖКТ. Успокаивает нервную систему.",goodWith:["Мелатонин","B6","GABA"],badWith:["Железо","Кальций"],tags:["сон","тревога","стресс","расслабление","нервы"],icon:"😴",ozon:"https://ozon.ru/search/?text=магний+глицинат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+глицинат",iherb:"https://ru.iherb.com/c/magnesium-glycinate"},
+    
+    {id:2,name:"Магний Цитрат",substance:"Магний (органическая форма)",time:"Утро/День",dose:"200-400 мг",why:"Хорошо усваивается. Помогает при запорах (слабительный эффект). Даёт энергию мышцам.",goodWith:["B6","Калий"],badWith:["Железо","Антибиотики"],tags:["энергия","мышцы","пищеварение","запоры","утро"],icon:"⚡",ozon:"https://ozon.ru/search/?text=магний+цитрат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+цитрат",iherb:"https://ru.iherb.com/c/magnesium-citrate"},
+    
+    {id:3,name:"Магний Малат",substance:"Магний + яблочная кислота",time:"Утро",dose:"200-400 мг",why:"Даёт энергию, бодрость. Помогает при хронической усталости и фибромиалгии. Улучшает работу мышц.",goodWith:["B-комплекс","CoQ10"],badWith:["Железо"],tags:["энергия","бодрость","усталость","мышцы","утро","фибромиалгия"],icon:"🌅",ozon:"https://ozon.ru/search/?text=магний+малат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+малат",iherb:"https://ru.iherb.com/c/magnesium-malate"},
+    
+    {id:4,name:"Магний L-Треонат",substance:"Магний (проникает в мозг)",time:"Утро/День",dose:"100-200 мг",why:"Единственная форма, проникающая через гематоэнцефалический барьер. Улучшает память, обучение, когнитивные функции.",goodWith:["Омега-3","Холин"],badWith:[],tags:["мозг","память","фокус","когнитивные","обучение"],icon:"🧠",ozon:"https://ozon.ru/search/?text=магний+треонат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+треонат",iherb:"https://ru.iherb.com/c/magnesium-l-threonate"},
+    
+    {id:5,name:"Магний Таурат",substance:"Магний + таурин",time:"Утро/Вечер",dose:"200-400 мг",why:"Поддержка сердца и сосудов. Нормализует давление. Успокаивает сердцебиение.",goodWith:["CoQ10","Омега-3","Калий"],badWith:[],tags:["сердце","давление","сосуды","кардио"],icon:"❤️",ozon:"https://ozon.ru/search/?text=магний+таурат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+таурат",iherb:"https://ru.iherb.com/c/magnesium-taurate"},
+    
+    {id:6,name:"Витамин D3",substance:"Витамин D",time:"Утро с едой",dose:"2000-5000 МЕ",why:"Иммунитет, кости, настроение. Даёт энергию, борется с усталостью. Критически важен при плохом настроении.",goodWith:["K2","Омега-3","Магний"],badWith:[],tags:["иммунитет","настроение","кости","энергия","усталость","утро","депрессия"],icon:"☀️",ozon:"https://ozon.ru/search/?text=витамин+d3",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+d3",iherb:"https://ru.iherb.com/c/vitamin-d"},
+    
+    {id:7,name:"Омега-3",substance:"Омега-3",time:"Утро/Обед",dose:"1000-2000 мг",why:"Сердце, мозг, кожа, противовоспалительное. Улучшает настроение и когнитивные функции.",goodWith:["D3","E","Магний"],badWith:["Антикоагулянты"],tags:["мозг","сердце","кожа","настроение","воспаление"],icon:"🐟",ozon:"https://ozon.ru/search/?text=омега-3",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=омега-3",iherb:"https://ru.iherb.com/c/omega-3"},
+    
+    {id:8,name:"Цинк",substance:"Цинк",time:"День",dose:"15-30 мг",why:"Иммунитет, кожа, заживление. Участвует в производстве энергии.",goodWith:["A","C","D3"],badWith:["Железо","Медь","Кальций","Кофе"],tags:["иммунитет","кожа","энергия","заживление"],icon:"🛡️",ozon:"https://ozon.ru/search/?text=цинк",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=цинк",iherb:"https://ru.iherb.com/c/zinc"},
+    
+    {id:9,name:"Креатин",substance:"Креатин",time:"После тренировки",dose:"5 г",why:"Сила, мышцы, выносливость. Даёт быструю энергию мышцам.",goodWith:["Углеводы","Протеин","Кофеин"],badWith:[],tags:["спорт","масса","сила","энергия","мышцы"],icon:"💪",ozon:"https://ozon.ru/search/?text=креатин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=креатин",iherb:"https://ru.iherb.com/c/creatine"},
+    
+    {id:10,name:"Витамин C",substance:"Аскорбиновая кислота",time:"Утро",dose:"500-1000 мг",why:"Иммунитет, антиоксидант, коллаген. Помогает при усталости надпочечников.",goodWith:["Цинк","E","B-комплекс"],badWith:["B12"],tags:["иммунитет","кожа","энергия","усталость","стресс"],icon:"🍊",ozon:"https://ozon.ru/search/?text=витамин+c",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+c",iherb:"https://ru.iherb.com/c/vitamin-c"},
+    
+    {id:11,name:"Мелатонин",substance:"Гормон сна",time:"За 30 мин до сна",dose:"1-5 мг",why:"Быстрое засыпание, качественный сон. Помогает при бессоннице и сменном графике.",goodWith:["Магний","GABA","5-HTP"],badWith:["Кофеин","Алкоголь","Стимуляторы"],tags:["сон","бессонница","расслабление","вечер"],icon:"🌙",ozon:"https://ozon.ru/search/?text=мелатонин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=мелатонин",iherb:"https://ru.iherb.com/c/melatonin"},
+    
+    {id:12,name:"Витамины B-Complex",substance:"Группа B (B1-B12)",time:"Утро",dose:"1 капсула",why:"Энергия, нервная система, метаболизм. Критически важны при усталости и стрессе.",goodWith:["Магний","D3","C"],badWith:["C (раздельно 2ч)"],tags:["энергия","нервы","стресс","усталость","метаболизм","утро","бодрость"],icon:"⚡",ozon:"https://ozon.ru/search/?text=витамины+группы+b",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамины+b",iherb:"https://ru.iherb.com/c/vitamin-b-complex"},
+    
+    {id:13,name:"Железо",substance:"Fe",time:"Утро натощак",dose:"18-30 мг",why:"Гемоглобин, энергия, кислород. При анемии — причина хронической усталости.",goodWith:["C","B12","Фолиевая кислота"],badWith:["Кальций","Цинк","Кофе","Чай","Магний"],tags:["энергия","анемия","усталость","гемоглобин","утро"],icon:"🩸",ozon:"https://ozon.ru/search/?text=железо",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=железо",iherb:"https://ru.iherb.com/c/iron"},
+    
+    {id:14,name:"Коэнзим Q10",substance:"CoQ10",time:"Утро с едой",dose:"100-200 мг",why:"Энергия клеток, сердце, антиоксидант. Даёт силы, борется с усталостью.",goodWith:["Омега-3","E","Селен"],badWith:[],tags:["сердце","энергия","антиоксидант","усталость","митохондрии"],icon:"❤️",ozon:"https://ozon.ru/search/?text=коэнзим+q10",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=коэнзим+q10",iherb:"https://ru.iherb.com/c/coq10"},
+    
+    {id:15,name:"Ашваганда",substance:"Адаптоген",time:"Утро/Вечер",dose:"300-600 мг",why:"Снижение стресса, баланс кортизола. Улучшает сон, даёт энергию, борется с усталостью надпочечников.",goodWith:["Магний","B-комплекс","Родиола"],badWith:["Седативные","Тиреоидные гормоны"],tags:["стресс","тревога","энергия","сон","усталость","кортизол","надпочечники"],icon:"🌿",ozon:"https://ozon.ru/search/?text=ашваганда",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=ашваганда",iherb:"https://ru.iherb.com/c/ashwagandha"},
+    
+    {id:16,name:"Родиола Розовая",substance:"Адаптоген",time:"Утро",dose:"200-400 мг",why:"Энергия, выносливость, борьба с усталостью. Улучшает настроение и концентрацию.",goodWith:["Ашваганда","B-комплекс"],badWith:["Антидепрессанты","Стимуляторы"],tags:["энергия","усталость","настроение","фокус","утро","бодрость","стресс"],icon:"🌸",ozon:"https://ozon.ru/search/?text=родиола+розовая",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=родиола",iherb:"https://ru.iherb.com/c/rhodiola"},
+    
+    {id:17,name:"L-Тирозин",substance:"Аминокислота",time:"Утро натощак",dose:"500-1000 мг",why:"Энергия, фокус, настроение. Предшественник дофамина. Помогает при усталости и стрессе.",goodWith:["B6","C","Кофеин"],badWith:["Леводопа","Тиреоидные гормоны"],tags:["энергия","фокус","настроение","усталость","мотивация","утро","дофамин"],icon:"🎯",ozon:"https://ozon.ru/search/?text=l-тирозин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=l-тирозин",iherb:"https://ru.iherb.com/c/l-tyrosine"},
+    
+    {id:18,name:"Куркума",substance:"Куркумин",time:"Обед с едой",dose:"500-1000 мг",why:"Противовоспалительное, суставы. Улучшает общее самочувствие.",goodWith:["Черный перец","Омега-3","Имбирь"],badWith:["Антикоагулянты"],tags:["воспаление","суставы","иммунитет","здоровье"],icon:"🧡",ozon:"https://ozon.ru/search/?text=куркума",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=куркума",iherb:"https://ru.iherb.com/c/turmeric"},
+    
+    {id:19,name:"Пробиотики",substance:"Полезные бактерии",time:"Утро натощак",dose:"10-50 млрд КОЕ",why:"Кишечник, иммунитет, пищеварение. Влияют на настроение и энергию.",goodWith:["Пребиотики","Клетчатка"],badWith:["Антибиотики (раздельно 2ч)"],tags:["кишечник","иммунитет","пищеварение","настроение","энергия"],icon:"🦠",ozon:"https://ozon.ru/search/?text=пробиотики",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=пробиотики",iherb:"https://ru.iherb.com/c/probiotics"},
+    
+    {id:20,name:"Коллаген",substance:"Белок",time:"Утро/Перед сном",dose:"5-10 г",why:"Кожа, суставы, волосы, ногти. Улучшает восстановление.",goodWith:["Витамин C","Гиалуроновая кислота"],badWith:[],tags:["кожа","суставы","красота","волосы","ногти","восстановление"],icon:"✨",ozon:"https://ozon.ru/search/?text=коллаген",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=коллаген",iherb:"https://ru.iherb.com/c/collagen"},
+    
+    {id:21,name:"L-Теанин",substance:"Аминокислота",time:"Утро/День",dose:"100-200 мг",why:"Расслабление без сонливости, фокус. Снимает тревожность.",goodWith:["Кофеин","Магний","GABA"],badWith:[],tags:["фокус","расслабление","стресс","тревога","спокойствие"],icon:"🧘",ozon:"https://ozon.ru/search/?text=l-теанин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=l-теанин",iherb:"https://ru.iherb.com/c/l-theanine"},
+    
+    {id:22,name:"Селен",substance:"Se",time:"Утро",dose:"100-200 мкг",why:"Щитовидка, иммунитет, антиоксидант. Влияет на энергию и метаболизм.",goodWith:["Йод","E","C","Цинк"],badWith:[],tags:["щитовидка","иммунитет","энергия","метаболизм","антиоксидант"],icon:"🦋",ozon:"https://ozon.ru/search/?text=селен",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=селен",iherb:"https://ru.iherb.com/c/selenium"},
+    
+    {id:23,name:"Йод",substance:"I",time:"Утро",dose:"150-300 мкг",why:"Щитовидка, метаболизм, энергия. При дефиците — хроническая усталость.",goodWith:["Селен","Цинк","Тирозин"],badWith:["Бром","Хлор"],tags:["щитовидка","метаболизм","энергия","усталость","гормоны"],icon:"🔷",ozon:"https://ozon.ru/search/?text=йод",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=йод",iherb:"https://ru.iherb.com/c/iodine"},
+    
+    {id:24,name:"Витамин E",substance:"Токоферол",time:"Утро с едой",dose:"100-400 МЕ",why:"Антиоксидант, кожа, иммунитет. Защищает клетки.",goodWith:["C","Селен","Омега-3"],badWith:["Железо (раздельно)"],tags:["кожа","антиоксидант","иммунитет","здоровье"],icon:"🌟",ozon:"https://ozon.ru/search/?text=витамин+e",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+e",iherb:"https://ru.iherb.com/c/vitamin-e"},
+    
+    {id:25,name:"Биотин",substance:"B7",time:"Утро",dose:"5000-10000 мкг",why:"Волосы, ногти, кожа. Участвует в энергетическом обмене.",goodWith:["Коллаген","Цинк","B-комплекс"],badWith:[],tags:["волосы","ногти","кожа","красота","энергия","метаболизм"],icon:"💅",ozon:"https://ozon.ru/search/?text=биотин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=биотин",iherb:"https://ru.iherb.com/c/biotin"},
+    
+    {id:26,name:"GABA",substance:"ГАМК",time:"Вечер",dose:"250-750 мг",why:"Расслабление, сон, снижение тревоги. Успокаивает нервную систему.",goodWith:["Магний","Мелатонин","L-Теанин"],badWith:["Алкоголь","Седативные"],tags:["сон","тревога","расслабление","стресс","нервы","вечер"],icon:"😌",ozon:"https://ozon.ru/search/?text=gaba",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=gaba",iherb:"https://ru.iherb.com/c/gaba"},
+    
+    {id:27,name:"Ресвератрол",substance:"Полифенол",time:"Вечер",dose:"100-500 мг",why:"Долголетие, антиоксидант, сердце. Защищает клетки от старения.",goodWith:["Кверцетин","NMN","Омега-3"],badWith:[],tags:["долголетие","антиоксидант","сердце","anti-age","здоровье"],icon:"🍇",ozon:"https://ozon.ru/search/?text=ресвератрол",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=ресвератрол",iherb:"https://ru.iherb.com/c/resveratrol"},
+    
+    {id:28,name:"NMN",substance:"Никотинамид мононуклеотид",time:"Утро",dose:"250-500 мг",why:"Долголетие, энергия клеток, NAD+. Повышает уровень энергии.",goodWith:["Ресвератрол","TMG","CoQ10"],badWith:[],tags:["долголетие","энергия","anti-age","клетки","митохондрии","утро"],icon:"⏳",ozon:"https://ozon.ru/search/?text=nmn",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=nmn",iherb:"https://ru.iherb.com/c/nmn"},
+    
+    {id:29,name:"Протеин",substance:"Белок",time:"После тренировки",dose:"20-30 г",why:"Рост мышц, восстановление. Даёт энергию и строительный материал.",goodWith:["Креатин","BCAA","Углеводы"],badWith:[],tags:["спорт","мышцы","восстановление","энергия","протеин"],icon:"🥤",ozon:"https://ozon.ru/search/?text=протеин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=протеин",iherb:"https://ru.iherb.com/c/protein-powders"},
+    
+    {id:30,name:"Витамин K2",substance:"Менахинон",time:"Утро с едой",dose:"100-200 мкг",why:"Направляет кальций в кости, защищает сердце. Работает с D3.",goodWith:["D3","Кальций","Магний"],badWith:["Антикоагулянты"],tags:["кости","сердце","кальций","здоровье"],icon:"🦴",ozon:"https://ozon.ru/search/?text=витамин+k2",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+k2",iherb:"https://ru.iherb.com/c/vitamin-k2"}
 ];
 
 // ==========================================
@@ -436,9 +470,46 @@ function searchByName() {
     renderResults(supplementsDB.filter(i => i.name.toLowerCase().includes(q) || i.substance.toLowerCase().includes(q)));
 }
 
-function searchBySymptom() {
-    const q = document.getElementById('input-symptom').value.toLowerCase();
-    renderResults(supplementsDB.filter(i => i.tags.some(t => t.includes(q))));
+function searchBySymptom() {function searchBySymptom() {
+    const q = document.getElementById('input-symptom').value.toLowerCase().trim();
+    if (!q) return;
+    
+    // Разбиваем запрос на слова для лучшего поиска
+    const words = q.split(' ').filter(w => w.length > 2);
+    
+    const results = supplementsDB.filter(i => {
+        // Ищем совпадения в тегах
+        const tagMatch = i.tags.some(tag => 
+            words.some(word => tag.includes(word) || word.includes(tag))
+        );
+        
+        // Ищем в названии и описании
+        const nameMatch = i.name.toLowerCase().includes(q) || i.substance.toLowerCase().includes(q);
+        const whyMatch = i.why.toLowerCase().includes(q);
+        
+        // Специальные ключевые слова для частых запросов
+        const keywords = {
+            'плохо встаю': ['энергия', 'утро', 'бодрость', 'усталость', 'сон'],
+            'усталость': ['энергия', 'усталость', 'бодрость', 'утро'],
+            'нет сил': ['энергия', 'усталость', 'бодрость'],
+            'сон': ['сон', 'бессонница', 'расслабление'],
+            'иммунитет': ['иммунитет'],
+            'стресс': ['стресс', 'тревога', 'нервы', 'расслабление']
+        };
+        
+        let keywordMatch = false;
+        for (const [key, tags] of Object.entries(keywords)) {
+            if (q.includes(key)) {
+                keywordMatch = i.tags.some(tag => tags.includes(tag));
+                break;
+            }
+        }
+        
+        return tagMatch || nameMatch || whyMatch || keywordMatch;
+    });
+    
+    renderResults(results);
+}
 }
 
 function generatePersonalPlan() {
