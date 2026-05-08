@@ -831,6 +831,79 @@ function fallbackSearch(query) {
     
     renderResults(results);
 }
+    // === УМНЫЙ ПОИСК С УЧЁТОМ ВОЗРАСТА И ВЕСА ===
+async function smartSearchWithProfile(query, age, weight) {
+    const resultsArea = document.getElementById('results-area');
+    
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                messages: [{
+                    role: "user",
+                    content: `Пользователь: возраст ${age} лет, вес ${weight} кг. Цель: "${query}". 
+Найди ID добавок из базы, которые подходят ИМЕННО для этого человека с учётом возраста и веса. 
+Верни ТОЛЬКО JSON: {"ids": [1, 5, 12], "explanation": "краткое объяснение почему эти добавки"}. 
+База: 1-Магний Глицинат(сон,стресс), 2-Магний Цитрат(энергия,пищеварение), 3-Магний Малат(энергия,усталость,утро), 4-Магний Треонат(мозг), 5-Магний Таурат(сердце), 6-D3(иммунитет,энергия,утро), 7-Омега-3(мозг,сердце), 8-Цинк(иммунитет), 9-Креатин(мышцы,энергия), 10-Витамин C(иммунитет,усталость), 11-Мелатонин(сон), 12-B-Complex(энергия,нервы,утро), 13-Железо(энергия,анемия), 14-CoQ10(энергия,сердце), 15-Ашваганда(стресс,усталость), 16-Родиола(энергия,усталость,утро), 17-L-Тирозин(энергия,фокус), 18-Куркума(воспаление), 19-Пробиотики(кишечник), 20-Коллаген(кожа), 21-L-Теанин(расслабление), 22-Селен(щитовидка), 23-Йод(щитовидка,энергия), 24-Витамин E(кожа), 25-Биотин(волосы), 26-GABA(сон,расслабление), 27-Ресвератрол(долголетие), 28-NMN(энергия), 29-Протеин(мышцы), 30-K2(кости).`
+                }],
+                userId: currentUser
+            }),
+            signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        const data = await response.json();
+        
+        if (data.reply) {
+            const jsonMatch = data.reply.match(/\{[\s\S]*"ids"[\s\S]*\}/);
+            if (jsonMatch) {
+                const result = JSON.parse(jsonMatch[0]);
+                const items = supplementsDB.filter(item => result.ids.includes(item.id));
+                if (items.length > 0) {
+                    // Добавляем персональное объяснение
+                    const personalizedHTML = `
+                        <div style="background: linear-gradient(135deg, #ecfdf5, #d1fae5); padding: 1.5rem; border-radius: 16px; margin-bottom: 2rem; border-left: 4px solid var(--primary);">
+                            <h3 style="margin:0 0 0.5rem; color:var(--primary-dark);">📋 Персональные рекомендации</h3>
+                            <p style="margin:0; color:var(--text);">
+                                <strong>Возраст:</strong> ${age} лет | <strong>Вес:</strong> ${weight} кг<br>
+                                <strong>Цель:</strong> ${goal}<br><br>
+                                ${result.explanation || 'Подобрано на основе ваших параметров и цели.'}
+                            </p>
+                        </div>
+                    `;
+                    resultsArea.innerHTML = personalizedHTML + items.map(i => `
+                        <div class="result-card">
+                            <h3><span class="icon">${i.icon}</span> ${i.name} <small style="color:var(--text-sec); font-size:0.9rem">(${i.substance})</small></h3>
+                            <p>${i.why}</p>
+                            <p><strong>⏰ Время:</strong> ${i.time} | <strong>💊 Доза:</strong> ${i.dose}</p>
+                            <div>${i.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+                            <div class="compatibility">
+                                <div class="good">✅ Можно с: ${i.goodWith.join(', ') || 'всем'}</div>
+                                <div class="bad">❌ Не с: ${i.badWith.join(', ') || 'нет ограничений'}</div>
+                            </div>
+                            <button class="btn-primary" onclick="addToStack(${i.id})">➕ Добавить в план</button>
+                            <div class="buy-buttons">
+                                <a href="${i.ozon}" target="_blank" class="buy-btn ozon">🛒 Ozon</a>
+                                <a href="${i.wb}" target="_blank" class="buy-btn wb">🛍 Wildberries</a>
+                                <a href="${i.iherb}" target="_blank" class="buy-btn iherb">🌿 iHerb</a>
+                            </div>
+                        </div>
+                    `).join('');
+                    return;
+                }
+            }
+        }
+    } catch (err) {
+        console.log('AI failed:', err);
+    }
+    
+    // Fallback на обычный поиск
+    fallbackSearch(query);
+}
 function generatePersonalPlan() {
     const goal = document.getElementById('p-goal').value.trim();
     const age = parseInt(document.getElementById('p-age').value) || 30;
