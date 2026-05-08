@@ -833,16 +833,17 @@ function fallbackSearch(query) {
 }
 function generatePersonalPlan() {
     const goal = document.getElementById('p-goal').value.trim();
+    const age = parseInt(document.getElementById('p-age').value) || 30;
+    const weight = parseInt(document.getElementById('p-weight').value) || 70;
+    
     if (!goal) return alert('Укажите вашу цель');
 
-    // Показываем статус загрузки
     const resultsArea = document.getElementById('results-area');
     resultsArea.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sec);"><i>🤔 Анализирую ваш профиль и цель...</i></div>';
-
-    // Отправляем цель в умный поиск (ИИ + теги)
-    smartSearch(goal);
-
-    // Плавно скроллим к результатам
+    
+    // Отправляем в ИИ с параметрами пользователя
+    smartSearchWithProfile(goal, age, weight);
+    
     setTimeout(() => {
         resultsArea.scrollIntoView({behavior: 'smooth'});
     }, 100);
