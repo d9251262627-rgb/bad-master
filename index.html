@@ -676,27 +676,6 @@ function searchByName() {
     renderResults(supplementsDB.filter(i => i.name.toLowerCase().includes(q) || i.substance.toLowerCase().includes(q)));
 }
 
-async function smartSearch(query) {
-    const resultsArea = document.getElementById('results-area');
-    resultsArea.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sec);"><i>🤔 Анализирую...</i></div>';
-    
-    try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 4000);
-        
-        const response = await fetch('/api/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                messages: [{
-                    role: "user",
-                    content: `Найди ID добавок для запроса: "${query}". Верни ТОЛЬКО JSON: {"ids": [1, 5, 12]}. База: 1-Магний Глицинат(сон,стресс), 2-Магний Цитрат(энергия,пищеварение), 3-Магний Малат(энергия,усталость,утро), 4-Магний Треонат(мозг), 5-Магний Таурат(сердце), 6-D3(иммунитет,энергия,утро), 7-Омега-3(мозг,сердце), 8-Цинк(иммунитет), 9-Креатин(мышцы,энергия), 10-Витамин C(иммунитет,усталость), 11-Мелатонин(сон), 12-B-Complex(энергия,нервы,утро), 13-Железо(энергия,анемия), 14-CoQ10(энергия,сердце), 15-Ашваганда(стресс,усталость), 16-Родиола(энергия,усталость,утро), 17-L-Тирозин(энергия,фокус), 18-Куркума(воспаление), 19-Пробиотики(кишечник), 20-Коллаген(кожа), 21-L-Теанин(расслабление), 22-Селен(щитовидка), 23-Йод(щитовидка,энергия), 24-Витамин E(кожа), 25-Биотин(волосы), 26-GABA(сон,расслабление), 27-Ресвератрол(долголетие), 28-NMN(энергия), 29-Протеин(мышцы), 30-K2(кости).`
-                }],
-                userId: currentUser
-            }),
-            signal: controller.signal
-        });
-        
         clearTimeout(timeoutId);
         const data = await response.json();
         
@@ -870,7 +849,7 @@ async function smartSearchWithProfile(query, age, weight) {
                             <h3 style="margin:0 0 0.5rem; color:var(--primary-dark);">📋 Персональные рекомендации</h3>
                             <p style="margin:0; color:var(--text);">
                                 <strong>Возраст:</strong> ${age} лет | <strong>Вес:</strong> ${weight} кг<br>
-                                <strong>Цель:</strong> ${goal}<br><br>
+                                <strong>Цель:</strong> ${query}<br><br>
                                 ${result.explanation || 'Подобрано на основе ваших параметров и цели.'}
                             </p>
                         </div>
