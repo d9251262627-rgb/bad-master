@@ -23,7 +23,6 @@
             position: relative;
         }
         
-        /* Floating Leaf Animation */
         .floating-leaf {
             position: fixed;
             font-size: 200px;
@@ -89,10 +88,27 @@
             border-radius: var(--radius); box-shadow: var(--shadow); animation: slideUp 0.5s ease; }
         .search-box.active { display: block; }
         
+        /* Quick Filters */
+        .quick-filters { display: flex; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap; justify-content: center; }
+        .filter-btn { padding: 10px 18px; border: 2px solid var(--border); background: white; 
+            border-radius: 25px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+        .filter-btn:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
+        
         input[type="text"], input[type="number"], input[type="time"], input[type="email"] { 
             width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 14px; 
             font-size: 16px; margin-bottom: 1rem; transition: border-color 0.3s; }
         input:focus { border-color: var(--primary); outline: none; }
+        
+        /* Autocomplete */
+        .autocomplete-container { position: relative; }
+        .autocomplete-list { position: absolute; top: 100%; left: 0; right: 0; 
+            background: white; border: 1px solid var(--border); border-radius: 12px; 
+            margin-top: 5px; max-height: 300px; overflow-y: auto; z-index: 1000; 
+            box-shadow: var(--shadow); display: none; }
+        .autocomplete-item { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid var(--border); 
+            transition: background 0.2s; }
+        .autocomplete-item:hover { background: #f0fdf4; }
+        .autocomplete-item:last-child { border-bottom: none; }
         
         .btn-primary { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); 
             color: white; border: none; padding: 16px; border-radius: 14px; font-weight: 700; 
@@ -146,18 +162,33 @@
             height: 100%; border-radius: 10px; transition: width 0.5s ease; }
         .progress-text { text-align: center; font-weight: 600; color: var(--primary-dark); }
         
+        /* Improved Calendar */
         .calendar-widget { background: white; border-radius: 20px; padding: 1.5rem; 
             box-shadow: var(--shadow); margin-bottom: 2rem; }
         .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
         .calendar-day-header { font-weight: 600; color: var(--text-sec); padding: 5px; font-size: 0.8rem; }
         .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; 
-            border-radius: 50%; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+            border-radius: 50%; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; position: relative; }
         .calendar-day:hover { background: #f1f5f9; }
         .calendar-day.today { border: 2px solid var(--primary); font-weight: 700; }
         .calendar-day.full { background: var(--success); color: white; }
         .calendar-day.partial { background: var(--accent); color: white; }
         .calendar-day.empty { background: transparent; cursor: default; }
+        
+        /* Calendar Tooltip */
+        .calendar-tooltip {
+            position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+            background: var(--text); color: white; padding: 8px 12px; border-radius: 8px;
+            font-size: 0.75rem; white-space: nowrap; z-index: 100; display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); margin-bottom: 5px;
+        }
+        .calendar-tooltip::after {
+            content: ''; position: absolute; top: 100%; left: 50%;
+            transform: translateX(-50%); border: 5px solid transparent;
+            border-top-color: var(--text);
+        }
+        .calendar-day:hover .calendar-tooltip { display: block; }
         
         .achievements { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
             gap: 1rem; margin-top: 1rem; }
@@ -239,6 +270,8 @@
             .buy-buttons { flex-direction: column; }
             .buy-btn { width: 100%; }
             .floating-leaf { font-size: 100px; }
+            .quick-filters { flex-direction: column; }
+            .filter-btn { width: 100%; }
         }
     </style>
 </head>
@@ -279,7 +312,19 @@
     </div>
 
     <div id="search-name" class="search-box active">
-        <input type="text" id="input-name" placeholder="Название добавки (Магний, Омега-3...)">
+        <!-- Quick Filters -->
+        <div class="quick-filters">
+            <button class="filter-btn" onclick="quickSearch('сон')">💤 Для сна</button>
+            <button class="filter-btn" onclick="quickSearch('энергия')">⚡ Для энергии</button>
+            <button class="filter-btn" onclick="quickSearch('мозг')">🧠 Для мозга</button>
+            <button class="filter-btn" onclick="quickSearch('спорт')">💪 Для спорта</button>
+            <button class="filter-btn" onclick="quickSearch('иммунитет')">🛡️ Иммунитет</button>
+        </div>
+        
+        <div class="autocomplete-container">
+            <input type="text" id="input-name" placeholder="Название добавки (Магний, Омега-3...)" oninput="handleAutocomplete(this.value)">
+            <div id="autocomplete-list" class="autocomplete-list"></div>
+        </div>
         <button class="btn-primary" onclick="searchByName()">Найти</button>
     </div>
 
@@ -421,7 +466,7 @@
 
 <script>
 // ==========================================
-// 📦 РАСШИРЕННАЯ БАЗА ДАННЫХ (250+ добавок)
+// 📦 БАЗА ДАННЫХ (30 добавок)
 // ==========================================
 const supplementsDB = [
     {id:1,name:"Магний Глицинат",substance:"Магний (хелат)",time:"Вечер",dose:"200-400 мг",why:"Лучшая форма для сна и расслабления. Не вызывает расстройства ЖКТ.",goodWith:["Мелатонин","B6"],badWith:["Железо","Кальций"],tags:["сон","тревога","стресс","расслабление"],icon:"😴",ozon:"https://ozon.ru/search/?text=магний+глицинат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+глицинат",iherb:"https://ru.iherb.com/c/magnesium-glycinate"},
@@ -490,7 +535,6 @@ function logout() {
 }
 
 function requestPermissions() {
-    // Browser notifications
     if ('Notification' in window && Notification.permission === 'default') {
         Notification.requestPermission();
     }
@@ -531,7 +575,7 @@ function initApp() {
 }
 
 // ==========================================
-// 📅 CALENDAR FUNCTIONS
+// 📅 CALENDAR FUNCTIONS (IMPROVED)
 // ==========================================
 function renderCalendar() {
     const grid = document.getElementById('calendar-grid');
@@ -540,11 +584,12 @@ function renderCalendar() {
     const year = now.getFullYear();
     const month = now.getMonth();
     
+    grid.innerHTML = ''; // Clear existing
+    
     const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
         "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
     monthLabel.textContent = `${monthNames[month]} ${year}`;
     
-    // Day headers
     const dayHeaders = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
     dayHeaders.forEach(day => {
         const div = document.createElement('div');
@@ -553,18 +598,15 @@ function renderCalendar() {
         grid.appendChild(div);
     });
     
-    // Get first day and total days
     const firstDay = new Date(year, month, 1).getDay() || 7;
     const totalDays = new Date(year, month + 1, 0).getDate();
     
-    // Empty cells before first day
     for (let i = 1; i < firstDay; i++) {
         const div = document.createElement('div');
         div.className = 'calendar-day empty';
         grid.appendChild(div);
     }
     
-    // Days
     const today = now.getDate();
     for (let day = 1; day <= totalDays; day++) {
         const div = document.createElement('div');
@@ -579,6 +621,7 @@ function renderCalendar() {
         if (dayData) {
             const takenCount = dayData.taken || 0;
             const totalCount = dayData.total || 0;
+            const takenList = dayData.takenList || [];
             
             if (totalCount > 0) {
                 if (takenCount === totalCount) {
@@ -587,15 +630,23 @@ function renderCalendar() {
                     div.classList.add('partial');
                 }
             }
+            
+            // Tooltip with supplement names
+            if (takenList.length > 0) {
+                const tooltip = document.createElement('div');
+                tooltip.className = 'calendar-tooltip';
+                tooltip.innerHTML = takenList.map(name => `✅ ${name}`).join('<br>');
+                div.appendChild(tooltip);
+            }
         }
         
         grid.appendChild(div);
     }
 }
 
-function saveCalendarData(date, taken, total) {
+function saveCalendarData(date, taken, total, takenList) {
     const dateKey = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
-    calendarData[dateKey] = {taken, total};
+    calendarData[dateKey] = {taken, total, takenList};
     save('calendar', calendarData);
     renderCalendar();
 }
@@ -621,7 +672,6 @@ function saveReminderTime() {
 }
 
 function scheduleReminders() {
-    // Clear existing
     if (window.reminderTimeout) clearTimeout(window.reminderTimeout);
     
     if (reminders.browser || reminders.telegram) {
@@ -636,16 +686,14 @@ function scheduleReminders() {
         const delay = reminderTime - now;
         window.reminderTimeout = setTimeout(() => {
             sendReminder();
-            // Schedule for next day
             scheduleReminders();
         }, delay);
     }
 }
 
 function sendReminder() {
-    const message = `🌿 VITA | ЖивиЛегко\n\nПора принять добавки! 📋\n\nУ вас запланировано: ${myStack.length} добавок\n\nОткройте сайт, чтобы отметить приём.`;
+    const message = `🌿 VITA | ЖивиЛегко\n\nПора принять добавки! 📋\n\nУ вас запланировано: ${myStack.length} добавок`;
     
-    // Browser notification
     if (reminders.browser && 'Notification' in window && Notification.permission === 'granted') {
         new Notification('🌿 VITA | Пора принять добавки!', {
             body: `У вас ${myStack.length} добавок запланировано`,
@@ -653,15 +701,13 @@ function sendReminder() {
         });
     }
     
-    // Telegram (user needs to have started the bot)
     if (reminders.telegram) {
-        // This would require backend integration
         console.log('Telegram reminder:', message);
     }
 }
 
 // ==========================================
-// 🧭 NAVIGATION & SEARCH
+// 🧭 NAVIGATION & SEARCH (WITH AUTOCOMPLETE)
 // ==========================================
 function switchTab(tab) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -669,13 +715,74 @@ function switchTab(tab) {
     document.querySelectorAll('.search-box').forEach(b => b.classList.remove('active'));
     document.getElementById('search-' + (tab === 'search' ? 'name' : tab)).classList.add('active');
     document.getElementById('results-area').innerHTML = '';
+    document.getElementById('autocomplete-list').style.display = 'none';
+}
+
+function quickSearch(query) {
+    document.getElementById('input-name').value = query;
+    smartSearch(query);
+}
+
+function handleAutocomplete(value) {
+    const list = document.getElementById('autocomplete-list');
+    list.innerHTML = '';
+    
+    if (!value || value.length < 2) {
+        list.style.display = 'none';
+        return;
+    }
+    
+    const matches = supplementsDB.filter(item => 
+        item.name.toLowerCase().includes(value.toLowerCase()) ||
+        item.substance.toLowerCase().includes(value.toLowerCase())
+    ).slice(0, 5);
+    
+    if (matches.length > 0) {
+        matches.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'autocomplete-item';
+            div.innerHTML = `<strong>${item.name}</strong><br><small>${item.substance}</small>`;
+            div.onclick = () => {
+                document.getElementById('input-name').value = item.name;
+                list.style.display = 'none';
+                searchByName();
+            };
+            list.appendChild(div);
+        });
+        list.style.display = 'block';
+    } else {
+        list.style.display = 'none';
+    }
 }
 
 function searchByName() {
     const q = document.getElementById('input-name').value.toLowerCase();
+    if (!q) return;
+    document.getElementById('autocomplete-list').style.display = 'none';
     renderResults(supplementsDB.filter(i => i.name.toLowerCase().includes(q) || i.substance.toLowerCase().includes(q)));
 }
 
+async function smartSearch(query) {
+    const resultsArea = document.getElementById('results-area');
+    resultsArea.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sec);"><i>🤔 Анализирую...</i></div>';
+    
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000);
+        
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                messages: [{
+                    role: "user",
+                    content: `Найди ID добавок для запроса: "${query}". Верни ТОЛЬКО JSON: {"ids": [1, 5, 12]}. База: 1-Магний Глицинат(сон,стресс), 2-Магний Цитрат(энергия,пищеварение), 3-Магний Малат(энергия,усталость,утро), 4-Магний Треонат(мозг), 5-Магний Таурат(сердце), 6-D3(иммунитет,энергия,утро), 7-Омега-3(мозг,сердце), 8-Цинк(иммунитет), 9-Креатин(мышцы,энергия), 10-Витамин C(иммунитет,усталость), 11-Мелатонин(сон), 12-B-Complex(энергия,нервы,утро), 13-Железо(энергия,анемия), 14-CoQ10(энергия,сердце), 15-Ашваганда(стресс,усталость), 16-Родиола(энергия,усталость,утро), 17-L-Тирозин(энергия,фокус), 18-Куркума(воспаление), 19-Пробиотики(кишечник), 20-Коллаген(кожа), 21-L-Теанин(расслабление), 22-Селен(щитовидка), 23-Йод(щитовидка,энергия), 24-Витамин E(кожа), 25-Биотин(волосы), 26-GABA(сон,расслабление), 27-Ресвератрол(долголетие), 28-NMN(энергия), 29-Протеин(мышцы), 30-K2(кости).`
+                }],
+                userId: currentUser
+            }),
+            signal: controller.signal
+        });
+        
         clearTimeout(timeoutId);
         const data = await response.json();
         
@@ -735,41 +842,7 @@ function searchBySymptom() {
     if (!query) return;
     smartSearch(query);
 }
-// === УМНЫЙ ПОИСК (ИИ + теги) ===
 
-// === ЗАПАСНОЙ ПОИСК (теги) ===
-function fallbackSearch(query) {
-    const q = query.toLowerCase().trim();
-    const words = q.split(' ').filter(w => w.length > 2);
-    
-    const results = supplementsDB.filter(i => {
-        const tagMatch = i.tags.some(tag => words.some(word => tag.includes(word) || word.includes(tag)));
-        const nameMatch = i.name.toLowerCase().includes(q) || i.substance.toLowerCase().includes(q);
-        const whyMatch = i.why.toLowerCase().includes(q);
-        
-        const keywords = {
-            'хочу выспаться': ['сон', 'бессонница', 'расслабление'],
-            'стать сильнее': ['спорт', 'мышцы', 'сила', 'энергия'],
-            'плохо встаю': ['энергия', 'утро', 'бодрость', 'усталость'],
-            'усталость': ['энергия', 'усталость', 'бодрость'],
-            'иммунитет': ['иммунитет'],
-            'стресс': ['стресс', 'тревога', 'нервы']
-        };
-        
-        let keywordMatch = false;
-        for (const [key, tags] of Object.entries(keywords)) {
-            if (q.includes(key)) {
-                keywordMatch = i.tags.some(tag => tags.includes(tag));
-                break;
-            }
-        }
-        
-        return tagMatch || nameMatch || whyMatch || keywordMatch;
-    });
-    
-    renderResults(results);
-}
-    // === УМНЫЙ ПОИСК С УЧЁТОМ ВОЗРАСТА И ВЕСА ===
 async function smartSearchWithProfile(query, age, weight) {
     const resultsArea = document.getElementById('results-area');
     
@@ -783,10 +856,7 @@ async function smartSearchWithProfile(query, age, weight) {
             body: JSON.stringify({
                 messages: [{
                     role: "user",
-                    content: `Пользователь: возраст ${age} лет, вес ${weight} кг. Цель: "${query}". 
-Найди ID добавок из базы, которые подходят ИМЕННО для этого человека с учётом возраста и веса. 
-Верни ТОЛЬКО JSON: {"ids": [1, 5, 12], "explanation": "краткое объяснение почему эти добавки"}. 
-База: 1-Магний Глицинат(сон,стресс), 2-Магний Цитрат(энергия,пищеварение), 3-Магний Малат(энергия,усталость,утро), 4-Магний Треонат(мозг), 5-Магний Таурат(сердце), 6-D3(иммунитет,энергия,утро), 7-Омега-3(мозг,сердце), 8-Цинк(иммунитет), 9-Креатин(мышцы,энергия), 10-Витамин C(иммунитет,усталость), 11-Мелатонин(сон), 12-B-Complex(энергия,нервы,утро), 13-Железо(энергия,анемия), 14-CoQ10(энергия,сердце), 15-Ашваганда(стресс,усталость), 16-Родиола(энергия,усталость,утро), 17-L-Тирозин(энергия,фокус), 18-Куркума(воспаление), 19-Пробиотики(кишечник), 20-Коллаген(кожа), 21-L-Теанин(расслабление), 22-Селен(щитовидка), 23-Йод(щитовидка,энергия), 24-Витамин E(кожа), 25-Биотин(волосы), 26-GABA(сон,расслабление), 27-Ресвератрол(долголетие), 28-NMN(энергия), 29-Протеин(мышцы), 30-K2(кости).`
+                    content: `Пользователь: возраст ${age} лет, вес ${weight} кг. Цель: "${query}". Найди ID добавок из базы, которые подходят ИМЕННО для этого человека с учётом возраста и веса. Верни ТОЛЬКО JSON: {"ids": [1, 5, 12], "explanation": "краткое объяснение почему эти добавки"}. База: 1-Магний Глицинат(сон,стресс), 2-Магний Цитрат(энергия,пищеварение), 3-Магний Малат(энергия,усталость,утро), 4-Магний Треонат(мозг), 5-Магний Таурат(сердце), 6-D3(иммунитет,энергия,утро), 7-Омега-3(мозг,сердце), 8-Цинк(иммунитет), 9-Креатин(мышцы,энергия), 10-Витамин C(иммунитет,усталость), 11-Мелатонин(сон), 12-B-Complex(энергия,нервы,утро), 13-Железо(энергия,анемия), 14-CoQ10(энергия,сердце), 15-Ашваганда(стресс,усталость), 16-Родиола(энергия,усталость,утро), 17-L-Тирозин(энергия,фокус), 18-Куркума(воспаление), 19-Пробиотики(кишечник), 20-Коллаген(кожа), 21-L-Теанин(расслабление), 22-Селен(щитовидка), 23-Йод(щитовидка,энергия), 24-Витамин E(кожа), 25-Биотин(волосы), 26-GABA(сон,расслабление), 27-Ресвератрол(долголетие), 28-NMN(энергия), 29-Протеин(мышцы), 30-K2(кости).`
                 }],
                 userId: currentUser
             }),
@@ -802,7 +872,6 @@ async function smartSearchWithProfile(query, age, weight) {
                 const result = JSON.parse(jsonMatch[0]);
                 const items = supplementsDB.filter(item => result.ids.includes(item.id));
                 if (items.length > 0) {
-                    // Добавляем персональное объяснение
                     const personalizedHTML = `
                         <div style="background: linear-gradient(135deg, #ecfdf5, #d1fae5); padding: 1.5rem; border-radius: 16px; margin-bottom: 2rem; border-left: 4px solid var(--primary);">
                             <h3 style="margin:0 0 0.5rem; color:var(--primary-dark);">📋 Персональные рекомендации</h3>
@@ -839,9 +908,9 @@ async function smartSearchWithProfile(query, age, weight) {
         console.log('AI failed:', err);
     }
     
-    // Fallback на обычный поиск
     fallbackSearch(query);
 }
+
 function generatePersonalPlan() {
     const goal = document.getElementById('p-goal').value.trim();
     const age = parseInt(document.getElementById('p-age').value) || 30;
@@ -852,14 +921,12 @@ function generatePersonalPlan() {
     const resultsArea = document.getElementById('results-area');
     resultsArea.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sec);"><i>🤔 Анализирую ваш профиль и цель...</i></div>';
     
-    // Отправляем в ИИ с параметрами пользователя
     smartSearchWithProfile(goal, age, weight);
     
     setTimeout(() => {
         resultsArea.scrollIntoView({behavior: 'smooth'});
     }, 100);
 }
-
 
 function renderResults(items) {
     const c = document.getElementById('results-area');
@@ -920,6 +987,7 @@ function updateSchedule() {
     const takenCount = myStack.filter(i => i.taken).length;
     const totalCount = myStack.length;
     const percent = totalCount > 0 ? (takenCount / totalCount * 100) : 0;
+    const takenList = myStack.filter(i => i.taken).map(i => i.name);
     
     document.getElementById('progress-fill').style.width = percent + '%';
     document.getElementById('progress-text').textContent = `${takenCount} из ${totalCount} добавок принято`;
@@ -936,9 +1004,8 @@ function updateSchedule() {
             </div>` : ''
         ).join('');
     
-    // Save to calendar
     const today = new Date();
-    saveCalendarData(today, takenCount, totalCount);
+    saveCalendarData(today, takenCount, totalCount, takenList);
 }
 
 function getSlotIcon(time) {
@@ -1091,6 +1158,13 @@ function addMsg(role, text) {
 
 document.getElementById('chat-input').addEventListener('keypress', e => {
     if(e.key === 'Enter') sendMessage();
+});
+
+// Close autocomplete when clicking outside
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.autocomplete-container')) {
+        document.getElementById('autocomplete-list').style.display = 'none';
+    }
 });
 
 // ==========================================
