@@ -744,13 +744,55 @@ function switchTab(tab) {
     currentDisplayCount = 10;
 }
 
-function quickSearch(query) {
+ async function quickSearch(query) {
     document.getElementById('input-name').value = query;
+    const resultsArea = document.getElementById('results-area');
+    
+    // Показываем загрузку
+    resultsArea.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sec);"><i>🔍 Ищем в базе...</i></div>';
+    
+    // Сразу ищем через ИИ ВСЕ добавки по теме
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                messages: [{
+                    role: "user",
+                    content: `Найди ВСЕ добавки из базы для запроса: "${query}". Верни ТОЛЬКО JSON: {"ids": [1, 4, 7, 12, 15, 16, 17, 21, 28]}. Ищи МАКСИМУМ подходящих добавок. База: 1-Магний Глицинат(сон,стресс), 2-Магний Цитрат(энергия,пищеварение), 3-Магний Малат(энергия,усталость,утро), 4-Магний Треонат(мозг), 5-Магний Таурат(сердце), 6-D3(иммунитет,энергия,утро), 7-Омега-3(мозг,сердце), 8-Цинк(иммунитет), 9-Креатин(мышцы,энергия), 10-Витамин C(иммунитет,усталость), 11-Мелатонин(сон), 12-B-Complex(энергия,нервы,утро), 13-Железо(энергия,анемия), 14-CoQ10(энергия,сердце), 15-Ашваганда(стресс,усталость), 16-Родиола(энергия,усталость,утро), 17-L-Тирозин(энергия,фокус), 18-Куркума(воспаление), 19-Пробиотики(кишечник), 20-Коллаген(кожа), 21-L-Теанин(расслабление), 22-Селен(щитовидка), 23-Йод(щитовидка,энергия), 24-Витамин E(кожа), 25-Биотин(волосы), 26-GABA(сон,расслабление), 27-Ресвератрол(долголетие), 28-NMN(энергия), 29-Протеин(мышцы), 30-K2(кости).`
+                }],
+                userId: currentUser
+            }),
+            signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        const data = await response.json();
+        
+        if (data.reply) {
+            const jsonMatch = data.reply.match(/\{[\s\S]*"ids"[\s\S]*\}/);
+            if (jsonMatch) {
+                const result = JSON.parse(jsonMatch[0]);
+                currentSearchResults = supplementsDB.filter(item => result.ids.includes(item.id));
+                currentDisplayCount = 10;
+                renderResultsWithLoadMore(currentSearchResults);
+                return;
+            }
+        }
+    } catch (err) {
+        console.log('AI search failed, using local:', err);
+    }
+    
+    // Если ИИ не ответил — используем локальную базу
     currentSearchResults = supplementsDB.filter(item => 
         item.tags.some(tag => tag.includes(query.toLowerCase()))
     );
     currentDisplayCount = 10;
     renderResultsWithLoadMore(currentSearchResults);
+}
 }
 
 function handleAutocomplete(value) {
@@ -922,18 +964,17 @@ function renderResultsWithLoadMore(items) {
     `).join('');
     
     if (currentDisplayCount < items.length) {
-        html += `
-            <div class="load-more">
-                <button class="load-more-btn" onclick="loadMore()">
-                    🔽 Показать ещё добавки (${items.length - currentDisplayCount} осталось)
-                </button>
-            </div>
-        `;
-    }
+    html += `
+        <div class="load-more">
+            <button class="load-more-btn" onclick="loadMore()">
+                🔽 Показать ещё добавки
+            </button>
+        </div>
+    `;
+}
     
     c.innerHTML = html;
 }
-
 function loadMore() {
     currentDisplayCount += 10;
     renderResultsWithLoadMore(currentSearchResults);
