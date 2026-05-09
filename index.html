@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VITA | ЖивиЛегко — ваш персональный помощник по здоровью</title>
+    <title>VITA | ЖивиЛегко — персональный помощник по здоровью</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -26,7 +27,7 @@
         .floating-leaf {
             position: fixed;
             font-size: 200px;
-            opacity: 0.03;
+            opacity: 0.08;
             pointer-events: none;
             z-index: 0;
             animation: float 20s infinite ease-in-out;
@@ -60,7 +61,8 @@
         header { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); 
             padding: 1rem 2rem; border-bottom: 1px solid var(--border); 
             position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 12px; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s; }
+        .logo:hover { transform: scale(1.05); }
         .user-badge { background: linear-gradient(135deg, #ecfdf5, #d1fae5); color: var(--primary-dark); 
             padding: 8px 14px; border-radius: 50px; font-weight: 600; font-size: 0.9rem; }
         .logout-btn { background: transparent; border: 1px solid var(--border); 
@@ -88,7 +90,6 @@
             border-radius: var(--radius); box-shadow: var(--shadow); animation: slideUp 0.5s ease; }
         .search-box.active { display: block; }
         
-        /* Quick Filters */
         .quick-filters { display: flex; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap; justify-content: center; }
         .filter-btn { padding: 10px 18px; border: 2px solid var(--border); background: white; 
             border-radius: 25px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
@@ -99,7 +100,6 @@
             font-size: 16px; margin-bottom: 1rem; transition: border-color 0.3s; }
         input:focus { border-color: var(--primary); outline: none; }
         
-        /* Autocomplete */
         .autocomplete-container { position: relative; }
         .autocomplete-list { position: absolute; top: 100%; left: 0; right: 0; 
             background: white; border: 1px solid var(--border); border-radius: 12px; 
@@ -114,6 +114,11 @@
             color: white; border: none; padding: 16px; border-radius: 14px; font-weight: 700; 
             cursor: pointer; width: 100%; margin-top: 1rem; transition: transform 0.2s; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(5,150,105,0.4); }
+        
+        .btn-secondary { background: white; color: var(--primary); border: 2px solid var(--primary); 
+            padding: 12px; border-radius: 14px; font-weight: 600; cursor: pointer; 
+            transition: all 0.2s; margin-top: 1rem; }
+        .btn-secondary:hover { background: #f0fdf4; transform: translateY(-2px); }
 
         #results-area { margin-top: 2rem; }
         .result-card { background: var(--card); border-radius: 20px; padding: 1.5rem; 
@@ -135,6 +140,23 @@
         .buy-btn.wb { background: #cb11ab; }
         .buy-btn.iherb { background: #00a651; }
         .buy-btn:hover { transform: scale(1.05); }
+        
+        .details-btn { background: linear-gradient(135deg, #60a5fa, #3b82f6); color: white; 
+            border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; 
+            cursor: pointer; transition: all 0.2s; margin-top: 10px; }
+        .details-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(59,130,246,0.4); }
+        
+        .details-content { display: none; margin-top: 1rem; padding: 1rem; 
+            background: linear-gradient(135deg, #eff6ff, #dbeafe); border-radius: 12px; 
+            border-left: 4px solid #3b82f6; }
+        .details-content.show { display: block; animation: slideDown 0.3s ease; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .load-more { text-align: center; margin: 2rem 0; }
+        .load-more-btn { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); 
+            color: white; border: none; padding: 14px 40px; border-radius: 25px; 
+            font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 1rem; }
+        .load-more-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(5,150,105,0.4); }
         
         #my-stack-section { display: none; margin-top: 3rem; border-top: 2px dashed var(--border); padding-top: 2rem; }
         #my-stack-section.visible { display: block; }
@@ -162,7 +184,6 @@
             height: 100%; border-radius: 10px; transition: width 0.5s ease; }
         .progress-text { text-align: center; font-weight: 600; color: var(--primary-dark); }
         
-        /* Improved Calendar */
         .calendar-widget { background: white; border-radius: 20px; padding: 1.5rem; 
             box-shadow: var(--shadow); margin-bottom: 2rem; }
         .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
@@ -176,7 +197,6 @@
         .calendar-day.partial { background: var(--accent); color: white; }
         .calendar-day.empty { background: transparent; cursor: default; }
         
-        /* Calendar Tooltip */
         .calendar-tooltip {
             position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
             background: var(--text); color: white; padding: 8px 12px; border-radius: 8px;
@@ -292,7 +312,7 @@
 </div>
 
 <header id="app-header" style="display:none;">
-    <div class="logo">🌿 VITA</div>
+    <div class="logo" onclick="goToMain()">🌿 VITA</div>
     <div>
         <span class="user-badge" id="display-user"></span>
         <button class="logout-btn" onclick="logout()">Выйти</button>
@@ -312,10 +332,9 @@
     </div>
 
     <div id="search-name" class="search-box active">
-        <!-- Quick Filters -->
         <div class="quick-filters">
-            <button class="filter-btn" onclick="quickSearch('сон')">💤 Для сна</button>
             <button class="filter-btn" onclick="quickSearch('энергия')">⚡ Для энергии</button>
+            <button class="filter-btn" onclick="quickSearch('сон')">💤 Для сна</button>
             <button class="filter-btn" onclick="quickSearch('мозг')">🧠 Для мозга</button>
             <button class="filter-btn" onclick="quickSearch('спорт')">💪 Для спорта</button>
             <button class="filter-btn" onclick="quickSearch('иммунитет')">🛡️ Иммунитет</button>
@@ -466,39 +485,39 @@
 
 <script>
 // ==========================================
-// 📦 БАЗА ДАННЫХ (30 добавок)
+// 📦 БАЗА ДАННЫХ (30 добавок с подробностями)
 // ==========================================
 const supplementsDB = [
-    {id:1,name:"Магний Глицинат",substance:"Магний (хелат)",time:"Вечер",dose:"200-400 мг",why:"Лучшая форма для сна и расслабления. Не вызывает расстройства ЖКТ.",goodWith:["Мелатонин","B6"],badWith:["Железо","Кальций"],tags:["сон","тревога","стресс","расслабление"],icon:"😴",ozon:"https://ozon.ru/search/?text=магний+глицинат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+глицинат",iherb:"https://ru.iherb.com/c/magnesium-glycinate"},
-    {id:2,name:"Магний Цитрат",substance:"Магний (органический)",time:"Утро/День",dose:"200-400 мг",why:"Хорошо усваивается. Помогает при запорах. Даёт энергию мышцам.",goodWith:["B6","Калий"],badWith:["Железо"],tags:["энергия","мышцы","пищеварение","утро","усталость"],icon:"⚡",ozon:"https://ozon.ru/search/?text=магний+цитрат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+цитрат",iherb:"https://ru.iherb.com/c/magnesium-citrate"},
-    {id:3,name:"Магний Малат",substance:"Магний + яблочная кислота",time:"Утро",dose:"200-400 мг",why:"Даёт энергию и бодрость. Помогает при хронической усталости.",goodWith:["B-комплекс","CoQ10"],badWith:["Железо"],tags:["энергия","бодрость","усталость","мышцы","утро"],icon:"🌅",ozon:"https://ozon.ru/search/?text=магний+малат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+малат",iherb:"https://ru.iherb.com/c/magnesium-malate"},
-    {id:4,name:"Магний L-Треонат",substance:"Магний (для мозга)",time:"Утро/День",dose:"100-200 мг",why:"Проникает в мозг. Улучшает память и когнитивные функции.",goodWith:["Омега-3"],badWith:[],tags:["мозг","память","фокус","когнитивные"],icon:"🧠",ozon:"https://ozon.ru/search/?text=магний+треонат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+треонат",iherb:"https://ru.iherb.com/c/magnesium-l-threonate"},
-    {id:5,name:"Магний Таурат",substance:"Магний + таурин",time:"Утро/Вечер",dose:"200-400 мг",why:"Поддержка сердца и сосудов. Нормализует давление.",goodWith:["CoQ10","Омега-3"],badWith:[],tags:["сердце","давление","сосуды"],icon:"❤️",ozon:"https://ozon.ru/search/?text=магний+таурат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+таурат",iherb:"https://ru.iherb.com/c/magnesium-taurate"},
-    {id:6,name:"Витамин D3",substance:"Витамин D",time:"Утро с едой",dose:"2000-5000 МЕ",why:"Иммунитет, кости, настроение. Даёт энергию, борется с усталостью.",goodWith:["K2","Омега-3","Магний"],badWith:[],tags:["иммунитет","настроение","кости","энергия","усталость","утро"],icon:"☀️",ozon:"https://ozon.ru/search/?text=витамин+d3",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+d3",iherb:"https://ru.iherb.com/c/vitamin-d"},
-    {id:7,name:"Омега-3",substance:"Омега-3",time:"Утро/Обед",dose:"1000-2000 мг",why:"Сердце, мозг, кожа. Улучшает настроение и когнитивные функции.",goodWith:["D3","E","Магний"],badWith:["Антикоагулянты"],tags:["мозг","сердце","кожа","настроение"],icon:"🐟",ozon:"https://ozon.ru/search/?text=омега-3",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=омега-3",iherb:"https://ru.iherb.com/c/omega-3"},
-    {id:8,name:"Цинк",substance:"Цинк",time:"День",dose:"15-30 мг",why:"Иммунитет, кожа, заживление. Участвует в производстве энергии.",goodWith:["A","C","D3"],badWith:["Железо","Медь","Кальций"],tags:["иммунитет","кожа","энергия"],icon:"🛡️",ozon:"https://ozon.ru/search/?text=цинк",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=цинк",iherb:"https://ru.iherb.com/c/zinc"},
-    {id:9,name:"Креатин",substance:"Креатин",time:"После тренировки",dose:"5 г",why:"Сила, мышцы, выносливость. Даёт быструю энергию.",goodWith:["Углеводы","Протеин"],badWith:[],tags:["спорт","масса","сила","энергия","мышцы"],icon:"💪",ozon:"https://ozon.ru/search/?text=креатин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=креатин",iherb:"https://ru.iherb.com/c/creatine"},
-    {id:10,name:"Витамин C",substance:"Аскорбиновая кислота",time:"Утро",dose:"500-1000 мг",why:"Иммунитет, антиоксидант, коллаген. Помогает при усталости.",goodWith:["Цинк","E"],badWith:["B12"],tags:["иммунитет","кожа","энергия","усталость"],icon:"🍊",ozon:"https://ozon.ru/search/?text=витамин+c",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+c",iherb:"https://ru.iherb.com/c/vitamin-c"},
-    {id:11,name:"Мелатонин",substance:"Гормон сна",time:"За 30 мин до сна",dose:"1-5 мг",why:"Быстрое засыпание, качественный сон.",goodWith:["Магний","GABA"],badWith:["Кофеин","Алкоголь"],tags:["сон","бессонница","расслабление"],icon:"🌙",ozon:"https://ozon.ru/search/?text=мелатонин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=мелатонин",iherb:"https://ru.iherb.com/c/melatonin"},
-    {id:12,name:"B-Complex",substance:"Витамины группы B",time:"Утро",dose:"1 капсула",why:"Энергия, нервная система. Критически важны при усталости.",goodWith:["Магний","D3"],badWith:["C (раздельно)"],tags:["энергия","нервы","стресс","усталость","утро","бодрость"],icon:"⚡",ozon:"https://ozon.ru/search/?text=витамины+группы+b",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамины+b",iherb:"https://ru.iherb.com/c/vitamin-b-complex"},
-    {id:13,name:"Железо",substance:"Fe",time:"Утро натощак",dose:"18-30 мг",why:"Гемоглобин, энергия. При анемии — причина усталости.",goodWith:["C","B12"],badWith:["Кальций","Цинк","Кофе","Магний"],tags:["энергия","анемия","усталость","утро"],icon:"🩸",ozon:"https://ozon.ru/search/?text=железо",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=железо",iherb:"https://ru.iherb.com/c/iron"},
-    {id:14,name:"CoQ10",substance:"Коэнзим Q10",time:"Утро с едой",dose:"100-200 мг",why:"Энергия клеток, сердце. Даёт силы, борется с усталостью.",goodWith:["Омега-3","E"],badWith:[],tags:["сердце","энергия","усталость"],icon:"❤️",ozon:"https://ozon.ru/search/?text=коэнзим+q10",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=коэнзим+q10",iherb:"https://ru.iherb.com/c/coq10"},
-    {id:15,name:"Ашваганда",substance:"Адаптоген",time:"Утро/Вечер",dose:"300-600 мг",why:"Снижение стресса. Улучшает сон, даёт энергию.",goodWith:["Магний","B-комплекс"],badWith:["Седативные"],tags:["стресс","тревога","энергия","сон","усталость"],icon:"🌿",ozon:"https://ozon.ru/search/?text=ашваганда",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=ашваганда",iherb:"https://ru.iherb.com/c/ashwagandha"},
-    {id:16,name:"Родиола Розовая",substance:"Адаптоген",time:"Утро",dose:"200-400 мг",why:"Энергия, выносливость, борьба с усталостью. Улучшает настроение.",goodWith:["Ашваганда","B-комплекс"],badWith:["Антидепрессанты"],tags:["энергия","усталость","настроение","утро","бодрость","стресс"],icon:"🌸",ozon:"https://ozon.ru/search/?text=родиола+розовая",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=родиола",iherb:"https://ru.iherb.com/c/rhodiola"},
-    {id:17,name:"L-Тирозин",substance:"Аминокислота",time:"Утро натощак",dose:"500-1000 мг",why:"Энергия, фокус, настроение. Помогает при усталости.",goodWith:["B6","C"],badWith:[],tags:["энергия","фокус","настроение","усталость","утро"],icon:"🎯",ozon:"https://ozon.ru/search/?text=l-тирозин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=l-тирозин",iherb:"https://ru.iherb.com/c/l-tyrosine"},
-    {id:18,name:"Куркума",substance:"Куркумин",time:"Обед с едой",dose:"500-1000 мг",why:"Противовоспалительное, суставы.",goodWith:["Черный перец","Омега-3"],badWith:["Антикоагулянты"],tags:["воспаление","суставы","иммунитет"],icon:"🧡",ozon:"https://ozon.ru/search/?text=куркума",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=куркума",iherb:"https://ru.iherb.com/c/turmeric"},
-    {id:19,name:"Пробиотики",substance:"Полезные бактерии",time:"Утро натощак",dose:"10-50 млрд КОЕ",why:"Кишечник, иммунитет, пищеварение.",goodWith:["Пребиотики"],badWith:["Антибиотики (раздельно)"],tags:["кишечник","иммунитет","пищеварение"],icon:"🦠",ozon:"https://ozon.ru/search/?text=пробиотики",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=пробиотики",iherb:"https://ru.iherb.com/c/probiotics"},
-    {id:20,name:"Коллаген",substance:"Белок",time:"Утро/Перед сном",dose:"5-10 г",why:"Кожа, суставы, волосы, ногти.",goodWith:["Витамин C"],badWith:[],tags:["кожа","суставы","красота","волосы"],icon:"✨",ozon:"https://ozon.ru/search/?text=коллаген",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=коллаген",iherb:"https://ru.iherb.com/c/collagen"},
-    {id:21,name:"L-Теанин",substance:"Аминокислота",time:"Утро/День",dose:"100-200 мг",why:"Расслабление без сонливости, фокус.",goodWith:["Кофеин","Магний"],badWith:[],tags:["фокус","расслабление","стресс","тревога"],icon:"🧘",ozon:"https://ozon.ru/search/?text=l-теанин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=l-теанин",iherb:"https://ru.iherb.com/c/l-theanine"},
-    {id:22,name:"Селен",substance:"Se",time:"Утро",dose:"100-200 мкг",why:"Щитовидка, иммунитет, антиоксидант.",goodWith:["Йод","E","C"],badWith:[],tags:["щитовидка","иммунитет","энергия"],icon:"🦋",ozon:"https://ozon.ru/search/?text=селен",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=селен",iherb:"https://ru.iherb.com/c/selenium"},
-    {id:23,name:"Йод",substance:"I",time:"Утро",dose:"150-300 мкг",why:"Щитовидка, метаболизм, энергия.",goodWith:["Селен","Цинк"],badWith:[],tags:["щитовидка","метаболизм","энергия","усталость"],icon:"🔷",ozon:"https://ozon.ru/search/?text=йод",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=йод",iherb:"https://ru.iherb.com/c/iodine"},
-    {id:24,name:"Витамин E",substance:"Токоферол",time:"Утро с едой",dose:"100-400 МЕ",why:"Антиоксидант, кожа, иммунитет.",goodWith:["C","Селен","Омега-3"],badWith:["Железо (раздельно)"],tags:["кожа","антиоксидант","иммунитет"],icon:"🌟",ozon:"https://ozon.ru/search/?text=витамин+e",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+e",iherb:"https://ru.iherb.com/c/vitamin-e"},
-    {id:25,name:"Биотин",substance:"B7",time:"Утро",dose:"5000-10000 мкг",why:"Волосы, ногти, кожа. Участвует в энергетическом обмене.",goodWith:["Коллаген","Цинк"],badWith:[],tags:["волосы","ногти","кожа","красота","энергия"],icon:"💅",ozon:"https://ozon.ru/search/?text=биотин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=биотин",iherb:"https://ru.iherb.com/c/biotin"},
-    {id:26,name:"GABA",substance:"ГАМК",time:"Вечер",dose:"250-750 мг",why:"Расслабление, сон, снижение тревоги.",goodWith:["Магний","Мелатонин"],badWith:["Алкоголь"],tags:["сон","тревога","расслабление","стресс"],icon:"😌",ozon:"https://ozon.ru/search/?text=gaba",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=gaba",iherb:"https://ru.iherb.com/c/gaba"},
-    {id:27,name:"Ресвератрол",substance:"Полифенол",time:"Вечер",dose:"100-500 мг",why:"Долголетие, антиоксидант, сердце.",goodWith:["Кверцетин","NMN"],badWith:[],tags:["долголетие","антиоксидант","сердце"],icon:"🍇",ozon:"https://ozon.ru/search/?text=ресвератрол",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=ресвератрол",iherb:"https://ru.iherb.com/c/resveratrol"},
-    {id:28,name:"NMN",substance:"Никотинамид мононуклеотид",time:"Утро",dose:"250-500 мг",why:"Долголетие, энергия клеток.",goodWith:["Ресвератрол"],badWith:[],tags:["долголетие","энергия","anti-age"],icon:"⏳",ozon:"https://ozon.ru/search/?text=nmn",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=nmn",iherb:"https://ru.iherb.com/c/nmn"},
-    {id:29,name:"Протеин",substance:"Белок",time:"После тренировки",dose:"20-30 г",why:"Рост мышц, восстановление.",goodWith:["Креатин"],badWith:[],tags:["спорт","мышцы","восстановление","энергия"],icon:"🥤",ozon:"https://ozon.ru/search/?text=протеин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=протеин",iherb:"https://ru.iherb.com/c/protein-powders"},
-    {id:30,name:"Витамин K2",substance:"Менахинон",time:"Утро с едой",dose:"100-200 мкг",why:"Направляет кальций в кости, защищает сердце.",goodWith:["D3","Кальций"],badWith:["Антикоагулянты"],tags:["кости","сердце","кальций"],icon:"🦴",ozon:"https://ozon.ru/search/?text=витамин+k2",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+k2",iherb:"https://ru.iherb.com/c/vitamin-k2"}
+    {id:1,name:"Магний Глицинат",substance:"Магний (хелат)",time:"Вечер",dose:"200-400 мг",why:"Лучшая форма для сна и расслабления. Не вызывает расстройства ЖКТ.",goodWith:["Мелатонин","B6"],badWith:["Железо","Кальций"],tags:["сон","тревога","стресс","расслабление"],icon:"😴",details:"Магний глицинат — это хелатная форма магния, связанная с аминокислотой глицином. Обладает высокой биодоступностью (до 90%) и не вызывает диарею. Глицин дополнительно успокаивает нервную систему, улучшает качество сна и снижает тревожность. Рекомендуется принимать за 1-2 часа до сна для максимального расслабления мышц и нервной системы. Особенно полезен при хроническом стрессе, бессоннице и мышечных спазмах.",ozon:"https://ozon.ru/search/?text=магний+глицинат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+глицинат",iherb:"https://ru.iherb.com/c/magnesium-glycinate"},
+    {id:2,name:"Магний Цитрат",substance:"Магний (органический)",time:"Утро/День",dose:"200-400 мг",why:"Хорошо усваивается. Помогает при запорах. Даёт энергию мышцам.",goodWith:["B6","Калий"],badWith:["Железо"],tags:["энергия","мышцы","пищеварение","утро","усталость"],icon:"⚡",details:"Магний цитрат — органическая форма с хорошей усвояемостью (около 80%). Обладает мягким слабительным эффектом, что полезно при запорах. Быстро восполняет дефицит магния, улучшает работу мышц и энергетический обмен. Лучше принимать утром или днём с едой. Не рекомендуется при склонности к диарее. Оптимальная форма для спортсменов и людей с активным образом жизни.",ozon:"https://ozon.ru/search/?text=магний+цитрат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+цитрат",iherb:"https://ru.iherb.com/c/magnesium-citrate"},
+    {id:3,name:"Магний Малат",substance:"Магний + яблочная кислота",time:"Утро",dose:"200-400 мг",why:"Даёт энергию и бодрость. Помогает при хронической усталости.",goodWith:["B-комплекс","CoQ10"],badWith:["Железо"],tags:["энергия","бодрость","усталость","мышцы","утро"],icon:"🌅",details:"Магний малат — соединение магния с яблочной кислотой, которая участвует в цикле Кребса (производство энергии в клетках). Идеален для борьбы с хронической усталостью, фибромиалгией и мышечной слабостью. Яблочная кислота улучшает усвоение магния и стимулирует выработку АТФ — основного источника энергии клеток. Принимать утром натощак или с завтраком для максимальной энергии в течение дня.",ozon:"https://ozon.ru/search/?text=магний+малат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+малат",iherb:"https://ru.iherb.com/c/magnesium-malate"},
+    {id:4,name:"Магний L-Треонат",substance:"Магний (для мозга)",time:"Утро/День",dose:"100-200 мг",why:"Проникает в мозг. Улучшает память и когнитивные функции.",goodWith:["Омега-3"],badWith:[],tags:["мозг","память","фокус","когнитивные"],icon:"🧠",details:"Магний L-треонат — единственная форма магния, способная преодолевать гематоэнцефалический барьер и напрямую воздействовать на мозг. Увеличивает плотность синапсов, улучшает нейропластичность, память и способность к обучению. Клинические исследования показывают улучшение когнитивных функций на 20-25% через 4-6 недель приёма. Особенно полезен для студентов, пожилых людей и тех, кто работает с информацией.",ozon:"https://ozon.ru/search/?text=магний+треонат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+треонат",iherb:"https://ru.iherb.com/c/magnesium-l-threonate"},
+    {id:5,name:"Магний Таурат",substance:"Магний + таурин",time:"Утро/Вечер",dose:"200-400 мг",why:"Поддержка сердца и сосудов. Нормализует давление.",goodWith:["CoQ10","Омега-3"],badWith:[],tags:["сердце","давление","сосуды"],icon:"❤️",details:"Магний таурат — комбинация магния с аминокислотой таурином. Оба компонента критически важны для здоровья сердечно-сосудистой системы. Таурин улучшает сократимость сердца, нормализует ритм, снижает давление. Магний расслабляет сосуды и предотвращает спазмы. Идеальная форма для людей с гипертонией, аритмией, сердечной недостаточностью. Можно принимать в любое время дня.",ozon:"https://ozon.ru/search/?text=магний+таурат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+таурат",iherb:"https://ru.iherb.com/c/magnesium-taurate"},
+    {id:6,name:"Витамин D3",substance:"Витамин D",time:"Утро с едой",dose:"2000-5000 МЕ",why:"Иммунитет, кости, настроение. Даёт энергию, борется с усталостью.",goodWith:["K2","Омега-3","Магний"],badWith:[],tags:["иммунитет","настроение","кости","энергия","усталость","утро"],icon:"☀️",details:"Витамин D3 (холекальциферол) — жирорастворимый витамин, который фактически является гормоном. Регулирует более 1000 генов в организме. Дефицит D3 наблюдается у 80% населения и приводит к хронической усталости, депрессии, частым простудам, остеопорозу. Принимать утром с жирной пищей для лучшего усвоения. Оптимальная дозировка: 2000-5000 МЕ ежедневно. Обязательно сочетать с витамином K2 для направления кальция в кости.",ozon:"https://ozon.ru/search/?text=витамин+d3",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+d3",iherb:"https://ru.iherb.com/c/vitamin-d"},
+    {id:7,name:"Омега-3",substance:"Омега-3",time:"Утро/Обед",dose:"1000-2000 мг",why:"Сердце, мозг, кожа. Улучшает настроение и когнитивные функции.",goodWith:["D3","E","Магний"],badWith:["Антикоагулянты"],tags:["мозг","сердце","кожа","настроение"],icon:"🐟",details:"Омега-3 жирные кислоты (EPA и DHA) — строительный материал для клеточных мембран, особенно в мозге и сердце. EPA уменьшает воспаление, улучшает настроение, борется с депрессией. DHA критична для когнитивных функций, памяти, зрения. Исследования показывают снижение риска сердечных заболеваний на 30-40%, улучшение когнитивных способностей на 15-20%. Принимать с едой, содержащей жиры. Выбирать рыбий жир с высоким содержанием EPA+DHA (не менее 1000 мг).",ozon:"https://ozon.ru/search/?text=омега-3",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=омега-3",iherb:"https://ru.iherb.com/c/omega-3"},
+    {id:8,name:"Цинк",substance:"Цинк",time:"День",dose:"15-30 мг",why:"Иммунитет, кожа, заживление. Участвует в производстве энергии.",goodWith:["A","C","D3"],badWith:["Железо","Медь","Кальций"],tags:["иммунитет","кожа","энергия"],icon:"🛡️",details:"Цинк — важнейший минерал для иммунитета, участвует в работе более 300 ферментов. Ускоряет заживление ран, улучшает состояние кожи (особенно при акне), поддерживает производство тестостерона. Дефицит цинка приводит к частым простудам, выпадению волос, ломкости ногтей. Принимать днём во время еды (натощак может вызывать тошноту). Не сочетать с железом и кальцием — они конкурируют за усвоение. Курс: 1-2 месяца, затем перерыв.",ozon:"https://ozon.ru/search/?text=цинк",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=цинк",iherb:"https://ru.iherb.com/c/zinc"},
+    {id:9,name:"Креатин",substance:"Креатин",time:"После тренировки",dose:"5 г",why:"Сила, мышцы, выносливость. Даёт быструю энергию.",goodWith:["Углеводы","Протеин"],badWith:[],tags:["спорт","масса","сила","энергия","мышцы"],icon:"💪",details:"Креатин моногидрат — самая изученная спортивная добавка. Увеличивает запасы фосфокреатина в мышцах, что даёт быструю энергию для интенсивных тренировок. Результаты: увеличение силы на 10-15%, мышечной массы на 2-5 кг за месяц, выносливости на 20-30%. Также улучшает когнитивные функции, память, борется с усталостью. Принимать 5 г ежедневно (можно без фазы загрузки). Лучше после тренировки с углеводами или протеином. Безопасен при длительном приёме.",ozon:"https://ozon.ru/search/?text=креатин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=креатин",iherb:"https://ru.iherb.com/c/creatine"},
+    {id:10,name:"Витамин C",substance:"Аскорбиновая кислота",time:"Утро",dose:"500-1000 мг",why:"Иммунитет, антиоксидант, коллаген. Помогает при усталости.",goodWith:["Цинк","E"],badWith:["B12"],tags:["иммунитет","кожа","энергия","усталость"],icon:"🍊",details:"Витамин C — мощнейший антиоксидант, необходимый для синтеза коллагена (кожа, суставы, сосуды), усвоения железа, работы иммунитета. Участвует в производстве норадреналина и кортизола, помогая бороться со стрессом. Ускоряет выздоровление при простуде на 20-30%. Липосомальная форма усваивается в 5-10 раз лучше обычной. Принимать утром натощак или между приёмами пищи. Не превышать 2000 мг в день (риск камней в почках).",ozon:"https://ozon.ru/search/?text=витамин+c",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+c",iherb:"https://ru.iherb.com/c/vitamin-c"},
+    {id:11,name:"Мелатонин",substance:"Гормон сна",time:"За 30 мин до сна",dose:"1-5 мг",why:"Быстрое засыпание, качественный сон.",goodWith:["Магний","GABA"],badWith:["Кофеин","Алкоголь"],tags:["сон","бессонница","расслабление"],icon:"🌙",details:"Мелатонин — гормон, регулирующий циркадные ритмы (сон-бодрствование). Производство снижается с возрастом, при стрессе, работе по ночам. Добавка ускоряет засыпание на 30-50%, улучшает качество сна, помогает при джетлаге. Не вызывает привыкания. Начинать с 1-3 мг за 30-60 минут до сна. Не превышать 10 мг (может вызвать утреннюю сонливость). Не принимать с алкоголем и кофеином. Для долгосрочной регуляции сна сочетать с магнием и гигиеной сна.",ozon:"https://ozon.ru/search/?text=мелатонин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=мелатонин",iherb:"https://ru.iherb.com/c/melatonin"},
+    {id:12,name:"B-Complex",substance:"Витамины группы B",time:"Утро",dose:"1 капсула",why:"Энергия, нервная система. Критически важны при усталости.",goodWith:["Магний","D3"],badWith:["C (раздельно)"],tags:["энергия","нервы","стресс","усталость","утро","бодрость"],icon:"⚡",details:"Витамины группы B (B1, B2, B3, B5, B6, B7, B9, B12) — основа энергетического обмена. Участвуют в превращении пищи в энергию, работе нервной системы, производстве нейротрансмиттеров (серотонин, дофамин). Дефицит приводит к хронической усталости, депрессии, раздражительности, проблемам с кожей и волосами. Особенно важны B12 (энергия, нервы) и B6 (настроение, иммунитет). Принимать утром натощак или с завтраком. Выбирать метилированные формы (лучше усваиваются).",ozon:"https://ozon.ru/search/?text=витамины+группы+b",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамины+b",iherb:"https://ru.iherb.com/c/vitamin-b-complex"},
+    {id:13,name:"Железо",substance:"Fe",time:"Утро натощак",dose:"18-30 мг",why:"Гемоглобин, энергия. При анемии — причина усталости.",goodWith:["C","B12"],badWith:["Кальций","Цинк","Кофе","Магний"],tags:["энергия","анемия","усталость","утро"],icon:"🩸",details:"Железо — компонент гемоглобина, переносит кислород к клеткам. Дефицит (анемия) вызывает хроническую усталость, одышку, бледность, выпадение волос, ломкость ногтей. Особенно актуально для женщин (менструации, беременность). Принимать натощак с витамином C для лучшего усвоения (в 3-4 раза). Не сочетать с кальцием, цинком, кофе и чаем (блокируют усвоение). Курс: 2-3 месяца до нормализации ферритина. Превышение дозы токсично — сдайте анализ перед приёмом!",ozon:"https://ozon.ru/search/?text=железо",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=железо",iherb:"https://ru.iherb.com/c/iron"},
+    {id:14,name:"CoQ10",substance:"Коэнзим Q10",time:"Утро с едой",dose:"100-200 мг",why:"Энергия клеток, сердце. Даёт силы, борется с усталостью.",goodWith:["Омега-3","E"],badWith:[],tags:["сердце","энергия","усталость"],icon:"❤️",details:"Коэнзим Q10 (убихинон) — участвует в производстве АТФ (энергии) в митохондриях. Концентрация снижается с возрастом (после 30 лет), при приёме статинов. Улучшает работу сердца, снижает давление, борется с хронической усталостью. Исследования: снижение риска сердечных заболеваний на 30%, улучшение энергии на 25%. Форма убихинол усваивается в 3-4 раза лучше. Принимать с жирной пищей. Особенно важен для людей после 40 лет и принимающих статины.",ozon:"https://ozon.ru/search/?text=коэнзим+q10",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=коэнзим+q10",iherb:"https://ru.iherb.com/c/coq10"},
+    {id:15,name:"Ашваганда",substance:"Адаптоген",time:"Утро/Вечер",dose:"300-600 мг",why:"Снижение стресса. Улучшает сон, даёт энергию.",goodWith:["Магний","B-комплекс"],badWith:["Седативные"],tags:["стресс","тревога","энергия","сон","усталость"],icon:"🌿",details:"Ашваганда — древний аюрведический адаптоген. Снижает уровень кортизола (гормон стресса) на 20-30%, уменьшает тревожность, улучшает сон, повышает энергию и выносливость. Клинические исследования: улучшение качества сна на 70%, снижение стресса на 60%, повышение тестостерона у мужчин на 15%. Принимать 300-600 мг экстракта (стандартизированного по витанолидам). Эффект накопительный — проявляется через 2-4 недели. Не принимать при беременности и гипертиреозе.",ozon:"https://ozon.ru/search/?text=ашваганда",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=ашваганда",iherb:"https://ru.iherb.com/c/ashwagandha"},
+    {id:16,name:"Родиола Розовая",substance:"Адаптоген",time:"Утро",dose:"200-400 мг",why:"Энергия, выносливость, борьба с усталостью. Улучшает настроение.",goodWith:["Ашваганда","B-комплекс"],badWith:["Антидепрессанты"],tags:["энергия","усталость","настроение","утро","бодрость","стресс"],icon:"🌸",details:"Родиола розовая (золотой корень) — сибирский адаптоген. Повышает физическую и умственную выносливость, борется с усталостью, улучшает настроение и концентрацию. Механизм: увеличивает уровень серотонина и дофамина, оптимизирует использование АТФ. Исследования: снижение усталости на 40%, улучшение когнитивных функций на 20%. Принимать утром (может мешать сну, если принять вечером). Эффект чувствуется через 3-7 дней. Стандартизированный экстракт (3% розавинов).",ozon:"https://ozon.ru/search/?text=родиола+розовая",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=родиола",iherb:"https://ru.iherb.com/c/rhodiola"},
+    {id:17,name:"L-Тирозин",substance:"Аминокислота",time:"Утро натощак",dose:"500-1000 мг",why:"Энергия, фокус, настроение. Помогает при усталости.",goodWith:["B6","C"],badWith:[],tags:["энергия","фокус","настроение","усталость","утро"],icon:"🎯",details:"L-Тирозин — предшественник дофамина, норадреналина и адреналина. Улучшает концентрацию, мотивацию, энергию, настроение. Особенно эффективен при стрессе, недосыпе, интенсивных нагрузках. Исследования: улучшение когнитивных функций при стрессе на 30%, повышение энергии и бдительности. Принимать натощак (за 30 мин до еды) для лучшего усвоения. Эффект чувствуется через 30-60 минут. Не превышать 2000 мг в день. Не сочетать с ингибиторами МАО и леводопой.",ozon:"https://ozon.ru/search/?text=l-тирозин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=l-тирозин",iherb:"https://ru.iherb.com/c/l-tyrosine"},
+    {id:18,name:"Куркума",substance:"Куркумин",time:"Обед с едой",dose:"500-1000 мг",why:"Противовоспалительное, суставы.",goodWith:["Черный перец","Омега-3"],badWith:["Антикоагулянты"],tags:["воспаление","суставы","иммунитет"],icon:"🧡",details:"Куркумин — активное вещество куркумы. Мощное противовоспалительное и антиоксидантное действие (сильнее аспирина!). Уменьшает боль в суставах, улучшает пищеварение, защищает мозг, борется с депрессией. Проблема: плохая усвояемость. Решение: сочетать с чёрным перцем (усиление в 2000 раз!) или выбирать липосомальные формы. Исследования: снижение воспаления на 40-50%, уменьшение боли в суставах на 60%. Принимать с жирной пищей. Эффект накопительный — через 4-8 недель.",ozon:"https://ozon.ru/search/?text=куркума",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=куркума",iherb:"https://ru.iherb.com/c/turmeric"},
+    {id:19,name:"Пробиотики",substance:"Полезные бактерии",time:"Утро натощак",dose:"10-50 млрд КОЕ",why:"Кишечник, иммунитет, пищеварение.",goodWith:["Пребиотики"],badWith:["Антибиотики (раздельно)"],tags:["кишечник","иммунитет","пищеварение"],icon:"🦠",details:"Пробиотики — полезные бактерии (лакто- и бифидобактерии). Восстанавливают микробиом кишечника, который влияет на иммунитет (70% иммунных клеток в кишечнике!), настроение (90% серотонина производится в кишечнике), пищеварение, кожу. Особенно важны после антибиотиков, при стрессе, неправильном питании. Принимать натощак за 30 мин до еды. Выбирать мультиштаммовые комплексы (10-50 млрд КОЕ). Хранить в холодильнике (если требуется). Эффект через 2-4 недели.",ozon:"https://ozon.ru/search/?text=пробиотики",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=пробиотики",iherb:"https://ru.iherb.com/c/probiotics"},
+    {id:20,name:"Коллаген",substance:"Белок",time:"Утро/Перед сном",dose:"5-10 г",why:"Кожа, суставы, волосы, ногти.",goodWith:["Витамин C"],badWith:[],tags:["кожа","суставы","красота","волосы"],icon:"✨",details:"Коллаген — основной структурный белок кожи, суставов, костей, сухожилий. После 25 лет производство снижается на 1-2% в год. Добавка улучшает эластичность кожи на 30-40%, уменьшает морщины, укрепляет суставы и ногти, ускоряет восстановление после тренировок. Типы: I и III (кожа, кости), II (суставы). Гидролизованный коллаген (пептиды) усваивается лучше. Принимать с витамином C (необходим для синтеза). Эффект через 8-12 недель регулярного приёма.",ozon:"https://ozon.ru/search/?text=коллаген",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=коллаген",iherb:"https://ru.iherb.com/c/collagen"},
+    {id:21,name:"L-Теанин",substance:"Аминокислота",time:"Утро/День",dose:"100-200 мг",why:"Расслабление без сонливости, фокус.",goodWith:["Кофеин","Магний"],badWith:[],tags:["фокус","расслабление","стресс","тревога"],icon:"🧘",details:"L-Теанин — аминокислота из зелёного чая. Увеличивает альфа-волны в мозге (состояние расслабленной бдительности), снижает тревожность, улучшает концентрацию без сонливости. Уникальное сочетание: расслабление + фокус. С кофеином создаёт идеальную комбинацию для продуктивности (кофеин даёт энергию, теанин убирает нервозность). Исследования: снижение стресса на 30%, улучшение концентрации на 20%. Принимать 100-200 мг. Эффект через 30-40 минут. Безопасен, не вызывает привыкания.",ozon:"https://ozon.ru/search/?text=l-теанин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=l-теанин",iherb:"https://ru.iherb.com/c/l-theanine"},
+    {id:22,name:"Селен",substance:"Se",time:"Утро",dose:"100-200 мкг",why:"Щитовидка, иммунитет, антиоксидант.",goodWith:["Йод","E","C"],badWith:[],tags:["щитовидка","иммунитет","энергия"],icon:"🦋",details:"Селен — важнейший минерал для щитовидной железы (участвует в конверсии T4 в активный T3), мощный антиоксидант (компонент глутатионпероксидазы). Укрепляет иммунитет, защищает от окислительного стресса, улучшает фертильность у мужчин. Дефицит приводит к гипотиреозу, частым простудам, усталости. Принимать 100-200 мкг ежедневно. Не превышать 400 мкг (токсичен в высоких дозах). Бразильские орехи — природный источник (2 ореха = суточная норма). Эффект через 4-8 недель.",ozon:"https://ozon.ru/search/?text=селен",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=селен",iherb:"https://ru.iherb.com/c/selenium"},
+    {id:23,name:"Йод",substance:"I",time:"Утро",dose:"150-300 мкг",why:"Щитовидка, метаболизм, энергия.",goodWith:["Селен","Цинк"],badWith:[],tags:["щитовидка","метаболизм","энергия","усталость"],icon:"🔷",details:"Йод — критически важен для производства гормонов щитовидной железы (T3, T4), которые регулируют метаболизм, энергию, температуру тела. Дефицит наблюдается у 30% населения и приводит к гипотиреозу, усталости, набору веса, выпадению волос, проблемам с памятью. Особенно важен для женщин (риск заболеваний щитовидки в 5-8 раз выше). Принимать 150-300 мкг. Обязательно сочетать с селеном (защищает щитовидку). Перед приёмом сдать анализ на ТТГ и антитела к ТПО.",ozon:"https://ozon.ru/search/?text=йод",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=йод",iherb:"https://ru.iherb.com/c/iodine"},
+    {id:24,name:"Витамин E",substance:"Токоферол",time:"Утро с едой",dose:"100-400 МЕ",why:"Антиоксидант, кожа, иммунитет.",goodWith:["C","Селен","Омега-3"],badWith:["Железо (раздельно)"],tags:["кожа","антиоксидант","иммунитет"],icon:"🌟",details:"Витамин E (токоферол) — жирорастворимый антиоксидант, защищает клеточные мембраны от окисления. Улучшает состояние кожи (увлажнённость, эластичность), укрепляет иммунитет, защищает сердце и сосуды, замедляет старение. Усиливает действие витамина C и селена. Исследования: снижение риска сердечных заболеваний на 20-30%, улучшение состояния кожи на 25%. Принимать с жирной пищей. Выбирать натуральную форму (d-alpha-токоферол, а не dl-alpha). Не превышать 1000 МЕ в день.",ozon:"https://ozon.ru/search/?text=витамин+e",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+e",iherb:"https://ru.iherb.com/c/vitamin-e"},
+    {id:25,name:"Биотин",substance:"B7",time:"Утро",dose:"5000-10000 мкг",why:"Волосы, ногти, кожа. Участвует в энергетическом обмене.",goodWith:["Коллаген","Цинк"],badWith:[],tags:["волосы","ногти","кожа","красота","энергия"],icon:"💅",details:"Биотин (витамин B7, H) — водорастворимый витамин, необходимый для синтеза кератина (белок волос, ногтей, кожи). Участвует в метаболизме жиров, белков, углеводов. Дефицит вызывает выпадение волос, ломкость ногтей, сухость кожи. Исследования: укрепление ногтей на 25-30%, уменьшение выпадения волос на 40-50% через 3-6 месяцев. Безопасен даже в высоких дозах (10000 мкг). Принимать утром натощак. Эффект накопительный — первые результаты через 8-12 недель, максимальный через 6 месяцев.",ozon:"https://ozon.ru/search/?text=биотин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=биотин",iherb:"https://ru.iherb.com/c/biotin"},
+    {id:26,name:"GABA",substance:"ГАМК",time:"Вечер",dose:"250-750 мг",why:"Расслабление, сон, снижение тревоги.",goodWith:["Магний","Мелатонин"],badWith:["Алкоголь"],tags:["сон","тревога","расслабление","стресс"],icon:"😌",details:"GABA (гамма-аминомасляная кислота) — главный тормозной нейротрансмиттер мозга. Успокаивает нервную систему, снижает тревожность, улучшает сон, расслабляет мышцы. Дефицит приводит к бессоннице, тревоге, раздражительности, мышечному напряжению. Исследования: снижение тревоги на 30%, улучшение качества сна на 25%, увеличение альфа-волн (расслабление). Принимать 250-750 мг за 30-60 минут до сна. Можно сочетать с магнием и мелатонином для усиления эффекта. Не принимать с алкоголем и седативными.",ozon:"https://ozon.ru/search/?text=gaba",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=gaba",iherb:"https://ru.iherb.com/c/gaba"},
+    {id:27,name:"Ресвератрол",substance:"Полифенол",time:"Вечер",dose:"100-500 мг",why:"Долголетие, антиоксидант, сердце.",goodWith:["Кверцетин","NMN"],badWith:[],tags:["долголетие","антиоксидант","сердце"],icon:"🍇",details:"Ресвератрол — полифенол из красного вина, ягод, арахиса. Активирует гены долголетия (сиртуины), мощный антиоксидант, защищает сердце и сосуды, улучшает чувствительность к инсулину, борется с воспалением. Исследования на животных: увеличение продолжительности жизни на 20-30%. У людей: улучшение маркеров сердечно-сосудистого здоровья на 20-25%, снижение воспаления. Принимать 100-500 мг вечером. Выбирать транс-ресвератрол (активная форма). Сочетать с жирами для лучшего усвоения.",ozon:"https://ozon.ru/search/?text=ресвератрол",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=ресвератрол",iherb:"https://ru.iherb.com/c/resveratrol"},
+    {id:28,name:"NMN",substance:"Никотинамид мононуклеотид",time:"Утро",dose:"250-500 мг",why:"Долголетие, энергия клеток.",goodWith:["Ресвератрол"],badWith:[],tags:["долголетие","энергия","anti-age"],icon:"⏳",details:"NMN (никотинамид мононуклеотид) — предшественник NAD+, кофермента, критически важного для производства энергии в митохондриях и восстановления ДНК. Уровень NAD+ падает на 50% к 50 годам, что ведёт к старению, усталости, снижению метаболизма. Добавка NMN повышает NAD+, улучшает энергию, выносливость, когнитивные функции, замедляет старение. Исследования: увеличение продолжительности жизни на 10-15%, улучшение энергии на 30-40%. Принимать 250-500 мг утром натощак. Сочетать с ресвератролом (синергия). Эффект через 2-4 недели.",ozon:"https://ozon.ru/search/?text=nmn",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=nmn",iherb:"https://ru.iherb.com/c/nmn"},
+    {id:29,name:"Протеин",substance:"Белок",time:"После тренировки",dose:"20-30 г",why:"Рост мышц, восстановление.",goodWith:["Креатин"],badWith:[],tags:["спорт","мышцы","восстановление","энергия"],icon:"🥤",details:"Протеин (сывороточный, казеин, растительный) — источник аминокислот для роста и восстановления мышц. После тренировки мышцы нуждаются в белке для восстановления микротравм и роста. Сывороточный протеин усваивается быстро (30-60 мин), идеален после тренировки. Казеин — медленно (4-6 часов), хорош на ночь. Исследования: увеличение мышечной массы на 2-5 кг за 3 месяца, ускорение восстановления на 30-40%. Принимать 20-30 г после тренировки или между приёмами пищи. Не заменяет полноценное питание, а дополняет.",ozon:"https://ozon.ru/search/?text=протеин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=протеин",iherb:"https://ru.iherb.com/c/protein-powders"},
+    {id:30,name:"Витамин K2",substance:"Менахинон",time:"Утро с едой",dose:"100-200 мкг",why:"Направляет кальций в кости, защищает сердце.",goodWith:["D3","Кальций"],badWith:["Антикоагулянты"],tags:["кости","сердце","кальций"],icon:"🦴",details:"Витамин K2 (менахинон MK-7) — активирует белки, которые направляют кальций в кости и зубы, предотвращая его отложение в сосудах и почках. Работает в паре с D3: D3 увеличивает усвоение кальция, K2 направляет его куда нужно. Без K2 кальций может откладываться в артериях (риск атеросклероза). Исследования: снижение риска сердечных заболеваний на 50%, улучшение плотности костей на 10-15%. Принимать 100-200 мкг с D3. Форма MK-7 усваивается лучше MK-4. Не принимать с варфарином.",ozon:"https://ozon.ru/search/?text=витамин+k2",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+k2",iherb:"https://ru.iherb.com/c/vitamin-k2"}
 ];
 
 // ==========================================
@@ -513,6 +532,8 @@ let streakDays = 0;
 let lastTakenDate = null;
 let calendarData = {};
 let reminders = {browser: false, telegram: false, time: "09:00"};
+let currentSearchResults = [];
+let currentDisplayCount = 10;
 
 function getKey(k) { return `vita_${k}_${currentUser}`; }
 function save(k, d) { localStorage.setItem(getKey(k), JSON.stringify(d)); }
@@ -574,8 +595,12 @@ function initApp() {
     }
 }
 
+function goToMain() {
+    window.location.reload();
+}
+
 // ==========================================
-// 📅 CALENDAR FUNCTIONS (IMPROVED)
+// 📅 CALENDAR FUNCTIONS
 // ==========================================
 function renderCalendar() {
     const grid = document.getElementById('calendar-grid');
@@ -584,7 +609,7 @@ function renderCalendar() {
     const year = now.getFullYear();
     const month = now.getMonth();
     
-    grid.innerHTML = ''; // Clear existing
+    grid.innerHTML = '';
     
     const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
         "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
@@ -631,7 +656,6 @@ function renderCalendar() {
                 }
             }
             
-            // Tooltip with supplement names
             if (takenList.length > 0) {
                 const tooltip = document.createElement('div');
                 tooltip.className = 'calendar-tooltip';
@@ -707,20 +731,26 @@ function sendReminder() {
 }
 
 // ==========================================
-// 🧭 NAVIGATION & SEARCH (WITH AUTOCOMPLETE)
+// 🧭 NAVIGATION & SEARCH
 // ==========================================
 function switchTab(tab) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     event.currentTarget.classList.add('active');
     document.querySelectorAll('.search-box').forEach(b => b.classList.remove('active'));
     document.getElementById('search-' + (tab === 'search' ? 'name' : tab)).classList.add('active');
-    document.getElementById('results-area').innerHTML = '';
     document.getElementById('autocomplete-list').style.display = 'none';
+    document.getElementById('results-area').innerHTML = '';
+    currentSearchResults = [];
+    currentDisplayCount = 10;
 }
 
 function quickSearch(query) {
     document.getElementById('input-name').value = query;
-    smartSearch(query);
+    currentSearchResults = supplementsDB.filter(item => 
+        item.tags.some(tag => tag.includes(query.toLowerCase()))
+    );
+    currentDisplayCount = 10;
+    renderResultsWithLoadMore(currentSearchResults);
 }
 
 function handleAutocomplete(value) {
@@ -745,7 +775,9 @@ function handleAutocomplete(value) {
             div.onclick = () => {
                 document.getElementById('input-name').value = item.name;
                 list.style.display = 'none';
-                searchByName();
+                currentSearchResults = [item];
+                currentDisplayCount = 10;
+                renderResultsWithLoadMore(currentSearchResults);
             };
             list.appendChild(div);
         });
@@ -759,7 +791,11 @@ function searchByName() {
     const q = document.getElementById('input-name').value.toLowerCase();
     if (!q) return;
     document.getElementById('autocomplete-list').style.display = 'none';
-    renderResults(supplementsDB.filter(i => i.name.toLowerCase().includes(q) || i.substance.toLowerCase().includes(q)));
+    currentSearchResults = supplementsDB.filter(i => 
+        i.name.toLowerCase().includes(q) || i.substance.toLowerCase().includes(q)
+    );
+    currentDisplayCount = 10;
+    renderResultsWithLoadMore(currentSearchResults);
 }
 
 async function smartSearch(query) {
@@ -792,7 +828,9 @@ async function smartSearch(query) {
                 const result = JSON.parse(jsonMatch[0]);
                 const items = supplementsDB.filter(item => result.ids.includes(item.id));
                 if (items.length > 0) {
-                    renderResults(items);
+                    currentSearchResults = items;
+                    currentDisplayCount = 10;
+                    renderResultsWithLoadMore(currentSearchResults);
                     return;
                 }
             }
@@ -808,19 +846,25 @@ function fallbackSearch(query) {
     const q = query.toLowerCase().trim();
     const words = q.split(' ').filter(w => w.length > 2);
     
-    const results = supplementsDB.filter(i => {
+    currentSearchResults = supplementsDB.filter(i => {
         const tagMatch = i.tags.some(tag => words.some(word => tag.includes(word) || word.includes(tag)));
         const nameMatch = i.name.toLowerCase().includes(q) || i.substance.toLowerCase().includes(q);
         const whyMatch = i.why.toLowerCase().includes(q);
         
         const keywords = {
+            'хочу выспаться': ['сон', 'бессонница', 'расслабление'],
+            'стать сильнее': ['спорт', 'мышцы', 'сила', 'энергия'],
+            'выносливость': ['энергия', 'спорт', 'сила', 'мышцы'],
+            'похудеть': ['метаболизм', 'энергия'],
             'плохо встаю': ['энергия', 'утро', 'бодрость', 'усталость'],
             'усталость': ['энергия', 'усталость', 'бодрость'],
             'нет сил': ['энергия', 'усталость'],
             'сон': ['сон', 'бессонница'],
             'иммунитет': ['иммунитет'],
             'стресс': ['стресс', 'тревога', 'нервы'],
-            'нервы': ['нервы', 'тревога', 'стресс']
+            'нервы': ['нервы', 'тревога', 'стресс'],
+            'память': ['мозг', 'память', 'фокус'],
+            'кожа': ['кожа', 'красота', 'волосы']
         };
         
         let keywordMatch = false;
@@ -834,13 +878,70 @@ function fallbackSearch(query) {
         return tagMatch || nameMatch || whyMatch || keywordMatch;
     });
     
-    renderResults(results);
+    currentDisplayCount = 10;
+    renderResultsWithLoadMore(currentSearchResults);
 }
 
 function searchBySymptom() {
     const query = document.getElementById('input-symptom').value.trim();
     if (!query) return;
     smartSearch(query);
+}
+
+function renderResultsWithLoadMore(items) {
+    const c = document.getElementById('results-area');
+    if (!items.length) {
+        c.innerHTML = '<div style="text-align:center; padding:2rem; color:#888;">😕 Ничего не найдено. Попробуйте другой запрос.</div>';
+        return;
+    }
+    
+    const displayedItems = items.slice(0, currentDisplayCount);
+    
+    let html = displayedItems.map(i => `
+        <div class="result-card">
+            <h3><span class="icon">${i.icon}</span> ${i.name} <small style="color:var(--text-sec); font-size:0.9rem">(${i.substance})</small></h3>
+            <p>${i.why}</p>
+            <p><strong>⏰ Время:</strong> ${i.time} | <strong>💊 Доза:</strong> ${i.dose}</p>
+            <div>${i.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+            <div class="compatibility">
+                <div class="good">✅ Можно с: ${i.goodWith.join(', ') || 'всем'}</div>
+                <div class="bad">❌ Не с: ${i.badWith.join(', ') || 'нет ограничений'}</div>
+            </div>
+            <button class="details-btn" onclick="toggleDetails(${i.id})">📖 Подробнее</button>
+            <div id="details-${i.id}" class="details-content">
+                <h4 style="margin:0 0 10px; color:var(--primary-dark);">📚 Подробная информация</h4>
+                <p style="margin:0; line-height:1.6;">${i.details}</p>
+            </div>
+            <button class="btn-primary" onclick="addToStack(${i.id})">➕ Добавить в план</button>
+            <div class="buy-buttons">
+                <a href="${i.ozon}" target="_blank" class="buy-btn ozon">🛒 Ozon</a>
+                <a href="${i.wb}" target="_blank" class="buy-btn wb">🛍 Wildberries</a>
+                <a href="${i.iherb}" target="_blank" class="buy-btn iherb">🌿 iHerb</a>
+            </div>
+        </div>
+    `).join('');
+    
+    if (currentDisplayCount < items.length) {
+        html += `
+            <div class="load-more">
+                <button class="load-more-btn" onclick="loadMore()">
+                    🔽 Показать ещё добавки (${items.length - currentDisplayCount} осталось)
+                </button>
+            </div>
+        `;
+    }
+    
+    c.innerHTML = html;
+}
+
+function loadMore() {
+    currentDisplayCount += 10;
+    renderResultsWithLoadMore(currentSearchResults);
+}
+
+function toggleDetails(id) {
+    const details = document.getElementById(`details-${id}`);
+    details.classList.toggle('show');
 }
 
 async function smartSearchWithProfile(query, age, weight) {
@@ -882,24 +983,10 @@ async function smartSearchWithProfile(query, age, weight) {
                             </p>
                         </div>
                     `;
-                    resultsArea.innerHTML = personalizedHTML + items.map(i => `
-                        <div class="result-card">
-                            <h3><span class="icon">${i.icon}</span> ${i.name} <small style="color:var(--text-sec); font-size:0.9rem">(${i.substance})</small></h3>
-                            <p>${i.why}</p>
-                            <p><strong>⏰ Время:</strong> ${i.time} | <strong>💊 Доза:</strong> ${i.dose}</p>
-                            <div>${i.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
-                            <div class="compatibility">
-                                <div class="good">✅ Можно с: ${i.goodWith.join(', ') || 'всем'}</div>
-                                <div class="bad">❌ Не с: ${i.badWith.join(', ') || 'нет ограничений'}</div>
-                            </div>
-                            <button class="btn-primary" onclick="addToStack(${i.id})">➕ Добавить в план</button>
-                            <div class="buy-buttons">
-                                <a href="${i.ozon}" target="_blank" class="buy-btn ozon">🛒 Ozon</a>
-                                <a href="${i.wb}" target="_blank" class="buy-btn wb">🛍 Wildberries</a>
-                                <a href="${i.iherb}" target="_blank" class="buy-btn iherb">🌿 iHerb</a>
-                            </div>
-                        </div>
-                    `).join('');
+                    currentSearchResults = items;
+                    currentDisplayCount = 10;
+                    document.getElementById('results-area').innerHTML = personalizedHTML;
+                    renderResultsWithLoadMore(currentSearchResults);
                     return;
                 }
             }
@@ -929,48 +1016,57 @@ function generatePersonalPlan() {
 }
 
 function renderResults(items) {
-    const c = document.getElementById('results-area');
-    if (!items.length) {
-        c.innerHTML = '<div style="text-align:center; padding:2rem; color:#888;">😕 Ничего не найдено. Попробуйте другой запрос.</div>';
-        return;
-    }
-    c.innerHTML = items.map(i => `
-        <div class="result-card">
-            <h3><span class="icon">${i.icon}</span> ${i.name} <small style="color:var(--text-sec); font-size:0.9rem">(${i.substance})</small></h3>
-            <p>${i.why}</p>
-            <p><strong>⏰ Время:</strong> ${i.time} | <strong>💊 Доза:</strong> ${i.dose}</p>
-            <div>${i.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
-            <div class="compatibility">
-                <div class="good">✅ Можно с: ${i.goodWith.join(', ') || 'всем'}</div>
-                <div class="bad">❌ Не с: ${i.badWith.join(', ') || 'нет ограничений'}</div>
-            </div>
-            <button class="btn-primary" onclick="addToStack(${i.id})">➕ Добавить в план</button>
-            <div class="buy-buttons">
-                <a href="${i.ozon}" target="_blank" class="buy-btn ozon">🛒 Ozon</a>
-                <a href="${i.wb}" target="_blank" class="buy-btn wb">🛍 Wildberries</a>
-                <a href="${i.iherb}" target="_blank" class="buy-btn iherb">🌿 iHerb</a>
-            </div>
-        </div>
-    `).join('');
+    renderResultsWithLoadMore(items);
 }
 
 function addToStack(id) {
-    const item = supplementsDB.find(i => i.id === id);
-    if (!myStack.find(i => i.id === id)) {
-        myStack.push({...item, taken: false});
-        save('stack', myStack);
+    const newItem = supplementsDB.find(i => i.id === id);
+    
+    const existingItem = myStack.find(i => {
+        const newSubstance = newItem.substance.toLowerCase().split('(')[0].trim();
+        const existingSubstance = i.substance.toLowerCase().split('(')[0].trim();
         
-        if (!achievements.first && myStack.length >= 1) {
-            achievements.first = true;
-            alert('🌱 Достижение разблокировано: Первый шаг!');
-        }
-        if (!achievements.active && myStack.length >= 5) {
-            achievements.active = true;
-            alert('💪 Достижение разблокировано: Активный!');
-        }
-        save('achievements', achievements);
-        updateAchievements();
+        return (newSubstance.includes('магний') && existingSubstance.includes('магний')) ||
+               (newSubstance.includes('витамин') && existingSubstance.includes('витамин') && newSubstance === existingSubstance) ||
+               newItem.id === i.id;
+    });
+    
+    if (existingItem) {
+        const newDose = parseInt(newItem.dose.match(/\d+/g)?.[0] || '0');
+        const existingDose = parseInt(existingItem.dose.match(/\d+/g)?.[0] || '0');
+        const totalDose = newDose + existingDose;
+        
+        const confirmAdd = confirm(
+            `⚠️ Внимание!\n\n` +
+            `У вас уже есть "${existingItem.name}" в плане.\n` +
+            `Добавление "${newItem.name}" может привести к передозировке!\n\n` +
+            `Рекомендуемая суточная доза: 200-400 мг.\n` +
+            `У вас будет: ${existingDose} + ${newDose} = ${totalDose} мг\n\n` +
+            `Вы уверены, что хотите добавить?`
+        );
+        
+        if (!confirmAdd) return;
     }
+    
+    if (myStack.find(i => i.id === id)) {
+        alert('✅ Эта добавка уже есть в вашем плане!');
+        return;
+    }
+    
+    myStack.push({...newItem, taken: false});
+    save('stack', myStack);
+    
+    if (!achievements.first && myStack.length >= 1) {
+        achievements.first = true;
+        alert('🌱 Достижение разблокировано: Первый шаг!');
+    }
+    if (!achievements.active && myStack.length >= 5) {
+        achievements.active = true;
+        alert('💪 Достижение разблокировано: Активный!');
+    }
+    save('achievements', achievements);
+    updateAchievements();
+    
     updateSchedule();
     document.getElementById('my-stack-section').scrollIntoView({behavior:'smooth'});
     document.getElementById('my-stack-section').classList.add('visible');
@@ -1160,7 +1256,6 @@ document.getElementById('chat-input').addEventListener('keypress', e => {
     if(e.key === 'Enter') sendMessage();
 });
 
-// Close autocomplete when clicking outside
 document.addEventListener('click', (e) => {
     if (!e.target.closest('.autocomplete-container')) {
         document.getElementById('autocomplete-list').style.display = 'none';
