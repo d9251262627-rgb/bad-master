@@ -6,7 +6,7 @@
     <title>VITA | ЖивиЛегко — персональный помощник по здоровью</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #059669; --primary-light: #10b981; --primary-dark: #047857;
@@ -71,11 +71,60 @@
         .logout-btn:hover { background: #fef2f2; color: var(--danger); }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; position: relative; z-index: 1; }
-        .hero { text-align: center; margin-bottom: 2rem; animation: fadeIn 1s ease; }
+        
+        /* NEW HERO STYLING */
+        .hero { 
+            text-align: center; 
+            margin-bottom: 2rem; 
+            animation: fadeIn 1s ease;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(5,150,105,0.1);
+        }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .hero h1 { font-size: 2.6rem; font-weight: 800; margin: 1rem 0; }
-        .hero h1 span { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); 
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero h1 { 
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem; 
+            font-weight: 900; 
+            margin: 1rem 0;
+            background: linear-gradient(135deg, #047857 0%, #10b981 50%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+        .hero h1 span { 
+            display: block;
+            font-size: 2.2rem;
+            margin-top: 0.5rem;
+        }
+        .hero p { 
+            font-size: 1.2rem; 
+            color: var(--text-sec);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+        .hero-badges {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .hero-badge {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
         
         .tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; background: white; 
             padding: 0.5rem; border-radius: 60px; box-shadow: var(--shadow); 
@@ -157,6 +206,47 @@
             color: white; border: none; padding: 14px 40px; border-radius: 25px; 
             font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 1rem; }
         .load-more-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(5,150,105,0.4); }
+        
+        /* POPULAR COMBINATIONS */
+        .popular-combos {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 3rem 0;
+            box-shadow: 0 10px 40px rgba(245,158,11,0.2);
+        }
+        .popular-combos h3 {
+            font-family: 'Playfair Display', serif;
+            color: #92400e;
+            margin: 0 0 1.5rem;
+            font-size: 1.8rem;
+        }
+        .combo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        .combo-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .combo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        .combo-card h4 {
+            color: var(--primary-dark);
+            margin: 0 0 0.5rem;
+        }
+        .combo-card p {
+            color: var(--text-sec);
+            font-size: 0.9rem;
+            margin: 0;
+        }
         
         #my-stack-section { display: none; margin-top: 3rem; border-top: 2px dashed var(--border); padding-top: 2rem; }
         #my-stack-section.visible { display: block; }
@@ -284,14 +374,41 @@
             border-radius: 16px; font-size: 0.8rem; color: var(--text-sec); text-align: center; 
             box-shadow: var(--shadow); }
 
+        /* NOTIFICATIONS */
+        .notification-toast {
+            position: fixed;
+            bottom: 100px;
+            left: 24px;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 998;
+            animation: slideIn 0.5s ease;
+            max-width: 300px;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .notification-toast.show { display: flex; }
+        .notification-icon { font-size: 1.5rem; }
+        .notification-text { font-size: 0.9rem; color: var(--text); }
+        .notification-text strong { display: block; color: var(--primary-dark); }
+
         @media (max-width: 768px) {
-            .hero h1 { font-size: 1.8rem; }
+            .hero h1 { font-size: 2rem; }
+            .hero h1 span { font-size: 1.5rem; }
             #chat-modal { width: calc(100% - 48px); right: 24px; }
             .buy-buttons { flex-direction: column; }
             .buy-btn { width: 100%; }
             .floating-leaf { font-size: 100px; }
             .quick-filters { flex-direction: column; }
             .filter-btn { width: 100%; }
+            .notification-toast { left: 24px; right: 24px; bottom: 100px; max-width: none; }
         }
     </style>
 </head>
@@ -321,8 +438,14 @@
 
 <div class="container" id="main-content" style="display:none;">
     <div class="hero">
-        <h1>Экспертный подход к <span>вашему здоровью</span></h1>
-    <p>Анализируем научные исследования, чтобы вы получали только работающие добавки. Персональные рекомендации с гарантией эффективности.</p>
+        <h1>Экспертный подход к<span>вашему здоровью</span></h1>
+        <p>Анализируем научные исследования, чтобы вы получали только работающие добавки. Персональные рекомендации с гарантией эффективности.</p>
+        
+        <div class="hero-badges">
+            <div class="hero-badge">🔬 Научный подход</div>
+            <div class="hero-badge">✅ Доказанная эффективность</div>
+            <div class="hero-badge">🎯 Индивидуальный подбор</div>
+        </div>
     </div>
 
     <div class="tabs">
@@ -360,6 +483,33 @@
     </div>
 
     <div id="results-area"></div>
+
+    <!-- POPULAR COMBINATIONS -->
+    <div class="popular-combos" id="popular-combos" style="display:none;">
+        <h3>🔥 Популярные комбинации</h3>
+        <div class="combo-grid">
+            <div class="combo-card" onclick="addCombo(['6', '7', '30'])">
+                <h4>💪 Энергия + Иммунитет</h4>
+                <p>D3 + Омега-3 + K2</p>
+                <small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 15%</small>
+            </div>
+            <div class="combo-card" onclick="addCombo(['1', '11', '26'])">
+                <h4>😴 Качественный сон</h4>
+                <p>Магний + Мелатонин + GABA</p>
+                <small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 10%</small>
+            </div>
+            <div class="combo-card" onclick="addCombo(['4', '7', '17'])">
+                <h4>🧠 Фокус и память</h4>
+                <p>Магний L-Треонат + Омега-3 + L-Тирозин</p>
+                <small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 12%</small>
+            </div>
+            <div class="combo-card" onclick="addCombo(['9', '29', '3'])">
+                <h4>🏋️ Спорт и мышцы</h4>
+                <p>Креатин + Протеин + Магний Малат</p>
+                <small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 18%</small>
+            </div>
+        </div>
+    </div>
 
     <div id="my-stack-section">
         <div class="main-grid">
@@ -483,6 +633,15 @@
     </div>
 </div>
 
+<!-- NOTIFICATION TOAST -->
+<div class="notification-toast" id="notification-toast">
+    <div class="notification-icon">🛒</div>
+    <div class="notification-text">
+        <strong id="notif-name">Анна М.</strong>
+        купила <span id="notif-product">Магний Глицинат</span>
+    </div>
+</div>
+
 <script>
 // ==========================================
 // 📦 БАЗА ДАННЫХ (30 добавок с подробностями)
@@ -534,6 +693,9 @@ let calendarData = {};
 let reminders = {browser: false, telegram: false, time: "09:00"};
 let currentSearchResults = [];
 let currentDisplayCount = 10;
+let currentSearchQuery = '';
+let searchMode = 'local';
+let internetResults = [];
 
 function getKey(k) { return `vita_${k}_${currentUser}`; }
 function save(k, d) { localStorage.setItem(getKey(k), JSON.stringify(d)); }
@@ -593,10 +755,53 @@ function initApp() {
         updateSchedule();
         document.getElementById('my-stack-section').classList.add('visible');
     }
+    
+    // Show popular combos
+    document.getElementById('popular-combos').style.display = 'block';
+    
+    // Start notifications
+    startNotifications();
 }
 
 function goToMain() {
     window.location.reload();
+}
+
+// ==========================================
+// 🔔 NOTIFICATIONS
+// ==========================================
+const fakeNotifications = [
+    {name: "Анна М.", product: "Магний Глицинат"},
+    {name: "Сергей К.", product: "Омега-3"},
+    {name: "Мария Д.", product: "Витамин D3"},
+    {name: "Алексей П.", product: "Креатин"},
+    {name: "Елена В.", product: "Коллаген"},
+    {name: "Дмитрий С.", product: "B-Complex"},
+    {name: "Ольга Р.", product: "Мелатонин"},
+    {name: "Игорь Н.", product: "Цинк"}
+];
+
+function startNotifications() {
+    setTimeout(() => {
+        showNotification();
+        setInterval(() => {
+            showNotification();
+        }, 45000); // Every 45 seconds
+    }, 10000); // First after 10 seconds
+}
+
+function showNotification() {
+    const toast = document.getElementById('notification-toast');
+    const notif = fakeNotifications[Math.floor(Math.random() * fakeNotifications.length)];
+    
+    document.getElementById('notif-name').textContent = notif.name;
+    document.getElementById('notif-product').textContent = notif.product;
+    
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 4000);
 }
 
 // ==========================================
@@ -744,14 +949,12 @@ function switchTab(tab) {
     currentDisplayCount = 10;
 }
 
- async function quickSearch(query) {
+async function quickSearch(query) {
     document.getElementById('input-name').value = query;
     const resultsArea = document.getElementById('results-area');
     
-    // Показываем загрузку
     resultsArea.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sec);"><i>🔍 Ищем в базе...</i></div>';
     
-    // Сразу ищем через ИИ ВСЕ добавки по теме
     try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 5000);
@@ -786,13 +989,11 @@ function switchTab(tab) {
         console.log('AI search failed, using local:', err);
     }
     
-    // Если ИИ не ответил — используем локальную базу
     currentSearchResults = supplementsDB.filter(item => 
         item.tags.some(tag => tag.includes(query.toLowerCase()))
     );
     currentDisplayCount = 10;
     renderResultsWithLoadMore(currentSearchResults);
-}
 }
 
 function handleAutocomplete(value) {
@@ -964,17 +1165,18 @@ function renderResultsWithLoadMore(items) {
     `).join('');
     
     if (currentDisplayCount < items.length) {
-    html += `
-        <div class="load-more">
-            <button class="load-more-btn" onclick="loadMore()">
-                🔽 Показать ещё добавки
-            </button>
-        </div>
-    `;
-}
+        html += `
+            <div class="load-more">
+                <button class="load-more-btn" onclick="loadMore()">
+                    🔽 Показать ещё добавки
+                </button>
+            </div>
+        `;
+    }
     
     c.innerHTML = html;
 }
+
 function loadMore() {
     currentDisplayCount += 10;
     renderResultsWithLoadMore(currentSearchResults);
@@ -983,6 +1185,20 @@ function loadMore() {
 function toggleDetails(id) {
     const details = document.getElementById(`details-${id}`);
     details.classList.toggle('show');
+}
+
+function addCombo(ids) {
+    ids.forEach(id => {
+        const item = supplementsDB.find(i => i.id == id);
+        if (item && !myStack.find(i => i.id == id)) {
+            myStack.push({...item, taken: false});
+        }
+    });
+    save('stack', myStack);
+    updateSchedule();
+    document.getElementById('my-stack-section').scrollIntoView({behavior:'smooth'});
+    document.getElementById('my-stack-section').classList.add('visible');
+    alert('✅ Комбинация добавлена в ваш план!');
 }
 
 async function smartSearchWithProfile(query, age, weight) {
