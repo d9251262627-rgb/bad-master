@@ -4,682 +4,302 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VITA | Персональный помощник по здоровью</title>
-    <meta name="description" content="VITA — умный подбор витаминов и БАДов на основе научных исследований. Трекер, календарь, персональные рекомендации.">
-    <meta name="keywords" content="витамины, БАДы, магний, омега-3, здоровье, добавки, трекер, иммунитет">
-    <meta name="author" content="VITA Health">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://bad-master.vercel.app">
-    <meta property="og:title" content="VITA | Экспертный подход к вашему здоровью">
-    <meta property="og:description" content="Персональные рекомендации добавок с доказанной эффективностью.">
-    <meta property="og:image" content="https://bad-master.vercel.app/og-image.jpg">
-    <meta property="og:url" content="https://bad-master.vercel.app">
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="ru_RU">
-    <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"WebApplication","name":"VITA","description":"Персональный подбор витаминов и БАДов","url":"https://bad-master.vercel.app","applicationCategory":"HealthApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"RUB"}}
-    </script>
+    <meta name="description" content="VITA — умный подбор витаминов и БАДов">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link rel="icon" type="image/svg+xml" href="image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #059669; --primary-light: #10b981; --primary-dark: #047857; --accent: #f59e0b; --danger: #ef4444; --success: #22c55e; --bg: #ffffff; --card: #ffffff; --text: #0f172a; --text-sec: #64748b; --border: #e2e8f0; --radius: 20px; --shadow: 0 10px 40px rgba(5,150,105,0.1); }
-        * { box-sizing: border-box; } 
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; line-height: 1.6; overflow-x: hidden; position: relative; }
-        #auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.9); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 9999; }
-        .auth-box { background: white; padding: 2.5rem; border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); max-width: 420px; width: 90%; text-align: center; animation: slideUp 0.5s ease; position: relative; z-index: 1; }
+        :root { --primary: #059669; --primary-light: #10b981; --primary-dark: #047857; --bg: #f8fafc; --text: #0f172a; --border: #e2e8f0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%); min-height: 100vh; color: var(--text); }
+        
+        /* Auth Screen */
+        .auth-wrapper { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: rgba(15,23,42,0.95); position: fixed; top: 0; left: 0; width: 100%; z-index: 9999; }
+        .auth-box { background: white; padding: 3rem; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-width: 420px; width: 90%; text-align: center; animation: slideUp 0.5s ease; }
         @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .auth-box h2 { margin: 0 0 0.5rem; color: var(--primary-dark); }
-        .auth-input { width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 12px; font-size: 16px; margin: 1rem 0; text-align: center; }
-        .auth-btn { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; border: none; padding: 14px; width: 100%; border-radius: 12px; font-weight: 700; cursor: pointer; transition: transform 0.2s; }
-        .auth-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(5,150,105,0.4); }
-        header { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); padding: 1rem 2rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s; }
-        .logo:hover { transform: scale(1.05); }
-        .user-badge { background: linear-gradient(135deg, #ecfdf5, #d1fae5); color: var(--primary-dark); padding: 8px 14px; border-radius: 50px; font-weight: 600; font-size: 0.9rem; }
-        .logout-btn { background: transparent; border: 1px solid var(--border); color: var(--text-sec); padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
-        .logout-btn:hover { background: #fef2f2; color: var(--danger); }
-        .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; position: relative; z-index: 1; }
-        .hero { text-align: center; margin-bottom: 2rem; animation: fadeIn 1s ease; padding: 4rem 2rem 2rem; background: transparent; border-radius: 0; box-shadow: none; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .hero h1 { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900; margin: 1rem 0; background: linear-gradient(135deg, #047857 0%, #10b981 50%, #059669 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1.2; }
-        .hero h1 span { display: block; font-size: 2.2rem; margin-top: 0.5rem; }
-        .hero p { font-size: 1.2rem; color: var(--text-sec); max-width: 800px; margin: 0 auto; line-height: 1.8; }
-        .hero-badges { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap; }
-        .hero-badge { background: #f8fafc; border: 1px solid #e2e8f0; padding: 8px 16px; border-radius: 10px; font-size: 0.85rem; font-weight: 500; color: var(--text-sec); box-shadow: none; display: inline-flex; align-items: center; gap: 6px; }
-        .tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; background: white; padding: 0.5rem; border-radius: 60px; box-shadow: var(--shadow); width: fit-content; margin-left: auto; margin-right: auto; }
-        .tab-btn { padding: 16px 32px; border: none; background: transparent; color: var(--text-sec); border-radius: 50px; cursor: pointer; font-weight: 700; font-size: 1.05rem; transition: all 0.3s; }
-        .tab-btn.active { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; box-shadow: 0 6px 20px rgba(5,150,105,0.4); transform: scale(1.05); }
-        .search-box { display: none; background: var(--card); padding: 2rem; border-radius: var(--radius); box-shadow: var(--shadow); animation: slideUp 0.5s ease; }
-        .search-box.active { display: block; }
-        .quick-filters { display: flex; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap; justify-content: center; }
-        .filter-btn { padding: 10px 18px; border: 2px solid var(--border); background: white; border-radius: 25px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
-        .filter-btn:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
-        input[type="text"], input[type="number"], input[type="time"], input[type="email"] { width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 14px; font-size: 16px; margin-bottom: 1rem; transition: border-color 0.3s; }
-        input:focus { border-color: var(--primary); outline: none; }
-        .autocomplete-container { position: relative; }
-        .autocomplete-list { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid var(--border); border-radius: 12px; margin-top: 5px; max-height: 300px; overflow-y: auto; z-index: 1000; box-shadow: var(--shadow); display: none; }
-        .autocomplete-item { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid var(--border); transition: background 0.2s; }
-        .autocomplete-item:hover { background: #f0fdf4; }
-        .autocomplete-item:last-child { border-bottom: none; }
-        .btn-primary { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; border: none; padding: 16px; border-radius: 14px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 1rem; transition: transform 0.2s; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(5,150,105,0.4); }
-        #results-area { margin-top: 2rem; }
-        .result-card { background: var(--card); border-radius: 20px; padding: 1.5rem; margin-bottom: 1.2rem; box-shadow: var(--shadow); border-left: 5px solid var(--primary); animation: slideUp 0.5s ease; transition: transform 0.2s; }
-        .result-card:hover { transform: translateY(-5px); box-shadow: 0 15px 50px rgba(5,150,105,0.15); }
-        .result-card h3 { margin: 0 0 0.5rem; color: var(--primary-dark); display: flex; align-items: center; gap: 8px; }
-        .result-card .icon { font-size: 1.5rem; }
-        .tag { display: inline-block; background: #ecfdf5; color: var(--primary-dark); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; margin: 4px; }
-        .compatibility { margin-top: 1rem; padding: 1rem; background: #f8fafc; border-radius: 12px; }
-        .compatibility .good { color: var(--success); }
-        .compatibility .bad { color: var(--danger); }
-        .buy-buttons { display: flex; gap: 10px; margin-top: 1rem; flex-wrap: wrap; }
-        .buy-btn { flex: 1; min-width: 120px; padding: 10px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: transform 0.2s; text-decoration: none; text-align: center; color: white; }
-        .buy-btn.ozon { background: #005bff; }
-        .buy-btn.wb { background: #cb11ab; }
-        .buy-btn.iherb { background: #00a651; }
-        .buy-btn:hover { transform: scale(1.05); }
-        .details-btn { background: linear-gradient(135deg, #60a5fa, #3b82f6); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 10px; }
-        .details-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(59,130,246,0.4); }
-        .details-content { display: none; margin-top: 1rem; padding: 1rem; background: linear-gradient(135deg, #eff6ff, #dbeafe); border-radius: 12px; border-left: 4px solid #3b82f6; }
-        .details-content.show { display: block; animation: slideDown 0.3s ease; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .load-more { text-align: center; margin: 2rem 0; }
-        .load-more-btn { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; border: none; padding: 14px 40px; border-radius: 25px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 1rem; }
-        .load-more-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(5,150,105,0.4); }
-        .popular-combos { background: linear-gradient(135deg, #fef3c7, #fde68a); border-radius: 20px; padding: 2rem; margin: 3rem 0; box-shadow: 0 10px 40px rgba(245,158,11,0.2); }
-        .popular-combos h3 { font-family: 'Playfair Display', serif; color: #92400e; margin: 0 0 1.5rem; font-size: 1.8rem; }
-        .combo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
-        .combo-card { background: white; padding: 1.5rem; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); cursor: pointer; transition: all 0.3s; }
-        .combo-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
-        .combo-card h4 { color: var(--primary-dark); margin: 0 0 0.5rem; }
-        .combo-card p { color: var(--text-sec); font-size: 0.9rem; margin: 0; }
-        #my-stack-section { display: none; margin-top: 3rem; border-top: 2px dashed var(--border); padding-top: 2rem; }
-        #my-stack-section.visible { display: block; }
-        .main-grid { display: grid; grid-template-columns: 1fr 350px; gap: 2rem; }
-        @media (max-width: 968px) { .main-grid { grid-template-columns: 1fr; } }
-        .schedule-box { background: var(--card); border-radius: 20px; padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 2rem; }
-        .time-slot { margin-bottom: 1rem; padding: 1rem; background: linear-gradient(135deg, #f8fafc, #f1f5f9); border-radius: 14px; }
-        .time-label { font-weight: 800; color: var(--primary-dark); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px; }
-        .pill-tag { display: inline-flex; align-items: center; gap: 6px; background: white; padding: 8px 12px; border-radius: 10px; margin: 4px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.2s; }
-        .pill-tag.taken { background: linear-gradient(135deg, #dcfce7, #bbf7d0); border: 2px solid var(--primary); color: var(--primary-dark); }
-        .pill-tag:hover { transform: scale(1.05); }
-        .progress-container { background: white; border-radius: 20px; padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 2rem; }
-        .progress-bar { background: #e2e8f0; border-radius: 10px; height: 20px; overflow: hidden; margin: 1rem 0; }
-        .progress-fill { background: linear-gradient(90deg, var(--primary-light), var(--primary-dark)); height: 100%; border-radius: 10px; transition: width 0.5s ease; }
-        .progress-text { text-align: center; font-weight: 600; color: var(--primary-dark); }
-        .calendar-widget { background: white; border-radius: 20px; padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 2rem; }
-        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
-        .calendar-day-header { font-weight: 600; color: var(--text-sec); padding: 5px; font-size: 0.8rem; }
-        .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; position: relative; }
-        .calendar-day:hover { background: #f1f5f9; }
-        .calendar-day.today { border: 2px solid var(--primary); font-weight: 700; }
-        .calendar-day.full { background: var(--success); color: white; }
-        .calendar-day.partial { background: var(--accent); color: white; }
-        .calendar-day.empty { background: transparent; cursor: default; }
-        .calendar-tooltip { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: var(--text); color: white; padding: 8px 12px; border-radius: 8px; font-size: 0.75rem; white-space: nowrap; z-index: 100; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2); margin-bottom: 5px; }
-        .calendar-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--text); }
-        .calendar-day:hover .calendar-tooltip { display: block; }
-        .achievements { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .achievement { background: linear-gradient(135deg, #fffbeb, #fff7ed); border: 2px solid #fed7aa; border-radius: 14px; padding: 1rem; text-align: center; opacity: 0.5; transition: all 0.3s; }
-        .achievement.unlocked { opacity: 1; border-color: var(--accent); box-shadow: 0 4px 12px rgba(245,158,11,0.3); animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-        .achievement-icon { font-size: 2rem; margin-bottom: 0.5rem; }
-        .reminder-settings { background: white; border-radius: 20px; padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 2rem; }
-        .reminder-toggle { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; padding: 1rem; background: #f8fafc; border-radius: 12px; }
-        .toggle-switch { position: relative; width: 50px; height: 26px; }
-        .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: 0.3s; border-radius: 26px; }
-        .toggle-slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: 0.3s; border-radius: 50%; }
-        input:checked + .toggle-slider { background-color: var(--primary); }
-        input:checked + .toggle-slider:before { transform: translateX(24px); }
-        .tracker-card { background: linear-gradient(135deg, #fffbeb, #fff7ed); border: 1px solid #fed7aa; border-radius: 20px; padding: 1.5rem; margin-top: 2rem; box-shadow: var(--shadow); }
-        .mood-selector { display: flex; gap: 15px; margin: 15px 0; }
-        .mood-btn { font-size: 2rem; background: white; border: 2px solid var(--border); border-radius: 50%; width: 50px; height: 50px; cursor: pointer; transition: all 0.2s; }
-        .mood-btn.selected { background: var(--accent); border-color: var(--accent); transform: scale(1.2); box-shadow: 0 4px 12px rgba(245,158,11,0.4); }
-        .mood-chart { margin-top: 1rem; padding: 1rem; background: white; border-radius: 12px; min-height: 100px; }
-        .mood-day { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; margin: 2px; border-radius: 50%; background: #e2e8f0; font-size: 0.8rem; }
-        .mood-day.bad { background: #fecaca; }
-        .mood-day.ok { background: #fde68a; }
-        .mood-day.good { background: #86efac; }
-        .mood-day.great { background: #22c55e; color: white; }
-        #chat-toggle { position: fixed; bottom: 24px; right: 24px; background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; cursor: pointer; z-index: 999; box-shadow: 0 8px 20px rgba(5,150,105,0.4); transition: transform 0.2s; }
-        #chat-toggle:hover { transform: scale(1.1); }
-        #chat-modal { position: fixed; bottom: 100px; right: 24px; width: 360px; height: 480px; background: var(--card); border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); display: none; flex-direction: column; overflow: hidden; z-index: 999; animation: slideUp 0.3s ease; }
-        #chat-modal.open { display: flex; }
-        .chat-header { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; padding: 16px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
-        .chat-close { cursor: pointer; font-size: 1.2rem; }
-        #chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #f8fafc; }
-        .msg { max-width: 85%; padding: 12px 16px; border-radius: 18px; font-size: 0.9rem; animation: fadeIn 0.3s ease; }
-        .msg.ai { background: white; align-self: flex-start; border: 1px solid var(--border); }
-        .msg.user { background: linear-gradient(135deg, #dcfce7, #bbf7d0); align-self: flex-end; }
-        .chat-input { padding: 12px; border-top: 1px solid var(--border); display: flex; gap: 8px; }
-        .chat-input input { flex: 1; border: 1px solid var(--border); border-radius: 50px; padding: 10px 16px; margin: 0; }
-        .chat-input button { background: var(--primary); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; transition: transform 0.2s; }
-        .chat-input button:hover { transform: scale(1.1); }
-        .disclaimer { margin-top: 3rem; padding: 1.5rem; background: white; border-radius: 16px; font-size: 0.8rem; color: var(--text-sec); text-align: center; box-shadow: var(--shadow); }
-        .notification-toast { position: fixed; bottom: 100px; left: 24px; background: white; padding: 1rem 1.5rem; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); display: none; align-items: center; gap: 12px; z-index: 998; animation: slideIn 0.5s ease; max-width: 300px; }
-        @keyframes slideIn { from { transform: translateX(-100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        .notification-toast.show { display: flex; }
-        .notification-icon { font-size: 1.5rem; }
-        .notification-text { font-size: 0.9rem; color: var(--text); }
-        .notification-text strong { display: block; color: var(--primary-dark); }
-        @media (max-width: 768px) { .hero h1 { font-size: 2rem; } .hero h1 span { font-size: 1.5rem; } #chat-modal { width: calc(100% - 48px); right: 24px; } .buy-buttons { flex-direction: column; } .buy-btn { width: 100%; } .quick-filters { flex-direction: column; } .filter-btn { width: 100%; } .notification-toast { left: 24px; right: 24px; bottom: 100px; max-width: none; } }
+        .auth-box h2 { color: var(--primary-dark); margin-bottom: 0.5rem; font-size: 2rem; }
+        .auth-box p { color: #64748b; margin-bottom: 2rem; }
+        .auth-input { width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 12px; font-size: 16px; margin-bottom: 1rem; text-align: center; }
+        .auth-btn { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; border: none; padding: 14px; width: 100%; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 16px; transition: transform 0.2s; }
+        .auth-btn:hover { transform: translateY(-2px); }
+        .auth-error { color: #ef4444; margin-top: 1rem; font-size: 0.9rem; min-height: 20px; }
+
+        /* Main App */
+        .app-container { max-width: 1200px; margin: 0 auto; padding: 2rem; display: none; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; padding: 1rem 0; border-bottom: 1px solid var(--border); }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary-dark); cursor: pointer; }
+        .user-info { display: flex; align-items: center; gap: 1rem; }
+        .logout-btn { color: #ef4444; background: none; border: 1px solid #fecaca; padding: 8px 16px; border-radius: 8px; cursor: pointer; }
+
+        .hero { text-align: center; margin-bottom: 3rem; }
+        .hero h1 { font-size: 2.5rem; color: var(--primary-dark); margin-bottom: 1rem; }
+        .hero p { color: #64748b; font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+        .tabs { display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem; }
+        .tab-btn { padding: 10px 20px; border: none; background: white; border-radius: 20px; cursor: pointer; font-weight: 600; color: #64748b; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: all 0.2s; }
+        .tab-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(5,150,105,0.3); }
+
+        .content-box { background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 2rem; }
+        .input-group { display: flex; gap: 1rem; margin-bottom: 1rem; }
+        input[type="text"], input[type="number"] { flex: 1; padding: 12px; border: 2px solid var(--border); border-radius: 10px; font-size: 16px; }
+        .action-btn { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-weight: 600; }
+        
+        .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .card { border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; transition: transform 0.2s; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .card h3 { color: var(--primary-dark); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px; }
+        .tags { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0; }
+        .tag { background: #ecfdf5; color: var(--primary-dark); padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; }
+        .buy-btns { display: flex; gap: 8px; margin-top: 1rem; }
+        .buy-btn { flex: 1; padding: 8px; text-align: center; border-radius: 8px; text-decoration: none; color: white; font-weight: 600; font-size: 0.9rem; }
+        .ozon { background: #005bff; } .wb { background: #cb11ab; } .iherb { background: #00a651; }
     </style>
 </head>
 <body>
 
-<div id="auth-overlay">
-    <div class="auth-box">
-        <div style="font-size:3rem; margin-bottom:1rem;">🌿</div>
-        <h2>VITA | Вход</h2>
-        <p>Введите Email для синхронизации данных</p>
-        <input type="email" id="auth-email" class="auth-input" placeholder="example@mail.com">
-        <button class="auth-btn" onclick="handleAuth()">Войти / Регистрация</button>
-        <p id="auth-error" style="color:red; margin-top:10px; font-size:0.9rem;"></p>
-    </div>
-</div>
-
-<header id="app-header" style="display:none;">
-    <div class="logo" onclick="goToMain()">🌿 VITA</div>
-    <div>
-        <span class="user-badge" id="display-user"></span>
-        <button class="logout-btn" onclick="logout()">Выйти</button>
-    </div>
-</header>
-
-<div class="container" id="main-content" style="display:none;">
-    <div class="hero">
-        <h1>Экспертный подход к<span>вашему здоровью</span></h1>
-        <p>Анализируем научные исследования, чтобы вы получали только работающие добавки. Персональные рекомендации с гарантией эффективности.</p>
-        <div class="hero-badges">
-            <div class="hero-badge">🔬 Научный подход</div>
-            <div class="hero-badge">✅ Доказанная эффективность</div>
-            <div class="hero-badge">🎯 Индивидуальный подбор</div>
+    <!-- AUTH SCREEN -->
+    <div id="auth-screen" class="auth-wrapper">
+        <div class="auth-box">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🌿</div>
+            <h2>VITA | Вход</h2>
+            <p>Введите Email для синхронизации данных</p>
+            <input type="email" id="email-input" class="auth-input" placeholder="example@mail.com">
+            <button class="auth-btn" onclick="handleLogin()">Войти / Регистрация</button>
+            <div id="auth-error" class="auth-error"></div>
         </div>
     </div>
 
-    <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('search')">🔍 Поиск</button>
-        <button class="tab-btn" onclick="switchTab('symptom')">🩺 По симптому</button>
-        <button class="tab-btn" onclick="switchTab('personal')">Создай свой план</button>
-    </div>
-
-    <div id="search-name" class="search-box active">
-        <div class="quick-filters">
-            <button class="filter-btn" onclick="quickSearch('энергия')">⚡ Для энергии</button>
-            <button class="filter-btn" onclick="quickSearch('сон')">💤 Для сна</button>
-            <button class="filter-btn" onclick="quickSearch('мозг')">🧠 Для мозга</button>
-            <button class="filter-btn" onclick="quickSearch('спорт')">💪 Для спорта</button>
-            <button class="filter-btn" onclick="quickSearch('иммунитет')">🛡️ Иммунитет</button>
-        </div>
-        <div class="autocomplete-container">
-            <input type="text" id="input-name" placeholder="Название добавки (Магний, Омега-3...)" oninput="handleAutocomplete(this.value)">
-            <div id="autocomplete-list" class="autocomplete-list"></div>
-        </div>
-        <button class="btn-primary" onclick="searchByName()">Найти</button>
-    </div>
-
-    <div id="search-symptom" class="search-box">
-        <input type="text" id="input-symptom" placeholder="Что беспокоит? (сон, усталость...)">
-        <button class="btn-primary" onclick="searchBySymptom()">Подобрать</button>
-    </div>
-
-    <div id="search-personal" class="search-box">
-        <input type="number" id="p-age" placeholder="Возраст">
-        <input type="number" id="p-weight" placeholder="Вес (кг)">
-        <input type="text" id="p-goal" placeholder="Цель (хочу высыпаться)">
-        <button class="btn-primary" onclick="generatePersonalPlan()">Составить план</button>
-    </div>
-
-    <div id="results-area"></div>
-
-    <div class="popular-combos" id="popular-combos" style="display:none;">
-        <h3>🔥 Популярные комбинации</h3>
-        <div class="combo-grid">
-            <div class="combo-card" onclick="addCombo(['6', '7', '30'])"><h4>💪 Энергия + Иммунитет</h4><p>D3 + Омега-3 + K2</p><small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 15%</small></div>
-            <div class="combo-card" onclick="addCombo(['1', '11', '26'])"><h4>😴 Качественный сон</h4><p>Магний + Мелатонин + GABA</p><small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 10%</small></div>
-            <div class="combo-card" onclick="addCombo(['4', '7', '17'])"><h4>🧠 Фокус и память</h4><p>Магний L-Треонат + Омега-3 + L-Тирозин</p><small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 12%</small></div>
-            <div class="combo-card" onclick="addCombo(['9', '29', '3'])"><h4>🏋️ Спорт и мышцы</h4><p>Креатин + Протеин + Магний Малат</p><small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 18%</small></div>
-        </div>
-    </div>
-
-    <div id="my-stack-section">
-        <div class="main-grid">
-            <div>
-                <h2>📅 Ваше расписание</h2>
-                <div class="progress-container">
-                    <h3>🎯 Прогресс сегодня</h3>
-                    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width: 0%"></div></div>
-                    <div class="progress-text" id="progress-text">0 из 0 добавок принято</div>
-                </div>
-                <div class="schedule-box" id="schedule-container"><p style="text-align:center; color:#888;">Добавьте добавки из поиска</p></div>
-                <div class="progress-container">
-                    <h3>🏆 Достижения</h3>
-                    <div class="achievements" id="achievements-container">
-                        <div class="achievement" id="ach-1"><div class="achievement-icon">🌱</div><div>Первый шаг</div><small>Добавить 1 добавку</small></div>
-                        <div class="achievement" id="ach-2"><div class="achievement-icon">💪</div><div>Активный</div><small>5 добавок в плане</small></div>
-                        <div class="achievement" id="ach-3"><div class="achievement-icon">🔥</div><div>Серия 3 дня</div><small>Принимать 3 дня подряд</small></div>
-                        <div class="achievement" id="ach-4"><div class="achievement-icon">⭐</div><div>Мастер</div><small>10 дней подряд</small></div>
-                    </div>
-                </div>
-                <div class="tracker-card">
-                    <h3>😊 Самочувствие сегодня</h3>
-                    <div class="mood-selector">
-                        <button class="mood-btn" onclick="selectMood('bad')" data-mood="bad">😫</button>
-                        <button class="mood-btn" onclick="selectMood('ok')" data-mood="ok">😐</button>
-                        <button class="mood-btn" onclick="selectMood('good')" data-mood="good">🙂</button>
-                        <button class="mood-btn" onclick="selectMood('great')" data-mood="great">🤩</button>
-                    </div>
-                    <textarea id="wellness-note" placeholder="Заметки..." rows="2" style="width:100%; margin-top:10px; padding: 10px; border-radius: 8px; border: 1px solid var(--border);"></textarea>
-                    <button class="btn-primary" onclick="saveWellness()">Сохранить</button>
-                    <div class="mood-chart" id="mood-chart"><h4>📊 График за неделю</h4><div id="mood-days"></div></div>
-                </div>
+    <!-- MAIN APP -->
+    <div id="app-screen" class="app-container">
+        <header>
+            <div class="logo" onclick="location.reload()">🌿 VITA</div>
+            <div class="user-info">
+                <span id="user-display" style="font-weight: 600;"></span>
+                <button class="logout-btn" onclick="handleLogout()">Выйти</button>
             </div>
-            <div>
-                <div class="calendar-widget">
-                    <div class="calendar-header"><h3 style="margin:0;">📅 Календарь</h3><span id="current-month" style="font-weight:600; color:var(--primary);"></span></div>
-                    <div class="calendar-grid" id="calendar-grid"></div>
-                </div>
-                <div class="reminder-settings">
-                    <h3>🔔 Напоминания</h3>
-                    <div class="reminder-toggle">
-                        <div><div style="font-weight:600;">Браузерные уведомления</div><small style="color:var(--text-sec);">Push-уведомления в браузере</small></div>
-                        <label class="toggle-switch"><input type="checkbox" id="browser-reminder" onchange="toggleReminder('browser', this.checked)"><span class="toggle-slider"></span></label>
-                    </div>
-                    <div class="reminder-toggle">
-                        <div><div style="font-weight:600;">Telegram</div><small style="color:var(--text-sec);">@zhivi_legko_bot</small></div>
-                        <label class="toggle-switch"><input type="checkbox" id="telegram-reminder" onchange="toggleReminder('telegram', this.checked)"><span class="toggle-slider"></span></label>
-                    </div>
-                    <div style="margin-top:1rem;">
-                        <label style="font-weight:600; display:block; margin-bottom:0.5rem;">⏰ Время напоминаний:</label>
-                        <input type="time" id="reminder-time" value="09:00" onchange="saveReminderTime()">
-                    </div>
-                </div>
+        </header>
+
+        <div class="hero">
+            <h1>Экспертный подход к вашему здоровью</h1>
+            <p>Персональные рекомендации добавок с доказанной эффективностью.</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('search')">🔍 Поиск</button>
+            <button class="tab-btn" onclick="switchTab('plan')">📋 Мой план</button>
+        </div>
+
+        <div id="tab-search" class="content-box">
+            <div class="input-group">
+                <input type="text" id="search-input" placeholder="Что беспокоит? (сон, усталость, иммунитет...)">
+                <button class="action-btn" onclick="performSearch()">Найти</button>
             </div>
+            <div id="results" class="results-grid"></div>
+        </div>
+
+        <div id="tab-plan" class="content-box" style="display: none;">
+            <h3 style="margin-bottom: 1rem;">Ваш список добавок</h3>
+            <div id="plan-list"></div>
         </div>
     </div>
-    <div class="disclaimer">⚠️ Сервис носит информационный характер. Перед приёмом любых добавок проконсультируйтесь с врачом.</div>
-</div>
 
-<div id="chat-toggle" onclick="toggleChat()" style="display:none;">💬</div>
-<div id="chat-modal">
-    <div class="chat-header"><span>🌿 Помощник</span><span class="chat-close" onclick="toggleChat()">✖</span></div>
-    <div id="chat-messages"><div class="msg ai">🌿 Привет! Я помощник VITA. Спросите: "Что для сна?", "Какие добавки для иммунитета?"</div></div>
-    <div class="chat-input"><input type="text" id="chat-input" placeholder="Спросить о добавках..."><button onclick="sendMessage()">📤</button></div>
-</div>
+    <script>
+        // 1. CONFIGURATION
+        const SUPABASE_URL = 'https://yrfheqvpiuqzncgqhgrwn.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_RixoV9Q-BGCygKgIREwaEg_jN1QabOe';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-<div class="notification-toast" id="notification-toast">
-    <div class="notification-icon">🛒</div>
-    <div class="notification-text"><strong id="notif-name">Анна М.</strong> выбрал(а) <span id="notif-product">Магний Глицинат</span></div>
-</div>
+        let currentUser = null;
+        let myPlan = [];
 
-<script>
-// ==========================================
-// ⚙️ SUPABASE CONFIG
-// ==========================================
-const SUPABASE_URL = 'https://yrfheqvpiuqzncgqhgrwn.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_RixoV9Q-BGCygKgIREwaEg_jN1QabOe';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // 2. SUPPLEMENTS DATABASE (30 Items)
+        const DB = [
+            {id:1,name:"Магний Глицинат",tags:["сон","тревога","стресс"],icon:"😴",ozon:"https://ozon.ru/search/?text=магний+глицинат",wb:"https://wb.ru/search/?text=магний+глицинат",iherb:"https://iherb.com/c/magnesium-glycinate"},
+            {id:2,name:"Магний Цитрат",tags:["энергия","пищеварение"],icon:"⚡",ozon:"https://ozon.ru/search/?text=магний+цитрат",wb:"https://wb.ru/search/?text=магний+цитрат",iherb:"https://iherb.com/c/magnesium-citrate"},
+            {id:3,name:"Магний Малат",tags:["энергия","усталость","утро"],icon:"🌅",ozon:"https://ozon.ru/search/?text=магний+малат",wb:"https://wb.ru/search/?text=магний+малат",iherb:"https://iherb.com/c/magnesium-malate"},
+            {id:4,name:"Магний L-Треонат",tags:["мозг","память","фокус"],icon:"🧠",ozon:"https://ozon.ru/search/?text=магний+треонат",wb:"https://wb.ru/search/?text=магний+треонат",iherb:"https://iherb.com/c/magnesium-l-threonate"},
+            {id:5,name:"Магний Таурат",tags:["сердце","давление"],icon:"❤️",ozon:"https://ozon.ru/search/?text=магний+таурат",wb:"https://wb.ru/search/?text=магний+таурат",iherb:"https://iherb.com/c/magnesium-taurate"},
+            {id:6,name:"Витамин D3",tags:["иммунитет","настроение","кости","энергия"],icon:"☀️",ozon:"https://ozon.ru/search/?text=витамин+d3",wb:"https://wb.ru/search/?text=витамин+d3",iherb:"https://iherb.com/c/vitamin-d"},
+            {id:7,name:"Омега-3",tags:["мозг","сердце","кожа"],icon:"🐟",ozon:"https://ozon.ru/search/?text=омега-3",wb:"https://wb.ru/search/?text=омега-3",iherb:"https://iherb.com/c/omega-3"},
+            {id:8,name:"Цинк",tags:["иммунитет","кожа"],icon:"🛡️",ozon:"https://ozon.ru/search/?text=цинк",wb:"https://wb.ru/search/?text=цинк",iherb:"https://iherb.com/c/zinc"},
+            {id:9,name:"Креатин",tags:["спорт","масса","сила"],icon:"💪",ozon:"https://ozon.ru/search/?text=креатин",wb:"https://wb.ru/search/?text=креатин",iherb:"https://iherb.com/c/creatine"},
+            {id:10,name:"Витамин C",tags:["иммунитет","кожа","энергия"],icon:"🍊",ozon:"https://ozon.ru/search/?text=витамин+c",wb:"https://wb.ru/search/?text=витамин+c",iherb:"https://iherb.com/c/vitamin-c"},
+            {id:11,name:"Мелатонин",tags:["сон","бессонница"],icon:"🌙",ozon:"https://ozon.ru/search/?text=мелатонин",wb:"https://wb.ru/search/?text=мелатонин",iherb:"https://iherb.com/c/melatonin"},
+            {id:12,name:"B-Complex",tags:["энергия","нервы","стресс"],icon:"⚡",ozon:"https://ozon.ru/search/?text=витамины+группы+b",wb:"https://wb.ru/search/?text=витамины+b",iherb:"https://iherb.com/c/vitamin-b-complex"},
+            {id:13,name:"Железо",tags:["энергия","анемия"],icon:"🩸",ozon:"https://ozon.ru/search/?text=железо",wb:"https://wb.ru/search/?text=железо",iherb:"https://iherb.com/c/iron"},
+            {id:14,name:"CoQ10",tags:["сердце","энергия"],icon:"❤️",ozon:"https://ozon.ru/search/?text=коэнзим+q10",wb:"https://wb.ru/search/?text=коэнзим+q10",iherb:"https://iherb.com/c/coq10"},
+            {id:15,name:"Ашваганда",tags:["стресс","тревога","сон"],icon:"🌿",ozon:"https://ozon.ru/search/?text=ашваганда",wb:"https://wb.ru/search/?text=ашваганда",iherb:"https://iherb.com/c/ashwagandha"},
+            {id:16,name:"Родиола Розовая",tags:["энергия","усталость","настроение"],icon:"🌸",ozon:"https://ozon.ru/search/?text=родиола+розовая",wb:"https://wb.ru/search/?text=родиола",iherb:"https://iherb.com/c/rhodiola"},
+            {id:17,name:"L-Тирозин",tags:["энергия","фокус","настроение"],icon:"🎯",ozon:"https://ozon.ru/search/?text=l-тирозин",wb:"https://wb.ru/search/?text=l-тирозин",iherb:"https://iherb.com/c/l-tyrosine"},
+            {id:18,name:"Куркума",tags:["воспаление","суставы"],icon:"🧡",ozon:"https://ozon.ru/search/?text=куркума",wb:"https://wb.ru/search/?text=куркума",iherb:"https://iherb.com/c/turmeric"},
+            {id:19,name:"Пробиотики",tags:["кишечник","иммунитет"],icon:"🦠",ozon:"https://ozon.ru/search/?text=пробиотики",wb:"https://wb.ru/search/?text=пробиотики",iherb:"https://iherb.com/c/probiotics"},
+            {id:20,name:"Коллаген",tags:["кожа","суставы","красота"],icon:"✨",ozon:"https://ozon.ru/search/?text=коллаген",wb:"https://wb.ru/search/?text=коллаген",iherb:"https://iherb.com/c/collagen"},
+            {id:21,name:"L-Теанин",tags:["фокус","расслабление"],icon:"🧘",ozon:"https://ozon.ru/search/?text=l-теанин",wb:"https://wb.ru/search/?text=l-теанин",iherb:"https://iherb.com/c/l-theanine"},
+            {id:22,name:"Селен",tags:["щитовидка","иммунитет"],icon:"🦋",ozon:"https://ozon.ru/search/?text=селен",wb:"https://wb.ru/search/?text=селен",iherb:"https://iherb.com/c/selenium"},
+            {id:23,name:"Йод",tags:["щитовидка","метаболизм"],icon:"🔷",ozon:"https://ozon.ru/search/?text=йод",wb:"https://wb.ru/search/?text=йод",iherb:"https://iherb.com/c/iodine"},
+            {id:24,name:"Витамин E",tags:["кожа","антиоксидант"],icon:"🌟",ozon:"https://ozon.ru/search/?text=витамин+e",wb:"https://wb.ru/search/?text=витамин+e",iherb:"https://iherb.com/c/vitamin-e"},
+            {id:25,name:"Биотин",tags:["волосы","ногти","красота"],icon:"💅",ozon:"https://ozon.ru/search/?text=биотин",wb:"https://wb.ru/search/?text=биотин",iherb:"https://iherb.com/c/biotin"},
+            {id:26,name:"GABA",tags:["сон","тревога"],icon:"😌",ozon:"https://ozon.ru/search/?text=gaba",wb:"https://wb.ru/search/?text=gaba",iherb:"https://iherb.com/c/gaba"},
+            {id:27,name:"Ресвератрол",tags:["долголетие","сердце"],icon:"🍇",ozon:"https://ozon.ru/search/?text=ресвератрол",wb:"https://wb.ru/search/?text=ресвератрол",iherb:"https://iherb.com/c/resveratrol"},
+            {id:28,name:"NMN",tags:["долголетие","энергия"],icon:"⏳",ozon:"https://ozon.ru/search/?text=nmn",wb:"https://wb.ru/search/?text=nmn",iherb:"https://iherb.com/c/nmn"},
+            {id:29,name:"Протеин",tags:["спорт","мышцы"],icon:"🥤",ozon:"https://ozon.ru/search/?text=протеин",wb:"https://wb.ru/search/?text=протеин",iherb:"https://iherb.com/c/protein-powders"},
+            {id:30,name:"Витамин K2",tags:["кости","сердце"],icon:"🦴",ozon:"https://ozon.ru/search/?text=витамин+k2",wb:"https://wb.ru/search/?text=витамин+k2",iherb:"https://iherb.com/c/vitamin-k2"}
+        ];
 
-let currentUser = null;
-let userData = {
-    stack: [], wellness: [], calendar: {}, 
-    reminders: { browser: false, telegram: false, time: "09:00" },
-    achievements: { first: false, active: false, streak3: false, streak10: false },
-    streakDays: 0, lastTakenDate: null
-};
-let currentSearchResults = [], currentDisplayCount = 10, currentSearchQuery = '', searchMode = 'local';
+        // 3. AUTH FUNCTIONS
+        async function handleLogin() {
+            const email = document.getElementById('email-input').value.trim();
+            const errorDiv = document.getElementById('auth-error');
+            const btn = document.querySelector('.auth-btn');
 
-// ==========================================
-// 💾 DATABASE SYNC
-// ==========================================
-async function saveToDB() {
-    if (!currentUser) return;
-    const { error } = await supabase.from('users').upsert({ 
-        email: currentUser.email, 
-        data: userData 
-    }, { onConflict: 'email' });
-    if (error) console.error('DB Save Error:', error);
-}
+            if (!email.includes('@')) {
+                errorDiv.textContent = 'Введите корректный Email';
+                return;
+            }
 
-async function loadFromDB() {
-    if (!currentUser) return;
-    const { data, error } = await supabase.from('users').select('data').eq('email', currentUser.email).single();
-    if (data && data.data) userData = { ...userData, ...data.data };
-    initUI();
-}
+            errorDiv.textContent = '';
+            btn.textContent = 'Загрузка...';
+            btn.disabled = true;
 
-// ==========================================
-// 🔐 AUTH
-// ==========================================
-async function handleAuth() {
-    const email = document.getElementById('auth-email').value.trim();
-    if (!email.includes('@')) return document.getElementById('auth-error').textContent = 'Введите корректный Email';
-    
-    const btn = document.querySelector('.auth-btn');
-    btn.textContent = 'Загрузка...'; btn.disabled = true;
-    document.getElementById('auth-error').textContent = '';
+            try {
+                // 1. Try Sign In
+                const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: 'vita_pass_' + email
+                });
 
-    let { data: session, error } = await supabase.auth.signInWithPassword({ email, password: 'vita_pass_' + email });
-    
-    if (error) {
-        const { data: reg, error: regErr } = await supabase.auth.signUp({ email, password: 'vita_pass_' + email });
-        if (regErr) {
-            document.getElementById('auth-error').textContent = regErr.message;
-            btn.textContent = 'Войти / Регистрация'; btn.disabled = false;
-            return;
+                if (signInError) {
+                    // 2. If fails, try Sign Up
+                    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+                        email: email,
+                        password: 'vita_pass_' + email
+                    });
+
+                    if (signUpError) throw signUpError;
+                    
+                    alert('✅ Регистрация успешна! Теперь войдите.');
+                    btn.textContent = 'Войти / Регистрация';
+                    btn.disabled = false;
+                    return;
+                }
+
+                // Success
+                currentUser = signInData.user;
+                loadUserData();
+                initApp();
+
+            } catch (error) {
+                console.error(error);
+                errorDiv.textContent = 'Ошибка: ' + error.message;
+                btn.textContent = 'Войти / Регистрация';
+                btn.disabled = false;
+            }
         }
-        currentUser = reg.user;
-    } else {
-        currentUser = session.user;
-    }
-    await loadFromDB();
-}
 
-async function logout() {
-    if(confirm('Выйти?')) { await supabase.auth.signOut(); location.reload(); }
-}
+        async function handleLogout() {
+            await supabase.auth.signOut();
+            location.reload();
+        }
 
-function requestPermissions() { if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission(); }
+        async function loadUserData() {
+            // В реальном проекте здесь загрузка из Supabase
+            // Сейчас используем LocalStorage для простоты
+            const saved = localStorage.getItem('vita_plan_' + currentUser.email);
+            if (saved) myPlan = JSON.parse(saved);
+        }
 
-function initUI() {
-    document.getElementById('auth-overlay').style.display = 'none';
-    document.getElementById('app-header').style.display = 'flex';
-    document.getElementById('main-content').style.display = 'block';
-    document.getElementById('chat-toggle').style.display = 'flex';
-    document.getElementById('display-user').textContent = currentUser.email.split('@')[0];
-    
-    document.getElementById('browser-reminder').checked = userData.reminders.browser;
-    document.getElementById('telegram-reminder').checked = userData.reminders.telegram;
-    document.getElementById('reminder-time').value = userData.reminders.time;
-    
-    updateAchievements(); renderMoodChart(); renderCalendar(); scheduleReminders();
-    if (userData.stack.length) { updateSchedule(); document.getElementById('my-stack-section').classList.add('visible'); }
-    document.getElementById('popular-combos').style.display = 'block';
-    startNotifications();
-}
+        function saveUserData() {
+            localStorage.setItem('vita_plan_' + currentUser.email, JSON.stringify(myPlan));
+        }
 
-function goToMain() { window.location.reload(); }
+        // 4. APP LOGIC
+        function initApp() {
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('app-screen').style.display = 'block';
+            document.getElementById('user-display').textContent = currentUser.email.split('@')[0];
+            renderPlan();
+        }
 
-// ==========================================
-// 📦 SUPPLEMENTS DATABASE (30 ITEMS)
-// ==========================================
-const supplementsDB = [
-    {id:1,name:"Магний Глицинат",substance:"Магний (хелат)",time:"Вечер",dose:"200-400 мг",why:"Лучшая форма для сна и расслабления.",goodWith:["Мелатонин","B6"],badWith:["Железо","Кальций"],tags:["сон","тревога","стресс"],icon:"😴",details:"Магний глицинат — хелатная форма с биодоступностью до 90%. Глицин успокаивает нервную систему, улучшает сон. Принимать за 1-2 часа до сна.",ozon:"https://ozon.ru/search/?text=магний+глицинат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+глицинат",iherb:"https://ru.iherb.com/c/magnesium-glycinate"},
-    {id:2,name:"Магний Цитрат",substance:"Магний (органический)",time:"Утро/День",dose:"200-400 мг",why:"Хорошо усваивается. Помогает при запорах.",goodWith:["B6","Калий"],badWith:["Железо"],tags:["энергия","мышцы","пищеварение"],icon:"⚡",details:"Органическая форма с усвояемостью ~80%. Мягкий слабительный эффект. Лучше принимать утром или днём.",ozon:"https://ozon.ru/search/?text=магний+цитрат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+цитрат",iherb:"https://ru.iherb.com/c/magnesium-citrate"},
-    {id:3,name:"Магний Малат",substance:"Магний + яблочная кислота",time:"Утро",dose:"200-400 мг",why:"Даёт энергию и бодрость.",goodWith:["B-комплекс","CoQ10"],badWith:["Железо"],tags:["энергия","бодрость","усталость"],icon:"🌅",details:"Сочетание с яблочной кислотой стимулирует цикл Кребса (АТФ). Принимать утром для энергии.",ozon:"https://ozon.ru/search/?text=магний+малат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+малат",iherb:"https://ru.iherb.com/c/magnesium-malate"},
-    {id:4,name:"Магний L-Треонат",substance:"Магний (для мозга)",time:"Утро/День",dose:"100-200 мг",why:"Проникает в мозг. Улучшает память.",goodWith:["Омега-3"],badWith:[],tags:["мозг","память","фокус"],icon:"🧠",details:"Единственная форма, преодолевающая гематоэнцефалический барьер. Улучшает нейропластичность и когнитивные функции.",ozon:"https://ozon.ru/search/?text=магний+треонат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+треонат",iherb:"https://ru.iherb.com/c/magnesium-l-threonate"},
-    {id:5,name:"Магний Таурат",substance:"Магний + таурин",time:"Утро/Вечер",dose:"200-400 мг",why:"Поддержка сердца и сосудов.",goodWith:["CoQ10","Омега-3"],badWith:[],tags:["сердце","давление"],icon:"❤️",details:"Таурин улучшает ритм сердца, магний расслабляет сосуды. Идеален при гипертонии.",ozon:"https://ozon.ru/search/?text=магний+таурат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+таурат",iherb:"https://ru.iherb.com/c/magnesium-taurate"},
-    {id:6,name:"Витамин D3",substance:"Витамин D",time:"Утро с едой",dose:"2000-5000 МЕ",why:"Иммунитет, кости, настроение.",goodWith:["K2","Омега-3","Магний"],badWith:[],tags:["иммунитет","настроение","кости"],icon:"☀️",details:"Дефицит у 80% людей. Принимать с жирами. Обязательно с K2 для направления кальция в кости.",ozon:"https://ozon.ru/search/?text=витамин+d3",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+d3",iherb:"https://ru.iherb.com/c/vitamin-d"},
-    {id:7,name:"Омега-3",substance:"Омега-3",time:"Утро/Обед",dose:"1000-2000 мг",why:"Сердце, мозг, кожа.",goodWith:["D3","E","Магний"],badWith:["Антикоагулянты"],tags:["мозг","сердце","кожа"],icon:"🐟",details:"EPA и DHA — строительный материал для мембран. Снижают воспаление. Выбирать с EPA+DHA > 1000 мг.",ozon:"https://ozon.ru/search/?text=омега-3",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=омега-3",iherb:"https://ru.iherb.com/c/omega-3"},
-    {id:8,name:"Цинк",substance:"Цинк",time:"День",dose:"15-30 мг",why:"Иммунитет, кожа, заживление.",goodWith:["A","C","D3"],badWith:["Железо","Медь"],tags:["иммунитет","кожа"],icon:"🛡️",details:"Участвует в 300+ ферментах. Не принимать натощак. Курс 1-2 месяца.",ozon:"https://ozon.ru/search/?text=цинк",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=цинк",iherb:"https://ru.iherb.com/c/zinc"},
-    {id:9,name:"Креатин",substance:"Креатин",time:"После тренировки",dose:"5 г",why:"Сила, мышцы, выносливость.",goodWith:["Углеводы","Протеин"],badWith:[],tags:["спорт","масса","сила"],icon:"💪",details:"Самая изученная добавка. +10-15% силы. Улучшает когнитивные функции. Безопасен длительно.",ozon:"https://ozon.ru/search/?text=креатин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=креатин",iherb:"https://ru.iherb.com/c/creatine"},
-    {id:10,name:"Витамин C",substance:"Аскорбиновая кислота",time:"Утро",dose:"500-1000 мг",why:"Иммунитет, антиоксидант.",goodWith:["Цинк","E"],badWith:["B12"],tags:["иммунитет","кожа","энергия"],icon:"🍊",details:"Мощный антиоксидант. Ускоряет выздоровление. Не превышать 2000 мг/день.",ozon:"https://ozon.ru/search/?text=витамин+c",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+c",iherb:"https://ru.iherb.com/c/vitamin-c"},
-    {id:11,name:"Мелатонин",substance:"Гормон сна",time:"За 30 мин до сна",dose:"1-5 мг",why:"Быстрое засыпание.",goodWith:["Магний","GABA"],badWith:["Кофеин","Алкоголь"],tags:["сон","бессонница"],icon:"🌙",details:"Регулирует циркадные ритмы. Не вызывает привыкания. Начинать с 1-3 мг.",ozon:"https://ozon.ru/search/?text=мелатонин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=мелатонин",iherb:"https://ru.iherb.com/c/melatonin"},
-    {id:12,name:"B-Complex",substance:"Витамины группы B",time:"Утро",dose:"1 капсула",why:"Энергия, нервная система.",goodWith:["Магний","D3"],badWith:["C (раздельно)"],tags:["энергия","нервы","стресс"],icon:"⚡",details:"Основа энергетического обмена. Выбирать метилированные формы.",ozon:"https://ozon.ru/search/?text=витамины+группы+b",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамины+b",iherb:"https://ru.iherb.com/c/vitamin-b-complex"},
-    {id:13,name:"Железо",substance:"Fe",time:"Утро натощак",dose:"18-30 мг",why:"Гемоглобин, энергия.",goodWith:["C","B12"],badWith:["Кальций","Цинк","Кофе"],tags:["энергия","анемия"],icon:"🩸",details:"Принимать с витамином C. Не сочетать с кофе/чаем. Сдать ферритин перед приёмом.",ozon:"https://ozon.ru/search/?text=железо",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=железо",iherb:"https://ru.iherb.com/c/iron"},
-    {id:14,name:"CoQ10",substance:"Коэнзим Q10",time:"Утро с едой",dose:"100-200 мг",why:"Энергия клеток, сердце.",goodWith:["Омега-3","E"],badWith:[],tags:["сердце","энергия"],icon:"❤️",details:"Участвует в производстве АТФ. Снижается после 30 лет. Форма убихинол усваивается лучше.",ozon:"https://ozon.ru/search/?text=коэнзим+q10",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=коэнзим+q10",iherb:"https://ru.iherb.com/c/coq10"},
-    {id:15,name:"Ашваганда",substance:"Адаптоген",time:"Утро/Вечер",dose:"300-600 мг",why:"Снижение стресса.",goodWith:["Магний","B-комплекс"],badWith:["Седативные"],tags:["стресс","тревога","сон"],icon:"🌿",details:"Снижает кортизол на 20-30%. Эффект накопительный (2-4 недели).",ozon:"https://ozon.ru/search/?text=ашваганда",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=ашваганда",iherb:"https://ru.iherb.com/c/ashwagandha"},
-    {id:16,name:"Родиола Розовая",substance:"Адаптоген",time:"Утро",dose:"200-400 мг",why:"Энергия, выносливость.",goodWith:["Ашваганда","B-комплекс"],badWith:["Антидепрессанты"],tags:["энергия","усталость","настроение"],icon:"🌸",details:"Повышает серотонин и дофамин. Эффект через 3-7 дней.",ozon:"https://ozon.ru/search/?text=родиола+розовая",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=родиола",iherb:"https://ru.iherb.com/c/rhodiola"},
-    {id:17,name:"L-Тирозин",substance:"Аминокислота",time:"Утро натощак",dose:"500-1000 мг",why:"Энергия, фокус.",goodWith:["B6","C"],badWith:[],tags:["энергия","фокус","настроение"],icon:"🎯",details:"Предшественник дофамина. Эффект через 30-60 мин.",ozon:"https://ozon.ru/search/?text=l-тирозин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=l-тирозин",iherb:"https://ru.iherb.com/c/l-tyrosine"},
-    {id:18,name:"Куркума",substance:"Куркумин",time:"Обед с едой",dose:"500-1000 мг",why:"Противовоспалительное.",goodWith:["Черный перец","Омега-3"],badWith:["Антикоагулянты"],tags:["воспаление","суставы"],icon:"🧡",details:"Сильнее аспирина. Сочетать с чёрным перцем (усиление в 2000 раз).",ozon:"https://ozon.ru/search/?text=куркума",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=куркума",iherb:"https://ru.iherb.com/c/turmeric"},
-    {id:19,name:"Пробиотики",substance:"Полезные бактерии",time:"Утро натощак",dose:"10-50 млрд КОЕ",why:"Кишечник, иммунитет.",goodWith:["Пребиотики"],badWith:["Антибиотики"],tags:["кишечник","иммунитет"],icon:"🦠",details:"70% иммунитета в кишечнике. Принимать за 30 мин до еды.",ozon:"https://ozon.ru/search/?text=пробиотики",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=пробиотики",iherb:"https://ru.iherb.com/c/probiotics"},
-    {id:20,name:"Коллаген",substance:"Белок",time:"Утро/Перед сном",dose:"5-10 г",why:"Кожа, суставы, волосы.",goodWith:["Витамин C"],badWith:[],tags:["кожа","суставы","красота"],icon:"✨",details:"Производство падает после 25 лет. Гидролизованный усваивается лучше.",ozon:"https://ozon.ru/search/?text=коллаген",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=коллаген",iherb:"https://ru.iherb.com/c/collagen"},
-    {id:21,name:"L-Теанин",substance:"Аминокислота",time:"Утро/День",dose:"100-200 мг",why:"Расслабление без сонливости.",goodWith:["Кофеин","Магний"],badWith:[],tags:["фокус","расслабление"],icon:"🧘",details:"Увеличивает альфа-волны мозга. С кофеином = идеальная продуктивность.",ozon:"https://ozon.ru/search/?text=l-теанин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=l-теанин",iherb:"https://ru.iherb.com/c/l-theanine"},
-    {id:22,name:"Селен",substance:"Se",time:"Утро",dose:"100-200 мкг",why:"Щитовидка, иммунитет.",goodWith:["Йод","E","C"],badWith:[],tags:["щитовидка","иммунитет"],icon:"🦋",details:"Конвертирует T4 в T3. Не превышать 400 мкг. 2 бразильских ореха = норма.",ozon:"https://ozon.ru/search/?text=селен",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=селен",iherb:"https://ru.iherb.com/c/selenium"},
-    {id:23,name:"Йод",substance:"I",time:"Утро",dose:"150-300 мкг",why:"Щитовидка, метаболизм.",goodWith:["Селен","Цинк"],badWith:[],tags:["щитовидка","метаболизм"],icon:"🔷",details:"Дефицит у 30% людей. Обязательно с селеном. Сдать ТТГ перед приёмом.",ozon:"https://ozon.ru/search/?text=йод",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=йод",iherb:"https://ru.iherb.com/c/iodine"},
-    {id:24,name:"Витамин E",substance:"Токоферол",time:"Утро с едой",dose:"100-400 МЕ",why:"Антиоксидант, кожа.",goodWith:["C","Селен","Омега-3"],badWith:["Железо"],tags:["кожа","антиоксидант"],icon:"🌟",details:"Защищает мембраны. Натуральная форма (d-alpha) лучше синтетической.",ozon:"https://ozon.ru/search/?text=витамин+e",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+e",iherb:"https://ru.iherb.com/c/vitamin-e"},
-    {id:25,name:"Биотин",substance:"B7",time:"Утро",dose:"5000-10000 мкг",why:"Волосы, ногти, кожа.",goodWith:["Коллаген","Цинк"],badWith:[],tags:["волосы","ногти","красота"],icon:"💅",details:"Синтез кератина. Результаты через 8-12 недель.",ozon:"https://ozon.ru/search/?text=биотин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=биотин",iherb:"https://ru.iherb.com/c/biotin"},
-    {id:26,name:"GABA",substance:"ГАМК",time:"Вечер",dose:"250-750 мг",why:"Расслабление, сон.",goodWith:["Магний","Мелатонин"],badWith:["Алкоголь"],tags:["сон","тревога"],icon:"😌",details:"Тормозной нейротрансмиттер. Снижает тревогу на 30%.",ozon:"https://ozon.ru/search/?text=gaba",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=gaba",iherb:"https://ru.iherb.com/c/gaba"},
-    {id:27,name:"Ресвератрол",substance:"Полифенол",time:"Вечер",dose:"100-500 мг",why:"Долголетие, антиоксидант.",goodWith:["Кверцетин","NMN"],badWith:[],tags:["долголетие","сердце"],icon:"🍇",details:"Активирует сиртуины. Транс-форма активнее.",ozon:"https://ozon.ru/search/?text=ресвератрол",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=ресвератрол",iherb:"https://ru.iherb.com/c/resveratrol"},
-    {id:28,name:"NMN",substance:"Никотинамид мононуклеотид",time:"Утро",dose:"250-500 мг",why:"Долголетие, энергия клеток.",goodWith:["Ресвератрол"],badWith:[],tags:["долголетие","энергия"],icon:"⏳",details:"Предшественник NAD+. Эффект через 2-4 недели.",ozon:"https://ozon.ru/search/?text=nmn",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=nmn",iherb:"https://ru.iherb.com/c/nmn"},
-    {id:29,name:"Протеин",substance:"Белок",time:"После тренировки",dose:"20-30 г",why:"Рост мышц, восстановление.",goodWith:["Креатин"],badWith:[],tags:["спорт","мышцы"],icon:"🥤",details:"Сывороточный быстро усваивается. Казеин медленно.",ozon:"https://ozon.ru/search/?text=протеин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=протеин",iherb:"https://ru.iherb.com/c/protein-powders"},
-    {id:30,name:"Витамин K2",substance:"Менахинон",time:"Утро с едой",dose:"100-200 мкг",why:"Направляет кальций в кости.",goodWith:["D3","Кальций"],badWith:["Антикоагулянты"],tags:["кости","сердце"],icon:"🦴",details:"Без K2 кальций откладывается в сосудах. Форма MK-7 усваивается лучше.",ozon:"https://ozon.ru/search/?text=витамин+k2",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+k2",iherb:"https://ru.iherb.com/c/vitamin-k2"}
-];
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('tab-search').style.display = tab === 'search' ? 'block' : 'none';
+            document.getElementById('tab-plan').style.display = tab === 'plan' ? 'block' : 'none';
+        }
 
-// ==========================================
-// 🧭 NAVIGATION & SEARCH
-// ==========================================
-function switchTab(tab) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    event.currentTarget.classList.add('active');
-    document.querySelectorAll('.search-box').forEach(b => b.classList.remove('active'));
-    document.getElementById('search-' + (tab === 'search' ? 'name' : tab)).classList.add('active');
-    document.getElementById('autocomplete-list').style.display = 'none';
-    document.getElementById('results-area').innerHTML = '';
-    currentSearchResults = []; currentDisplayCount = 10;
-}
+        function performSearch() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
 
-async function quickSearch(query) {
-    document.getElementById('input-name').value = query;
-    document.getElementById('results-area').innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sec);"><i>🔍 Ищем в базе...</i></div>';
-    currentSearchResults = supplementsDB.filter(item => item.tags.some(tag => tag.includes(query.toLowerCase())));
-    currentDisplayCount = 10;
-    renderResultsWithLoadMore(currentSearchResults);
-}
+            const filtered = DB.filter(item => 
+                item.tags.some(tag => tag.includes(query)) || 
+                item.name.toLowerCase().includes(query)
+            );
 
-function handleAutocomplete(value) {
-    const list = document.getElementById('autocomplete-list'); list.innerHTML = '';
-    if (!value || value.length < 2) { list.style.display = 'none'; return; }
-    const matches = supplementsDB.filter(item => item.name.toLowerCase().includes(value.toLowerCase())).slice(0, 5);
-    if (matches.length > 0) {
-        matches.forEach(item => {
-            const div = document.createElement('div'); div.className = 'autocomplete-item'; div.innerHTML = `<strong>${item.name}</strong>`;
-            div.onclick = () => { document.getElementById('input-name').value = item.name; list.style.display = 'none'; currentSearchResults = [item]; currentDisplayCount = 10; renderResultsWithLoadMore(currentSearchResults); };
-            list.appendChild(div);
-        });
-        list.style.display = 'block';
-    } else { list.style.display = 'none'; }
-}
+            if (filtered.length === 0) {
+                resultsDiv.innerHTML = '<p style="text-align:center; width:100%; color:#888;">Ничего не найдено. Попробуйте "сон", "энергия", "спорт".</p>';
+                return;
+            }
 
-function searchByName() {
-    const q = document.getElementById('input-name').value.toLowerCase(); if (!q) return;
-    document.getElementById('autocomplete-list').style.display = 'none';
-    currentSearchResults = supplementsDB.filter(i => i.name.toLowerCase().includes(q) || i.substance.toLowerCase().includes(q));
-    currentDisplayCount = 10; renderResultsWithLoadMore(currentSearchResults);
-}
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <h3>${item.icon} ${item.name}</h3>
+                    <div class="tags">${item.tags.map(t => `<span class="tag">#${t}</span>`).join('')}</div>
+                    <div class="buy-btns">
+                        <a href="${item.ozon}" target="_blank" class="buy-btn ozon">Ozon</a>
+                        <a href="${item.wb}" target="_blank" class="buy-btn wb">WB</a>
+                        <a href="${item.iherb}" target="_blank" class="buy-btn iherb">iHerb</a>
+                    </div>
+                    <button onclick="addToPlan(${item.id})" style="margin-top:10px; width:100%; padding:8px; background:#f0fdf4; border:1px solid #10b981; color:#047857; border-radius:8px; cursor:pointer;">➕ В мой план</button>
+                `;
+                resultsDiv.appendChild(card);
+            });
+        }
 
-async function smartSearch(query) {
-    const resultsArea = document.getElementById('results-area');
-    resultsArea.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sec);"><i>🤔 Анализирую...</i></div>';
-    try {
-        const controller = new AbortController(); const timeoutId = setTimeout(() => controller.abort(), 4000);
-        const response = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: [{ role: "user", content: `Найди ID добавок для: "${query}". Верни JSON: {"ids": [1, 5, 12]}. База: 1-Магний Глицинат(сон), 2-Магний Цитрат(энергия), 3-Магний Малат(усталость), 4-Магний Треонат(мозг), 5-Магний Таурат(сердце), 6-D3(иммунитет), 7-Омега-3(мозг), 8-Цинк(иммунитет), 9-Креатин(спорт), 10-Витамин C(иммунитет), 11-Мелатонин(сон), 12-B-Complex(нервы), 13-Железо(энергия), 14-CoQ10(сердце), 15-Ашваганда(стресс), 16-Родиола(выносливость), 17-L-Тирозин(фокус), 18-Куркума(суставы), 19-Пробиотики(кишечник), 20-Коллаген(кожа), 21-L-Теанин(расслабление), 22-Селен(щитовидка), 23-Йод(метаболизм), 24-Витамин E(кожа), 25-Биотин(волосы), 26-GABA(сон), 27-Ресвератрол(долголетие), 28-NMN(энергия), 29-Протеин(мышцы), 30-K2(кости).` }], userId: currentUser.email }), signal: controller.signal });
-        clearTimeout(timeoutId); const data = await response.json();
-        if (data.reply) { const jsonMatch = data.reply.match(/\{[\s\S]*"ids"[\s\S]*\}/); if (jsonMatch) { const result = JSON.parse(jsonMatch[0]); const items = supplementsDB.filter(item => result.ids.includes(item.id)); if (items.length > 0) { currentSearchResults = items; currentDisplayCount = 10; renderResultsWithLoadMore(currentSearchResults); return; } } }
-    } catch (err) { console.log('AI fallback:', err); }
-    fallbackSearch(query);
-}
+        function addToPlan(id) {
+            const item = DB.find(i => i.id === id);
+            if (!myPlan.find(i => i.id === id)) {
+                myPlan.push(item);
+                saveUserData();
+                renderPlan();
+                alert(`✅ ${item.name} добавлен в план!`);
+            } else {
+                alert('⚠️ Уже есть в плане!');
+            }
+        }
 
-function fallbackSearch(query) {
-    const q = query.toLowerCase().trim(); const words = q.split(' ').filter(w => w.length > 2);
-    currentSearchResults = supplementsDB.filter(i => {
-        const tagMatch = i.tags.some(tag => words.some(word => tag.includes(word) || word.includes(tag)));
-        const nameMatch = i.name.toLowerCase().includes(q) || i.substance.toLowerCase().includes(q);
-        const whyMatch = i.why.toLowerCase().includes(q);
-        const keywords = { 'хочу выспаться': ['сон'], 'стать сильнее': ['спорт','сила'], 'выносливость': ['энергия','спорт'], 'похудеть': ['метаболизм'], 'плохо встаю': ['энергия','утро'], 'усталость': ['энергия'], 'нет сил': ['энергия'], 'сон': ['сон'], 'иммунитет': ['иммунитет'], 'стресс': ['стресс','тревога'], 'нервы': ['нервы','тревога'], 'память': ['мозг'], 'кожа': ['кожа','красота'] };
-        let keywordMatch = false;
-        for (const [key, tags] of Object.entries(keywords)) { if (q.includes(key)) { keywordMatch = i.tags.some(tag => tags.includes(tag)); break; } }
-        return tagMatch || nameMatch || whyMatch || keywordMatch;
-    });
-    currentDisplayCount = 10; renderResultsWithLoadMore(currentSearchResults);
-}
+        function renderPlan() {
+            const list = document.getElementById('plan-list');
+            if (myPlan.length === 0) {
+                list.innerHTML = '<p style="text-align:center; color:#888;">План пуст. Добавьте добавки из поиска.</p>';
+                return;
+            }
+            list.innerHTML = myPlan.map(item => `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:1rem; border-bottom:1px solid var(--border);">
+                    <span>${item.icon} <strong>${item.name}</strong></span>
+                    <button onclick="removeFromPlan(${item.id})" style="color:#ef4444; background:none; border:none; cursor:pointer;">❌</button>
+                </div>
+            `).join('');
+        }
 
-function searchBySymptom() { const query = document.getElementById('input-symptom').value.trim(); if (!query) return; smartSearch(query); }
+        function removeFromPlan(id) {
+            myPlan = myPlan.filter(i => i.id !== id);
+            saveUserData();
+            renderPlan();
+        }
 
-function renderResultsWithLoadMore(items) {
-    const c = document.getElementById('results-area');
-    if (!items.length) { c.innerHTML = '<div style="text-align:center; padding:2rem; color:#888;">😕 Ничего не найдено.</div>'; return; }
-    const displayed = items.slice(0, currentDisplayCount);
-    let html = displayed.map(i => `
-        <div class="result-card">
-            <h3><span class="icon">${i.icon}</span> ${i.name} <small style="color:var(--text-sec); font-size:0.9rem">(${i.substance})</small></h3>
-            <p>${i.why}</p>
-            <p><strong>⏰ Время:</strong> ${i.time} | <strong>💊 Доза:</strong> ${i.dose}</p>
-            <div>${i.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
-            <div class="compatibility"><div class="good">✅ Можно с: ${i.goodWith.join(', ') || 'всем'}</div><div class="bad">❌ Не с: ${i.badWith.join(', ') || 'нет ограничений'}</div></div>
-            <button class="details-btn" onclick="toggleDetails(${i.id})">📖 Подробнее</button>
-            <div id="details-${i.id}" class="details-content"><h4 style="margin:0 0 10px; color:var(--primary-dark);">📚 Подробно</h4><p style="margin:0; line-height:1.6;">${i.details}</p></div>
-            <button class="btn-primary" onclick="addToStack(${i.id})">➕ Добавить в план</button>
-            <div class="buy-buttons">
-                <a href="${i.ozon}" target="_blank" class="buy-btn ozon">🛒 Ozon</a>
-                <a href="${i.wb}" target="_blank" class="buy-btn wb">🛍 Wildberries</a>
-                <a href="${i.iherb}" target="_blank" class="buy-btn iherb">🌿 iHerb</a>
-            </div>
-        </div>`).join('');
-    if (currentDisplayCount < items.length) html += `<div class="load-more"><button class="load-more-btn" onclick="loadMore()">🔽 Показать ещё добавки</button></div>`;
-    c.innerHTML = html;
-}
-
-function loadMore() { currentDisplayCount += 10; renderResultsWithLoadMore(currentSearchResults); }
-function toggleDetails(id) { document.getElementById(`details-${id}`).classList.toggle('show'); }
-
-function addCombo(ids) {
-    ids.forEach(id => { const item = supplementsDB.find(i => i.id == id); if (item && !userData.stack.find(i => i.id == id)) userData.stack.push({...item, taken: false}); });
-    saveToDB(); updateSchedule(); document.getElementById('my-stack-section').scrollIntoView({behavior:'smooth'}); document.getElementById('my-stack-section').classList.add('visible');
-    alert('✅ Комбинация добавлена!');
-}
-
-async function smartSearchWithProfile(query, age, weight) {
-    const resultsArea = document.getElementById('results-area');
-    try {
-        const controller = new AbortController(); const timeoutId = setTimeout(() => controller.abort(), 5000);
-        const response = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: [{ role: "user", content: `Пользователь: ${age} лет, ${weight} кг. Цель: "${query}". Найди ID добавок. Верни JSON: {"ids": [1, 5, 12], "explanation": "почему"}. База: 1-Магний Глицинат(сон), 2-Магний Цитрат(энергия), 3-Магний Малат(усталость), 4-Магний Треонат(мозг), 5-Магний Таурат(сердце), 6-D3(иммунитет), 7-Омега-3(мозг), 8-Цинк(иммунитет), 9-Креатин(спорт), 10-Витамин C(иммунитет), 11-Мелатонин(сон), 12-B-Complex(нервы), 13-Железо(энергия), 14-CoQ10(сердце), 15-Ашваганда(стресс), 16-Родиола(выносливость), 17-L-Тирозин(фокус), 18-Куркума(суставы), 19-Пробиотики(кишечник), 20-Коллаген(кожа), 21-L-Теанин(расслабление), 22-Селен(щитовидка), 23-Йод(метаболизм), 24-Витамин E(кожа), 25-Биотин(волосы), 26-GABA(сон), 27-Ресвератрол(долголетие), 28-NMN(энергия), 29-Протеин(мышцы), 30-K2(кости).` }], userId: currentUser.email }), signal: controller.signal });
-        clearTimeout(timeoutId); const data = await response.json();
-        if (data.reply) { const jsonMatch = data.reply.match(/\{[\s\S]*"ids"[\s\S]*\}/); if (jsonMatch) { const result = JSON.parse(jsonMatch[0]); const items = supplementsDB.filter(item => result.ids.includes(item.id)); if (items.length > 0) { currentSearchResults = items; currentDisplayCount = 10; document.getElementById('results-area').innerHTML = `<div style="background: linear-gradient(135deg, #ecfdf5, #d1fae5); padding: 1.5rem; border-radius: 16px; margin-bottom: 2rem; border-left: 4px solid var(--primary);"><h3 style="margin:0 0 0.5rem; color:var(--primary-dark);">📋 Персонально для вас</h3><p style="margin:0;"><strong>Возраст:</strong> ${age} | <strong>Вес:</strong> ${weight} кг<br><strong>Цель:</strong> ${query}<br>${result.explanation || 'Подобрано на основе ваших параметров.'}</p></div>`; renderResultsWithLoadMore(currentSearchResults); return; } } }
-    } catch (err) { console.log('AI profile failed:', err); }
-    fallbackSearch(query);
-}
-
-function generatePersonalPlan() {
-    const goal = document.getElementById('p-goal').value.trim(); const age = parseInt(document.getElementById('p-age').value) || 30; const weight = parseInt(document.getElementById('p-weight').value) || 70;
-    if (!goal) return alert('Укажите цель');
-    document.getElementById('results-area').innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sec);"><i>🤔 Анализирую...</i></div>';
-    smartSearchWithProfile(goal, age, weight); setTimeout(() => document.getElementById('results-area').scrollIntoView({behavior: 'smooth'}), 100);
-}
-
-// ==========================================
-// 📦 STACK & SCHEDULE
-// ==========================================
-function addToStack(id) {
-    const newItem = supplementsDB.find(i => i.id === id);
-    const existing = userData.stack.find(i => {
-        const n = newItem.substance.toLowerCase().split('(')[0].trim();
-        const e = i.substance.toLowerCase().split('(')[0].trim();
-        return (n.includes('магний') && e.includes('магний')) || (n.includes('витамин') && e.includes('витамин') && n === e) || newItem.id === i.id;
-    });
-    if (existing) { if(!confirm(`⚠️ Уже есть "${existing.name}". Добавить ещё?`)) return; }
-    if (userData.stack.find(i => i.id === id)) { alert('✅ Уже в плане!'); return; }
-    userData.stack.push({...newItem, taken: false}); saveToDB();
-    updateSchedule(); document.getElementById('my-stack-section').scrollIntoView({behavior:'smooth'}); document.getElementById('my-stack-section').classList.add('visible');
-    if (!userData.achievements.first) { userData.achievements.first = true; saveToDB(); alert('🌱 Достижение: Первый шаг!'); }
-    updateAchievements();
-}
-
-function updateSchedule() {
-    const slots = {'Утро':[], 'День':[], 'Вечер':[]};
-    userData.stack.forEach(i => { if(i.time.includes('Утро') || i.time.includes('натощак')) slots['Утро'].push(i); else if(i.time.includes('Вечер') || i.time.includes('сна')) slots['Вечер'].push(i); else slots['День'].push(i); });
-    const taken = userData.stack.filter(i => i.taken).length; const total = userData.stack.length; const pct = total > 0 ? (taken/total*100) : 0;
-    document.getElementById('progress-fill').style.width = pct + '%';
-    document.getElementById('progress-text').textContent = `${taken} из ${total} принято`;
-    document.getElementById('schedule-container').innerHTML = Object.entries(slots).map(([t, items]) => items.length ? `<div class="time-slot"><div class="time-label">${getSlotIcon(t)} ${t}</div>${items.map(i => `<span class="pill-tag ${i.taken?'taken':''}" onclick="toggleTaken(${i.id})">${i.taken?'✅':'⬜'} ${i.name}</span>`).join('')}</div>` : '').join('');
-    const today = new Date(); userData.calendar[`${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`] = {taken, total, takenList: userData.stack.filter(i=>i.taken).map(i=>i.name)}; saveToDB(); renderCalendar();
-}
-
-function getSlotIcon(t) { return t==='Утро'?'🌅':t==='День'?'☀️':'🌙'; }
-function toggleTaken(id) { const item = userData.stack.find(i => i.id === id); if(item) { item.taken = !item.taken; saveToDB(); updateSchedule(); checkStreak(); } }
-
-function checkStreak() {
-    const today = new Date().toDateString(); if (userData.lastTakenDate === today) return;
-    const yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
-    if (userData.lastTakenDate === yesterday.toDateString()) userData.streakDays++; else userData.streakDays = 1;
-    userData.lastTakenDate = today; saveToDB();
-    if (userData.streakDays >= 3 && !userData.achievements.streak3) { userData.achievements.streak3 = true; saveToDB(); alert('🔥 Серия 3 дня!'); updateAchievements(); }
-    if (userData.streakDays >= 10 && !userData.achievements.streak10) { userData.achievements.streak10 = true; saveToDB(); alert('⭐ Мастер 10 дней!'); updateAchievements(); }
-}
-
-function updateAchievements() {
-    if(userData.achievements.first) document.getElementById('ach-1').classList.add('unlocked');
-    if(userData.achievements.active) document.getElementById('ach-2').classList.add('unlocked');
-    if(userData.achievements.streak3) document.getElementById('ach-3').classList.add('unlocked');
-    if(userData.achievements.streak10) document.getElementById('ach-4').classList.add('unlocked');
-}
-
-// ==========================================
-// 📅 CALENDAR & REMINDERS & MOOD
-// ==========================================
-function renderCalendar() {
-    const grid = document.getElementById('calendar-grid'); const monthLabel = document.getElementById('current-month'); const now = new Date();
-    grid.innerHTML = ''; const months = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
-    monthLabel.textContent = `${months[now.getMonth()]} ${now.getFullYear()}`;
-    ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].forEach(d => { const div = document.createElement('div'); div.className='calendar-day-header'; div.textContent=d; grid.appendChild(div); });
-    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).getDay() || 7; const totalDays = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
-    for(let i=1; i<firstDay; i++) { const div = document.createElement('div'); div.className='calendar-day empty'; grid.appendChild(div); }
-    for(let day=1; day<=totalDays; day++) {
-        const div = document.createElement('div'); const key = `${now.getFullYear()}-${now.getMonth()+1}-${day}`; const d = userData.calendar[key];
-        div.className='calendar-day'; div.textContent=day; if(day===now.getDate()) div.classList.add('today');
-        if(d && d.total>0) { if(d.taken===d.total) div.classList.add('full'); else if(d.taken>0) div.classList.add('partial'); }
-        if(d && d.takenList?.length) { const tip = document.createElement('div'); tip.className='calendar-tooltip'; tip.innerHTML=d.takenList.map(n=>`✅ ${n}`).join('<br>'); div.appendChild(tip); }
-        grid.appendChild(div);
-    }
-}
-
-function toggleReminder(type, val) { userData.reminders[type] = val; saveToDB(); if(val && type==='browser') requestPermissions(); scheduleReminders(); }
-function saveReminderTime() { userData.reminders.time = document.getElementById('reminder-time').value; saveToDB(); scheduleReminders(); }
-function scheduleReminders() {
-    if(window.reminderTimeout) clearTimeout(window.reminderTimeout);
-    if(userData.reminders.browser || userData.reminders.telegram) {
-        const now = new Date(); const [h,m] = userData.reminders.time.split(':').map(Number); const rt = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m);
-        if(rt <= now) rt.setDate(rt.getDate()+1);
-        window.reminderTimeout = setTimeout(() => { sendReminder(); scheduleReminders(); }, rt - now);
-    }
-}
-function sendReminder() {
-    if(userData.reminders.browser && 'Notification' in window && Notification.permission==='granted') new Notification('🌿 VITA | Пора принять добавки!', {body:`Запланировано: ${userData.stack.length}`, icon:'🌿'});
-}
-
-function selectMood(mood) { document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected')); event.target.classList.add('selected'); event.target.dataset.mood = mood; }
-function saveWellness() {
-    const note = document.getElementById('wellness-note').value; const mood = document.querySelector('.mood-btn.selected')?.dataset.mood;
-    if(!note && !mood) return alert('Выберите настроение');
-    userData.wellness.push({date: new Date().toLocaleDateString(), mood, note}); saveToDB(); renderMoodChart(); alert('✅ Сохранено!'); document.getElementById('wellness-note').value='';
-}
-function renderMoodChart() {
-    const c = document.getElementById('mood-days'); const last7 = userData.wellness.slice(-7);
-    if(!last7.length) { c.innerHTML='<p style="color:#888;">Отмечайте самочувствие каждый день!</p>'; return; }
-    c.innerHTML = last7.map(l => `<div class="mood-day ${l.mood}" title="${l.date}: ${l.note||''}">${{bad:'😫',ok:'😐',good:'🙂',great:'🤩'}[l.mood]||'😐'}</div>`).join('');
-}
-
-// ==========================================
-// 💬 CHAT & NOTIFICATIONS
-// ==========================================
-function toggleChat() { document.getElementById('chat-modal').classList.toggle('open'); }
-function sendMessage() {
-    const inp = document.getElementById('chat-input'); const q = inp.value.trim(); if(!q) return;
-    addMsg('user', q); inp.value='';
-    const load = document.createElement('div'); load.className='msg ai'; load.innerHTML='<i>🌿 Думаю...</i>'; document.getElementById('chat-messages').appendChild(load);
-    fetch('/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({messages:[{role:"user",content:q}], userId:currentUser.email}) })
-    .then(r=>r.json()).then(d => { load.remove(); if(d.reply) addMsg('ai', d.reply.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')); else addMsg('ai','⚠️ Ошибка'); })
-    .catch(e => { load.remove(); addMsg('ai','⚠️ Нет связи'); });
-}
-function addMsg(role, text) { const box=document.getElementById('chat-messages'); const div=document.createElement('div'); div.className=`msg ${role}`; div.innerHTML=text; box.appendChild(div); box.scrollTop=box.scrollHeight; }
-document.getElementById('chat-input').addEventListener('keypress', e => { if(e.key==='Enter') sendMessage(); });
-document.addEventListener('click', e => { if(!e.target.closest('.autocomplete-container')) document.getElementById('autocomplete-list').style.display='none'; });
-
-const fakeNotifs = [{n:"Анна М.",p:"Магний Глицинат"},{n:"Сергей К.",p:"Омега-3"},{n:"Мария Д.",p:"Витамин D3"},{n:"Алексей П.",p:"Креатин"},{n:"Елена В.",p:"Коллаген"}];
-function startNotifications() { setTimeout(()=>{showNotif(); setInterval(showNotif, 45000);}, 10000); }
-function showNotif() { const t=document.getElementById('notification-toast'); const n=fakeNotifs[Math.floor(Math.random()*fakeNotifs.length)]; document.getElementById('notif-name').textContent=n.n; document.getElementById('notif-product').textContent=n.p; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 4000); }
-
-// ==========================================
-// 🚀 INIT
-// ==========================================
-window.onload = () => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-        if(session) { currentUser = session.user; loadFromDB(); }
-    });
-};
-</script>
+        // 5. INIT ON LOAD
+        window.onload = async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                currentUser = session.user;
+                loadUserData();
+                initApp();
+            }
+        };
+    </script>
 </body>
 </html>
