@@ -3,413 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VITA | ЖивиЛегко — персональный помощник по здоровью</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+    
+    <!-- 🔍 SEO META TAGS -->
+    <title>VITA | Персональный помощник по здоровью и добавкам</title>
+    <meta name="description" content="VITA — умный подбор витаминов и БАДов на основе научных исследований. Персональный план приема, трекер привычек и экспертные рекомендации.">
+    <meta name="keywords" content="витамины, БАДы, магний, омега-3, здоровье, добавки, трекер привычек, иммунитет, нутрициология">
+    <meta name="author" content="VITA Health">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://bad-master.vercel.app">
+
+    <!-- 🌐 OPEN GRAPH -->
+    <meta property="og:title" content="VITA | Экспертный подход к вашему здоровью">
+    <meta property="og:description" content="Персональные рекомендации добавок с доказанной эффективностью. Трекер, календарь, умный поиск.">
+    <meta property="og:image" content="https://bad-master.vercel.app/og-image.jpg">
+    <meta property="og:url" content="https://bad-master.vercel.app">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+
+    <!-- 📊 SCHEMA.ORG -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "VITA | ЖивиЛегко",
+      "description": "Персональный подбор витаминов и БАДов на основе научных исследований",
+      "url": "https://bad-master.vercel.app",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "Web",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" }
+    }
+    </script>
+
+    <!-- 🧩 SUPABASE SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <link rel="icon" type="image/svg+xml" href="image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+    
     <style>
-        :root {
-            --primary: #059669; --primary-light: #10b981; --primary-dark: #047857;
-            --accent: #f59e0b; --danger: #ef4444; --success: #22c55e;
-            --bg: #ffffff; --card: #ffffff; --text: #0f172a; --text-sec: #64748b;
-            --border: #e2e8f0; --radius: 20px; --shadow: 0 10px 40px rgba(5,150,105,0.1);
-        }
-        * { box-sizing: border-box; }
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: var(--bg);
-            color: var(--text); 
-            margin: 0; padding: 0; line-height: 1.6; 
-            overflow-x: hidden;
-            position: relative;
-        }
-        
-        .floating-leaf {
-            position: fixed;
-            font-size: 200px;
-            opacity: 0.08;
-            pointer-events: none;
-            z-index: 0;
-            animation: float 20s infinite ease-in-out;
-        }
-        .leaf-1 { top: 10%; left: 10%; animation-delay: 0s; }
-        .leaf-2 { top: 60%; right: 10%; animation-delay: 5s; }
-        .leaf-3 { bottom: 10%; left: 50%; animation-delay: 10s; }
-        
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(30px, -30px) rotate(90deg); }
-            50% { transform: translate(-20px, 20px) rotate(180deg); }
-            75% { transform: translate(40px, 10px) rotate(270deg); }
-        }
-        
-        #auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(15,23,42,0.9); backdrop-filter: blur(12px); 
-            display: flex; align-items: center; justify-content: center; z-index: 9999; }
-        .auth-box { background: white; padding: 2.5rem; border-radius: 24px; 
-            box-shadow: 0 25px 50px rgba(0,0,0,0.25); max-width: 420px; width: 90%; text-align: center;
-            animation: slideUp 0.5s ease; position: relative; z-index: 1; }
+        :root { --primary: #059669; --primary-light: #10b981; --primary-dark: #047857; --accent: #f59e0b; --danger: #ef4444; --success: #22c55e; --bg: #ffffff; --card: #ffffff; --text: #0f172a; --text-sec: #64748b; --border: #e2e8f0; --radius: 20px; --shadow: 0 10px 40px rgba(5,150,105,0.1); }
+        * { box-sizing: border-box; } 
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; line-height: 1.6; overflow-x: hidden; position: relative; }
+        .floating-leaf { position: fixed; font-size: 200px; opacity: 0.08; pointer-events: none; z-index: 0; animation: float 20s infinite ease-in-out; }
+        .leaf-1 { top: 10%; left: 10%; animation-delay: 0s; } .leaf-2 { top: 60%; right: 10%; animation-delay: 5s; } .leaf-3 { bottom: 10%; left: 50%; animation-delay: 10s; }
+        @keyframes float { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 25% { transform: translate(30px, -30px) rotate(90deg); } 50% { transform: translate(-20px, 20px) rotate(180deg); } 75% { transform: translate(40px, 10px) rotate(270deg); } }
+        #auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.9); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+        .auth-box { background: white; padding: 2.5rem; border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); max-width: 420px; width: 90%; text-align: center; animation: slideUp 0.5s ease; position: relative; z-index: 1; }
         @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .auth-box h2 { margin: 0 0 0.5rem; color: var(--primary-dark); }
-        .auth-input { width: 100%; padding: 14px; border: 2px solid var(--border); 
-            border-radius: 12px; font-size: 16px; margin: 1rem 0; text-align: center; }
-        .auth-btn { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); 
-            color: white; border: none; padding: 14px; width: 100%; border-radius: 12px; 
-            font-weight: 700; cursor: pointer; transition: transform 0.2s; }
+        .auth-input { width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 12px; font-size: 16px; margin: 1rem 0; text-align: center; }
+        .auth-btn { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; border: none; padding: 14px; width: 100%; border-radius: 12px; font-weight: 700; cursor: pointer; transition: transform 0.2s; }
         .auth-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(5,150,105,0.4); }
-
-        header { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); 
-            padding: 1rem 2rem; border-bottom: 1px solid var(--border); 
-            position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+        header { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); padding: 1rem 2rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
         .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s; }
         .logo:hover { transform: scale(1.05); }
-        .user-badge { background: linear-gradient(135deg, #ecfdf5, #d1fae5); color: var(--primary-dark); 
-            padding: 8px 14px; border-radius: 50px; font-weight: 600; font-size: 0.9rem; }
-        .logout-btn { background: transparent; border: 1px solid var(--border); 
-            color: var(--text-sec); padding: 8px 12px; border-radius: 8px; cursor: pointer; 
-            transition: all 0.2s; }
+        .user-badge { background: linear-gradient(135deg, #ecfdf5, #d1fae5); color: var(--primary-dark); padding: 8px 14px; border-radius: 50px; font-weight: 600; font-size: 0.9rem; }
+        .logout-btn { background: transparent; border: 1px solid var(--border); color: var(--text-sec); padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
         .logout-btn:hover { background: #fef2f2; color: var(--danger); }
-
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; position: relative; z-index: 1; }
-        
-        /* NEW HERO STYLING */
-        .hero { 
-            text-align: center; 
-            margin-bottom: 2rem; 
-            animation: fadeIn 1s ease;
-            padding: 3rem 2rem;
-            background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
-            border-radius: 30px;
-            box-shadow: 0 20px 60px rgba(5,150,105,0.1);
-        }
+        .hero { text-align: center; margin-bottom: 2rem; animation: fadeIn 1s ease; padding: 3rem 2rem; background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%); border-radius: 30px; box-shadow: 0 20px 60px rgba(5,150,105,0.1); }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .hero h1 { 
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem; 
-            font-weight: 900; 
-            margin: 1rem 0;
-            background: linear-gradient(135deg, #047857 0%, #10b981 50%, #059669 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.2;
-        }
-        .hero h1 span { 
-            display: block;
-            font-size: 2.2rem;
-            margin-top: 0.5rem;
-        }
-        .hero p { 
-            font-size: 1.2rem; 
-            color: var(--text-sec);
-            max-width: 800px;
-            margin: 0 auto;
-            line-height: 1.8;
-        }
-        .hero-badges {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        .hero-badge {
-            background: white;
-            padding: 10px 20px;
-            border-radius: 50px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--primary-dark);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; background: white; 
-            padding: 0.5rem; border-radius: 60px; box-shadow: var(--shadow); 
-            width: fit-content; margin-left: auto; margin-right: auto; }
-        .tab-btn { padding: 12px 20px; border: none; background: transparent; 
-            color: var(--text-sec); border-radius: 50px; cursor: pointer; font-weight: 600; 
-            transition: all 0.3s; }
-        .tab-btn.active { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); 
-            color: white; box-shadow: 0 4px 12px rgba(5,150,105,0.3); }
-        
-        .search-box { display: none; background: var(--card); padding: 2rem; 
-            border-radius: var(--radius); box-shadow: var(--shadow); animation: slideUp 0.5s ease; }
+        .hero h1 { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900; margin: 1rem 0; background: linear-gradient(135deg, #047857 0%, #10b981 50%, #059669 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1.2; }
+        .hero h1 span { display: block; font-size: 2.2rem; margin-top: 0.5rem; }
+        .hero p { font-size: 1.2rem; color: var(--text-sec); max-width: 800px; margin: 0 auto; line-height: 1.8; }
+        .hero-badges { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap; }
+        .hero-badge { background: white; padding: 10px 20px; border-radius: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); font-size: 0.9rem; font-weight: 600; color: var(--primary-dark); display: flex; align-items: center; gap: 8px; }
+        .tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; background: white; padding: 0.5rem; border-radius: 60px; box-shadow: var(--shadow); width: fit-content; margin-left: auto; margin-right: auto; }
+        .tab-btn { padding: 12px 20px; border: none; background: transparent; color: var(--text-sec); border-radius: 50px; cursor: pointer; font-weight: 600; transition: all 0.3s; }
+        .tab-btn.active { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; box-shadow: 0 4px 12px rgba(5,150,105,0.3); }
+        .search-box { display: none; background: var(--card); padding: 2rem; border-radius: var(--radius); box-shadow: var(--shadow); animation: slideUp 0.5s ease; }
         .search-box.active { display: block; }
-        
         .quick-filters { display: flex; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap; justify-content: center; }
-        .filter-btn { padding: 10px 18px; border: 2px solid var(--border); background: white; 
-            border-radius: 25px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+        .filter-btn { padding: 10px 18px; border: 2px solid var(--border); background: white; border-radius: 25px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
         .filter-btn:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
-        
-        input[type="text"], input[type="number"], input[type="time"], input[type="email"] { 
-            width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 14px; 
-            font-size: 16px; margin-bottom: 1rem; transition: border-color 0.3s; }
+        input[type="text"], input[type="number"], input[type="time"], input[type="email"] { width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 14px; font-size: 16px; margin-bottom: 1rem; transition: border-color 0.3s; }
         input:focus { border-color: var(--primary); outline: none; }
-        
         .autocomplete-container { position: relative; }
-        .autocomplete-list { position: absolute; top: 100%; left: 0; right: 0; 
-            background: white; border: 1px solid var(--border); border-radius: 12px; 
-            margin-top: 5px; max-height: 300px; overflow-y: auto; z-index: 1000; 
-            box-shadow: var(--shadow); display: none; }
-        .autocomplete-item { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid var(--border); 
-            transition: background 0.2s; }
+        .autocomplete-list { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid var(--border); border-radius: 12px; margin-top: 5px; max-height: 300px; overflow-y: auto; z-index: 1000; box-shadow: var(--shadow); display: none; }
+        .autocomplete-item { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid var(--border); transition: background 0.2s; }
         .autocomplete-item:hover { background: #f0fdf4; }
         .autocomplete-item:last-child { border-bottom: none; }
-        
-        .btn-primary { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); 
-            color: white; border: none; padding: 16px; border-radius: 14px; font-weight: 700; 
-            cursor: pointer; width: 100%; margin-top: 1rem; transition: transform 0.2s; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; border: none; padding: 16px; border-radius: 14px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 1rem; transition: transform 0.2s; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(5,150,105,0.4); }
-        
-        .btn-secondary { background: white; color: var(--primary); border: 2px solid var(--primary); 
-            padding: 12px; border-radius: 14px; font-weight: 600; cursor: pointer; 
-            transition: all 0.2s; margin-top: 1rem; }
-        .btn-secondary:hover { background: #f0fdf4; transform: translateY(-2px); }
-
         #results-area { margin-top: 2rem; }
-        .result-card { background: var(--card); border-radius: 20px; padding: 1.5rem; 
-            margin-bottom: 1.2rem; box-shadow: var(--shadow); 
-            border-left: 5px solid var(--primary); animation: slideUp 0.5s ease;
-            transition: transform 0.2s; }
+        .result-card { background: var(--card); border-radius: 20px; padding: 1.5rem; margin-bottom: 1.2rem; box-shadow: var(--shadow); border-left: 5px solid var(--primary); animation: slideUp 0.5s ease; transition: transform 0.2s; }
         .result-card:hover { transform: translateY(-5px); box-shadow: 0 15px 50px rgba(5,150,105,0.15); }
         .result-card h3 { margin: 0 0 0.5rem; color: var(--primary-dark); display: flex; align-items: center; gap: 8px; }
         .result-card .icon { font-size: 1.5rem; }
-        .tag { display: inline-block; background: #ecfdf5; color: var(--primary-dark); 
-            padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; margin: 4px; }
+        .tag { display: inline-block; background: #ecfdf5; color: var(--primary-dark); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; margin: 4px; }
         .compatibility { margin-top: 1rem; padding: 1rem; background: #f8fafc; border-radius: 12px; }
         .compatibility .good { color: var(--success); }
         .compatibility .bad { color: var(--danger); }
         .buy-buttons { display: flex; gap: 10px; margin-top: 1rem; flex-wrap: wrap; }
-        .buy-btn { flex: 1; min-width: 120px; padding: 10px; border: none; border-radius: 10px; 
-            font-weight: 600; cursor: pointer; transition: transform 0.2s; text-decoration: none; text-align: center; color: white; }
+        .buy-btn { flex: 1; min-width: 120px; padding: 10px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: transform 0.2s; text-decoration: none; text-align: center; color: white; }
         .buy-btn.ozon { background: #005bff; }
         .buy-btn.wb { background: #cb11ab; }
         .buy-btn.iherb { background: #00a651; }
         .buy-btn:hover { transform: scale(1.05); }
-        
-        .details-btn { background: linear-gradient(135deg, #60a5fa, #3b82f6); color: white; 
-            border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; 
-            cursor: pointer; transition: all 0.2s; margin-top: 10px; }
+        .details-btn { background: linear-gradient(135deg, #60a5fa, #3b82f6); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 10px; }
         .details-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(59,130,246,0.4); }
-        
-        .details-content { display: none; margin-top: 1rem; padding: 1rem; 
-            background: linear-gradient(135deg, #eff6ff, #dbeafe); border-radius: 12px; 
-            border-left: 4px solid #3b82f6; }
+        .details-content { display: none; margin-top: 1rem; padding: 1rem; background: linear-gradient(135deg, #eff6ff, #dbeafe); border-radius: 12px; border-left: 4px solid #3b82f6; }
         .details-content.show { display: block; animation: slideDown 0.3s ease; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        
         .load-more { text-align: center; margin: 2rem 0; }
-        .load-more-btn { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); 
-            color: white; border: none; padding: 14px 40px; border-radius: 25px; 
-            font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 1rem; }
+        .load-more-btn { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; border: none; padding: 14px 40px; border-radius: 25px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 1rem; }
         .load-more-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(5,150,105,0.4); }
-        
-        /* POPULAR COMBINATIONS */
-        .popular-combos {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border-radius: 20px;
-            padding: 2rem;
-            margin: 3rem 0;
-            box-shadow: 0 10px 40px rgba(245,158,11,0.2);
-        }
-        .popular-combos h3 {
-            font-family: 'Playfair Display', serif;
-            color: #92400e;
-            margin: 0 0 1.5rem;
-            font-size: 1.8rem;
-        }
-        .combo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-        }
-        .combo-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .combo-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-        }
-        .combo-card h4 {
-            color: var(--primary-dark);
-            margin: 0 0 0.5rem;
-        }
-        .combo-card p {
-            color: var(--text-sec);
-            font-size: 0.9rem;
-            margin: 0;
-        }
-        
+        .popular-combos { background: linear-gradient(135deg, #fef3c7, #fde68a); border-radius: 20px; padding: 2rem; margin: 3rem 0; box-shadow: 0 10px 40px rgba(245,158,11,0.2); }
+        .popular-combos h3 { font-family: 'Playfair Display', serif; color: #92400e; margin: 0 0 1.5rem; font-size: 1.8rem; }
+        .combo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+        .combo-card { background: white; padding: 1.5rem; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); cursor: pointer; transition: all 0.3s; }
+        .combo-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+        .combo-card h4 { color: var(--primary-dark); margin: 0 0 0.5rem; }
+        .combo-card p { color: var(--text-sec); font-size: 0.9rem; margin: 0; }
         #my-stack-section { display: none; margin-top: 3rem; border-top: 2px dashed var(--border); padding-top: 2rem; }
         #my-stack-section.visible { display: block; }
-        
         .main-grid { display: grid; grid-template-columns: 1fr 350px; gap: 2rem; }
         @media (max-width: 968px) { .main-grid { grid-template-columns: 1fr; } }
-        
-        .schedule-box { background: var(--card); border-radius: 20px; padding: 1.5rem; 
-            box-shadow: var(--shadow); margin-bottom: 2rem; }
-        .time-slot { margin-bottom: 1rem; padding: 1rem; background: linear-gradient(135deg, #f8fafc, #f1f5f9); 
-            border-radius: 14px; }
+        .schedule-box { background: var(--card); border-radius: 20px; padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 2rem; }
+        .time-slot { margin-bottom: 1rem; padding: 1rem; background: linear-gradient(135deg, #f8fafc, #f1f5f9); border-radius: 14px; }
         .time-label { font-weight: 800; color: var(--primary-dark); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px; }
-        .pill-tag { display: inline-flex; align-items: center; gap: 6px; background: white; 
-            padding: 8px 12px; border-radius: 10px; margin: 4px; cursor: pointer; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.2s; }
-        .pill-tag.taken { background: linear-gradient(135deg, #dcfce7, #bbf7d0); 
-            border: 2px solid var(--primary); color: var(--primary-dark); }
+        .pill-tag { display: inline-flex; align-items: center; gap: 6px; background: white; padding: 8px 12px; border-radius: 10px; margin: 4px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.2s; }
+        .pill-tag.taken { background: linear-gradient(135deg, #dcfce7, #bbf7d0); border: 2px solid var(--primary); color: var(--primary-dark); }
         .pill-tag:hover { transform: scale(1.05); }
-        
-        .progress-container { background: white; border-radius: 20px; padding: 1.5rem; 
-            box-shadow: var(--shadow); margin-bottom: 2rem; }
-        .progress-bar { background: #e2e8f0; border-radius: 10px; height: 20px; 
-            overflow: hidden; margin: 1rem 0; }
-        .progress-fill { background: linear-gradient(90deg, var(--primary-light), var(--primary-dark)); 
-            height: 100%; border-radius: 10px; transition: width 0.5s ease; }
+        .progress-container { background: white; border-radius: 20px; padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 2rem; }
+        .progress-bar { background: #e2e8f0; border-radius: 10px; height: 20px; overflow: hidden; margin: 1rem 0; }
+        .progress-fill { background: linear-gradient(90deg, var(--primary-light), var(--primary-dark)); height: 100%; border-radius: 10px; transition: width 0.5s ease; }
         .progress-text { text-align: center; font-weight: 600; color: var(--primary-dark); }
-        
-        .calendar-widget { background: white; border-radius: 20px; padding: 1.5rem; 
-            box-shadow: var(--shadow); margin-bottom: 2rem; }
+        .calendar-widget { background: white; border-radius: 20px; padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 2rem; }
         .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
         .calendar-day-header { font-weight: 600; color: var(--text-sec); padding: 5px; font-size: 0.8rem; }
-        .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; 
-            border-radius: 50%; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; position: relative; }
+        .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; position: relative; }
         .calendar-day:hover { background: #f1f5f9; }
         .calendar-day.today { border: 2px solid var(--primary); font-weight: 700; }
         .calendar-day.full { background: var(--success); color: white; }
         .calendar-day.partial { background: var(--accent); color: white; }
         .calendar-day.empty { background: transparent; cursor: default; }
-        
-        .calendar-tooltip {
-            position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
-            background: var(--text); color: white; padding: 8px 12px; border-radius: 8px;
-            font-size: 0.75rem; white-space: nowrap; z-index: 100; display: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2); margin-bottom: 5px;
-        }
-        .calendar-tooltip::after {
-            content: ''; position: absolute; top: 100%; left: 50%;
-            transform: translateX(-50%); border: 5px solid transparent;
-            border-top-color: var(--text);
-        }
+        .calendar-tooltip { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: var(--text); color: white; padding: 8px 12px; border-radius: 8px; font-size: 0.75rem; white-space: nowrap; z-index: 100; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2); margin-bottom: 5px; }
+        .calendar-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--text); }
         .calendar-day:hover .calendar-tooltip { display: block; }
-        
-        .achievements { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
-            gap: 1rem; margin-top: 1rem; }
-        .achievement { background: linear-gradient(135deg, #fffbeb, #fff7ed); 
-            border: 2px solid #fed7aa; border-radius: 14px; padding: 1rem; text-align: center;
-            opacity: 0.5; transition: all 0.3s; }
-        .achievement.unlocked { opacity: 1; border-color: var(--accent); 
-            box-shadow: 0 4px 12px rgba(245,158,11,0.3); animation: pulse 2s infinite; }
+        .achievements { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .achievement { background: linear-gradient(135deg, #fffbeb, #fff7ed); border: 2px solid #fed7aa; border-radius: 14px; padding: 1rem; text-align: center; opacity: 0.5; transition: all 0.3s; }
+        .achievement.unlocked { opacity: 1; border-color: var(--accent); box-shadow: 0 4px 12px rgba(245,158,11,0.3); animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
         .achievement-icon { font-size: 2rem; margin-bottom: 0.5rem; }
-        
-        .reminder-settings { background: white; border-radius: 20px; padding: 1.5rem; 
-            box-shadow: var(--shadow); margin-bottom: 2rem; }
-        .reminder-toggle { display: flex; align-items: center; justify-content: space-between; 
-            margin-bottom: 1rem; padding: 1rem; background: #f8fafc; border-radius: 12px; }
+        .reminder-settings { background: white; border-radius: 20px; padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 2rem; }
+        .reminder-toggle { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; padding: 1rem; background: #f8fafc; border-radius: 12px; }
         .toggle-switch { position: relative; width: 50px; height: 26px; }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; 
-            background-color: #ccc; transition: 0.3s; border-radius: 26px; }
-        .toggle-slider:before { position: absolute; content: ""; height: 20px; width: 20px; 
-            left: 3px; bottom: 3px; background-color: white; transition: 0.3s; border-radius: 50%; }
+        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: 0.3s; border-radius: 26px; }
+        .toggle-slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: 0.3s; border-radius: 50%; }
         input:checked + .toggle-slider { background-color: var(--primary); }
         input:checked + .toggle-slider:before { transform: translateX(24px); }
-        
-        .tracker-card { background: linear-gradient(135deg, #fffbeb, #fff7ed); 
-            border: 1px solid #fed7aa; border-radius: 20px; padding: 1.5rem; margin-top: 2rem; 
-            box-shadow: var(--shadow); }
+        .tracker-card { background: linear-gradient(135deg, #fffbeb, #fff7ed); border: 1px solid #fed7aa; border-radius: 20px; padding: 1.5rem; margin-top: 2rem; box-shadow: var(--shadow); }
         .mood-selector { display: flex; gap: 15px; margin: 15px 0; }
-        .mood-btn { font-size: 2rem; background: white; border: 2px solid var(--border); 
-            border-radius: 50%; width: 50px; height: 50px; cursor: pointer; 
-            transition: all 0.2s; }
-        .mood-btn.selected { background: var(--accent); border-color: var(--accent); 
-            transform: scale(1.2); box-shadow: 0 4px 12px rgba(245,158,11,0.4); }
-        .mood-chart { margin-top: 1rem; padding: 1rem; background: white; 
-            border-radius: 12px; min-height: 100px; }
-        .mood-day { display: inline-flex; align-items: center; justify-content: center; 
-            width: 30px; height: 30px; margin: 2px; border-radius: 50%; 
-            background: #e2e8f0; font-size: 0.8rem; }
+        .mood-btn { font-size: 2rem; background: white; border: 2px solid var(--border); border-radius: 50%; width: 50px; height: 50px; cursor: pointer; transition: all 0.2s; }
+        .mood-btn.selected { background: var(--accent); border-color: var(--accent); transform: scale(1.2); box-shadow: 0 4px 12px rgba(245,158,11,0.4); }
+        .mood-chart { margin-top: 1rem; padding: 1rem; background: white; border-radius: 12px; min-height: 100px; }
+        .mood-day { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; margin: 2px; border-radius: 50%; background: #e2e8f0; font-size: 0.8rem; }
         .mood-day.bad { background: #fecaca; }
         .mood-day.ok { background: #fde68a; }
         .mood-day.good { background: #86efac; }
         .mood-day.great { background: #22c55e; color: white; }
-        
-        #chat-toggle { position: fixed; bottom: 24px; right: 24px; 
-            background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); 
-            color: white; width: 64px; height: 64px; border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; 
-            font-size: 1.8rem; cursor: pointer; z-index: 999; 
-            box-shadow: 0 8px 20px rgba(5,150,105,0.4); transition: transform 0.2s; }
+        #chat-toggle { position: fixed; bottom: 24px; right: 24px; background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; cursor: pointer; z-index: 999; box-shadow: 0 8px 20px rgba(5,150,105,0.4); transition: transform 0.2s; }
         #chat-toggle:hover { transform: scale(1.1); }
-        #chat-modal { position: fixed; bottom: 100px; right: 24px; width: 360px; 
-            height: 480px; background: var(--card); border-radius: 24px; 
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2); display: none; 
-            flex-direction: column; overflow: hidden; z-index: 999; 
-            animation: slideUp 0.3s ease; }
+        #chat-modal { position: fixed; bottom: 100px; right: 24px; width: 360px; height: 480px; background: var(--card); border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); display: none; flex-direction: column; overflow: hidden; z-index: 999; animation: slideUp 0.3s ease; }
         #chat-modal.open { display: flex; }
-        .chat-header { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); 
-            color: white; padding: 16px; font-weight: 700; display: flex; justify-content: space-between; 
-            align-items: center; }
+        .chat-header { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; padding: 16px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
         .chat-close { cursor: pointer; font-size: 1.2rem; }
         #chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #f8fafc; }
-        .msg { max-width: 85%; padding: 12px 16px; border-radius: 18px; font-size: 0.9rem; 
-            animation: fadeIn 0.3s ease; }
+        .msg { max-width: 85%; padding: 12px 16px; border-radius: 18px; font-size: 0.9rem; animation: fadeIn 0.3s ease; }
         .msg.ai { background: white; align-self: flex-start; border: 1px solid var(--border); }
         .msg.user { background: linear-gradient(135deg, #dcfce7, #bbf7d0); align-self: flex-end; }
         .chat-input { padding: 12px; border-top: 1px solid var(--border); display: flex; gap: 8px; }
         .chat-input input { flex: 1; border: 1px solid var(--border); border-radius: 50px; padding: 10px 16px; margin: 0; }
-        .chat-input button { background: var(--primary); color: white; border: none; 
-            border-radius: 50%; width: 40px; height: 40px; cursor: pointer; transition: transform 0.2s; }
+        .chat-input button { background: var(--primary); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; transition: transform 0.2s; }
         .chat-input button:hover { transform: scale(1.1); }
-
-        .disclaimer { margin-top: 3rem; padding: 1.5rem; background: white; 
-            border-radius: 16px; font-size: 0.8rem; color: var(--text-sec); text-align: center; 
-            box-shadow: var(--shadow); }
-
-        /* NOTIFICATIONS */
-        .notification-toast {
-            position: fixed;
-            bottom: 100px;
-            left: 24px;
-            background: white;
-            padding: 1rem 1.5rem;
-            border-radius: 16px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-            display: none;
-            align-items: center;
-            gap: 12px;
-            z-index: 998;
-            animation: slideIn 0.5s ease;
-            max-width: 300px;
-        }
-        @keyframes slideIn {
-            from { transform: translateX(-100px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
+        .disclaimer { margin-top: 3rem; padding: 1.5rem; background: white; border-radius: 16px; font-size: 0.8rem; color: var(--text-sec); text-align: center; box-shadow: var(--shadow); }
+        .notification-toast { position: fixed; bottom: 100px; left: 24px; background: white; padding: 1rem 1.5rem; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); display: none; align-items: center; gap: 12px; z-index: 998; animation: slideIn 0.5s ease; max-width: 300px; }
+        @keyframes slideIn { from { transform: translateX(-100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         .notification-toast.show { display: flex; }
         .notification-icon { font-size: 1.5rem; }
         .notification-text { font-size: 0.9rem; color: var(--text); }
         .notification-text strong { display: block; color: var(--primary-dark); }
-
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2rem; }
-            .hero h1 span { font-size: 1.5rem; }
-            #chat-modal { width: calc(100% - 48px); right: 24px; }
-            .buy-buttons { flex-direction: column; }
-            .buy-btn { width: 100%; }
-            .floating-leaf { font-size: 100px; }
-            .quick-filters { flex-direction: column; }
-            .filter-btn { width: 100%; }
-            .notification-toast { left: 24px; right: 24px; bottom: 100px; max-width: none; }
-        }
+        @media (max-width: 768px) { .hero h1 { font-size: 2rem; } .hero h1 span { font-size: 1.5rem; } #chat-modal { width: calc(100% - 48px); right: 24px; } .buy-buttons { flex-direction: column; } .buy-btn { width: 100%; } .floating-leaf { font-size: 100px; } .quick-filters { flex-direction: column; } .filter-btn { width: 100%; } .notification-toast { left: 24px; right: 24px; bottom: 100px; max-width: none; } }
     </style>
 </head>
 <body>
@@ -421,10 +199,11 @@
 <div id="auth-overlay">
     <div class="auth-box">
         <div style="font-size:3rem; margin-bottom:1rem;">🌿</div>
-        <h2>VITA | ЖивиЛегко</h2>
-        <p>Введите имя для создания профиля</p>
-        <input type="text" id="username-input" class="auth-input" placeholder="Ваше имя">
-        <button class="auth-btn" onclick="handleLogin()">Начать путь к здоровью</button>
+        <h2>VITA | Вход</h2>
+        <p>Введите Email для синхронизации данных</p>
+        <input type="email" id="auth-email" class="auth-input" placeholder="example@mail.com">
+        <button class="auth-btn" onclick="handleAuth()">Войти / Регистрация</button>
+        <p id="auth-error" style="color:red; margin-top:10px; font-size:0.9rem;"></p>
     </div>
 </div>
 
@@ -440,7 +219,6 @@
     <div class="hero">
         <h1>Экспертный подход к<span>вашему здоровью</span></h1>
         <p>Анализируем научные исследования, чтобы вы получали только работающие добавки. Персональные рекомендации с гарантией эффективности.</p>
-        
         <div class="hero-badges">
             <div class="hero-badge">🔬 Научный подход</div>
             <div class="hero-badge">✅ Доказанная эффективность</div>
@@ -462,7 +240,6 @@
             <button class="filter-btn" onclick="quickSearch('спорт')">💪 Для спорта</button>
             <button class="filter-btn" onclick="quickSearch('иммунитет')">🛡️ Иммунитет</button>
         </div>
-        
         <div class="autocomplete-container">
             <input type="text" id="input-name" placeholder="Название добавки (Магний, Омега-3...)" oninput="handleAutocomplete(this.value)">
             <div id="autocomplete-list" class="autocomplete-list"></div>
@@ -484,30 +261,13 @@
 
     <div id="results-area"></div>
 
-    <!-- POPULAR COMBINATIONS -->
     <div class="popular-combos" id="popular-combos" style="display:none;">
         <h3>🔥 Популярные комбинации</h3>
         <div class="combo-grid">
-            <div class="combo-card" onclick="addCombo(['6', '7', '30'])">
-                <h4>💪 Энергия + Иммунитет</h4>
-                <p>D3 + Омега-3 + K2</p>
-                <small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 15%</small>
-            </div>
-            <div class="combo-card" onclick="addCombo(['1', '11', '26'])">
-                <h4>😴 Качественный сон</h4>
-                <p>Магний + Мелатонин + GABA</p>
-                <small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 10%</small>
-            </div>
-            <div class="combo-card" onclick="addCombo(['4', '7', '17'])">
-                <h4>🧠 Фокус и память</h4>
-                <p>Магний L-Треонат + Омега-3 + L-Тирозин</p>
-                <small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 12%</small>
-            </div>
-            <div class="combo-card" onclick="addCombo(['9', '29', '3'])">
-                <h4>🏋️ Спорт и мышцы</h4>
-                <p>Креатин + Протеин + Магний Малат</p>
-                <small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 18%</small>
-            </div>
+            <div class="combo-card" onclick="addCombo(['6', '7', '30'])"><h4>💪 Энергия + Иммунитет</h4><p>D3 + Омега-3 + K2</p><small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 15%</small></div>
+            <div class="combo-card" onclick="addCombo(['1', '11', '26'])"><h4>😴 Качественный сон</h4><p>Магний + Мелатонин + GABA</p><small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 10%</small></div>
+            <div class="combo-card" onclick="addCombo(['4', '7', '17'])"><h4>🧠 Фокус и память</h4><p>Магний L-Треонат + Омега-3 + L-Тирозин</p><small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 12%</small></div>
+            <div class="combo-card" onclick="addCombo(['9', '29', '3'])"><h4>🏋️ Спорт и мышцы</h4><p>Креатин + Протеин + Магний Малат</p><small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 18%</small></div>
         </div>
     </div>
 
@@ -515,45 +275,21 @@
         <div class="main-grid">
             <div>
                 <h2>📅 Ваше расписание</h2>
-                
                 <div class="progress-container">
                     <h3>🎯 Прогресс сегодня</h3>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
-                    </div>
+                    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width: 0%"></div></div>
                     <div class="progress-text" id="progress-text">0 из 0 добавок принято</div>
                 </div>
-
-                <div class="schedule-box" id="schedule-container">
-                    <p style="text-align:center; color:#888;">Добавьте добавки из поиска</p>
-                </div>
-
+                <div class="schedule-box" id="schedule-container"><p style="text-align:center; color:#888;">Добавьте добавки из поиска</p></div>
                 <div class="progress-container">
                     <h3>🏆 Достижения</h3>
                     <div class="achievements" id="achievements-container">
-                        <div class="achievement" id="ach-1">
-                            <div class="achievement-icon">🌱</div>
-                            <div>Первый шаг</div>
-                            <small>Добавить 1 добавку</small>
-                        </div>
-                        <div class="achievement" id="ach-2">
-                            <div class="achievement-icon">💪</div>
-                            <div>Активный</div>
-                            <small>5 добавок в плане</small>
-                        </div>
-                        <div class="achievement" id="ach-3">
-                            <div class="achievement-icon">🔥</div>
-                            <div>Серия 3 дня</div>
-                            <small>Принимать 3 дня подряд</small>
-                        </div>
-                        <div class="achievement" id="ach-4">
-                            <div class="achievement-icon">⭐</div>
-                            <div>Мастер</div>
-                            <small>10 дней подряд</small>
-                        </div>
+                        <div class="achievement" id="ach-1"><div class="achievement-icon">🌱</div><div>Первый шаг</div><small>Добавить 1 добавку</small></div>
+                        <div class="achievement" id="ach-2"><div class="achievement-icon">💪</div><div>Активный</div><small>5 добавок в плане</small></div>
+                        <div class="achievement" id="ach-3"><div class="achievement-icon">🔥</div><div>Серия 3 дня</div><small>Принимать 3 дня подряд</small></div>
+                        <div class="achievement" id="ach-4"><div class="achievement-icon">⭐</div><div>Мастер</div><small>10 дней подряд</small></div>
                     </div>
                 </div>
-
                 <div class="tracker-card">
                     <h3>😊 Самочувствие сегодня</h3>
                     <div class="mood-selector">
@@ -564,48 +300,24 @@
                     </div>
                     <textarea id="wellness-note" placeholder="Заметки..." rows="2" style="width:100%; margin-top:10px; padding: 10px; border-radius: 8px; border: 1px solid var(--border);"></textarea>
                     <button class="btn-primary" onclick="saveWellness()">Сохранить</button>
-                    
-                    <div class="mood-chart" id="mood-chart">
-                        <h4>📊 График за неделю</h4>
-                        <div id="mood-days"></div>
-                    </div>
+                    <div class="mood-chart" id="mood-chart"><h4>📊 График за неделю</h4><div id="mood-days"></div></div>
                 </div>
             </div>
-
             <div>
                 <div class="calendar-widget">
-                    <div class="calendar-header">
-                        <h3 style="margin:0;">📅 Календарь</h3>
-                        <span id="current-month" style="font-weight:600; color:var(--primary);"></span>
-                    </div>
+                    <div class="calendar-header"><h3 style="margin:0;">📅 Календарь</h3><span id="current-month" style="font-weight:600; color:var(--primary);"></span></div>
                     <div class="calendar-grid" id="calendar-grid"></div>
                 </div>
-
                 <div class="reminder-settings">
                     <h3>🔔 Напоминания</h3>
-                    
                     <div class="reminder-toggle">
-                        <div>
-                            <div style="font-weight:600;">Браузерные уведомления</div>
-                            <small style="color:var(--text-sec);">Push-уведомления в браузере</small>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="browser-reminder" onchange="toggleReminder('browser', this.checked)">
-                            <span class="toggle-slider"></span>
-                        </label>
+                        <div><div style="font-weight:600;">Браузерные уведомления</div><small style="color:var(--text-sec);">Push-уведомления в браузере</small></div>
+                        <label class="toggle-switch"><input type="checkbox" id="browser-reminder" onchange="toggleReminder('browser', this.checked)"><span class="toggle-slider"></span></label>
                     </div>
-
                     <div class="reminder-toggle">
-                        <div>
-                            <div style="font-weight:600;">Telegram</div>
-                            <small style="color:var(--text-sec);">@zhivi_legko_bot</small>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="telegram-reminder" onchange="toggleReminder('telegram', this.checked)">
-                            <span class="toggle-slider"></span>
-                        </label>
+                        <div><div style="font-weight:600;">Telegram</div><small style="color:var(--text-sec);">@zhivi_legko_bot</small></div>
+                        <label class="toggle-switch"><input type="checkbox" id="telegram-reminder" onchange="toggleReminder('telegram', this.checked)"><span class="toggle-slider"></span></label>
                     </div>
-
                     <div style="margin-top:1rem;">
                         <label style="font-weight:600; display:block; margin-bottom:0.5rem;">⏰ Время напоминаний:</label>
                         <input type="time" id="reminder-time" value="09:00" onchange="saveReminderTime()">
@@ -614,40 +326,114 @@
             </div>
         </div>
     </div>
-
     <div class="disclaimer">⚠️ Сервис носит информационный характер. Перед приёмом любых добавок проконсультируйтесь с врачом.</div>
 </div>
 
 <div id="chat-toggle" onclick="toggleChat()" style="display:none;">💬</div>
 <div id="chat-modal">
-    <div class="chat-header">
-        <span>🌿 Помощник</span>
-        <span class="chat-close" onclick="toggleChat()">✖</span>
-    </div>
-    <div id="chat-messages">
-        <div class="msg ai">🌿 Привет! Я помощник VITA. Спросите: "Что для сна?", "Какие добавки для иммунитета?"</div>
-    </div>
-    <div class="chat-input">
-        <input type="text" id="chat-input" placeholder="Спросить о добавках...">
-        <button onclick="sendMessage()">📤</button>
-    </div>
+    <div class="chat-header"><span>🌿 Помощник</span><span class="chat-close" onclick="toggleChat()">✖</span></div>
+    <div id="chat-messages"><div class="msg ai">🌿 Привет! Я помощник VITA. Спросите: "Что для сна?", "Какие добавки для иммунитета?"</div></div>
+    <div class="chat-input"><input type="text" id="chat-input" placeholder="Спросить о добавках..."><button onclick="sendMessage()">📤</button></div>
 </div>
 
-<!-- NOTIFICATION TOAST -->
 <div class="notification-toast" id="notification-toast">
     <div class="notification-icon">🛒</div>
-    <div class="notification-text">
-        <strong id="notif-name">Анна М.</strong>
-        купила <span id="notif-product">Магний Глицинат</span>
-    </div>
+    <div class="notification-text"><strong id="notif-name">Анна М.</strong> купила <span id="notif-product">Магний Глицинат</span></div>
 </div>
 
 <script>
 // ==========================================
-// 📦 БАЗА ДАННЫХ (30 добавок с подробностями)
+// ⚙️ SUPABASE CONFIG (ВАШИ КЛЮЧИ)
+// ==========================================
+const SUPABASE_URL = 'https://yrfheqvpiuqzncgqhgrwn.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_RixoV9Q-BGCygKgIREwaEg_jN1QabOe';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let currentUser = null;
+let userData = {
+    stack: [], wellness: [], calendar: {}, 
+    reminders: { browser: false, telegram: false, time: "09:00" },
+    achievements: { first: false, active: false, streak3: false, streak10: false },
+    streakDays: 0, lastTakenDate: null
+};
+let currentSearchResults = [], currentDisplayCount = 10, currentSearchQuery = '', searchMode = 'local';
+
+// ==========================================
+// 💾 DATABASE SYNC
+// ==========================================
+async function saveToDB() {
+    if (!currentUser) return;
+    const { error } = await supabase.from('users').upsert({ 
+        email: currentUser.email, 
+         userData 
+    }, { onConflict: 'email' });
+    if (error) console.error('DB Save Error:', error);
+}
+
+async function loadFromDB() {
+    if (!currentUser) return;
+    const { data, error } = await supabase.from('users').select('data').eq('email', currentUser.email).single();
+    if (data && data.data) userData = { ...userData, ...data.data };
+    initUI();
+}
+
+// ==========================================
+// 🔐 AUTH
+// ==========================================
+async function handleAuth() {
+    const email = document.getElementById('auth-email').value.trim();
+    if (!email.includes('@')) return document.getElementById('auth-error').textContent = 'Введите корректный Email';
+    
+    const btn = document.querySelector('.auth-btn');
+    btn.textContent = 'Загрузка...'; btn.disabled = true;
+    document.getElementById('auth-error').textContent = '';
+
+    let {  session, error } = await supabase.auth.signInWithPassword({ email, password: 'vita_pass_' + email });
+    
+    if (error) {
+        const {  reg, error: regErr } = await supabase.auth.signUp({ email, password: 'vita_pass_' + email });
+        if (regErr) {
+            document.getElementById('auth-error').textContent = regErr.message;
+            btn.textContent = 'Войти / Регистрация'; btn.disabled = false;
+            return;
+        }
+        currentUser = reg.user;
+    } else {
+        currentUser = session.user;
+    }
+    await loadFromDB();
+}
+
+async function logout() {
+    if(confirm('Выйти?')) { await supabase.auth.signOut(); location.reload(); }
+}
+
+function requestPermissions() { if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission(); }
+
+function initUI() {
+    document.getElementById('auth-overlay').style.display = 'none';
+    document.getElementById('app-header').style.display = 'flex';
+    document.getElementById('main-content').style.display = 'block';
+    document.getElementById('chat-toggle').style.display = 'flex';
+    document.getElementById('display-user').textContent = currentUser.email.split('@')[0];
+    
+    document.getElementById('browser-reminder').checked = userData.reminders.browser;
+    document.getElementById('telegram-reminder').checked = userData.reminders.telegram;
+    document.getElementById('reminder-time').value = userData.reminders.time;
+    
+    updateAchievements(); renderMoodChart(); renderCalendar(); scheduleReminders();
+    if (userData.stack.length) { updateSchedule(); document.getElementById('my-stack-section').classList.add('visible'); }
+    document.getElementById('popular-combos').style.display = 'block';
+    startNotifications();
+}
+
+function goToMain() { window.location.reload(); }
+
+// ==========================================
+// 📦 SUPPLEMENTS DATABASE (30 ITEMS)
 // ==========================================
 const supplementsDB = [
-    {id:1,name:"Магний Глицинат",substance:"Магний (хелат)",time:"Вечер",dose:"200-400 мг",why:"Лучшая форма для сна и расслабления. Не вызывает расстройства ЖКТ.",goodWith:["Мелатонин","B6"],badWith:["Железо","Кальций"],tags:["сон","тревога","стресс","расслабление"],icon:"😴",details:"Магний глицинат — это хелатная форма магния, связанная с аминокислотой глицином. Обладает высокой биодоступностью (до 90%) и не вызывает диарею. Глицин дополнительно успокаивает нервную систему, улучшает качество сна и снижает тревожность. Рекомендуется принимать за 1-2 часа до сна для максимального расслабления мышц и нервной системы. Особенно полезен при хроническом стрессе, бессоннице и мышечных спазмах.",ozon:"https://ozon.ru/search/?text=магний+глицинат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+глицинат",iherb:"https://ru.iherb.com/c/magnesium-glycinate"},
+    {id:1,name:"Магний Глицинат",substance:"Магний (хелат)",time:"Вечер",dose:"200-400 мг",why:"Лучшая форма для сна и расслабления. Не вызывает расстройства ЖКТ.",goodWith:["Мелатонин","B6"],badWith:["Железо","Кальций"],tags:["сон","тревога","стресс","расслабление"],icon:"😴",details:"Магний глицинат — это хелатная форма магния, связанная с аминокислотой глицином. Обладает самой высокой биодоступностью (до 90%) и не вызывает диарею, в отличие от оксида магния. Глицин дополнительно успокаивает нервную систему, улучшает качество сна и снижает тревожность. Рекомендуется принимать за 1-2 часа до сна для максимального расслабления мышц и нервной системы. Особенно полезен при хроническом стрессе, бессоннице и мышечных спазмах.",ozon:"https://ozon.ru/search/?text=магний+глицинат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+глицинат",iherb:"https://ru.iherb.com/c/magnesium-glycinate"},
     {id:2,name:"Магний Цитрат",substance:"Магний (органический)",time:"Утро/День",dose:"200-400 мг",why:"Хорошо усваивается. Помогает при запорах. Даёт энергию мышцам.",goodWith:["B6","Калий"],badWith:["Железо"],tags:["энергия","мышцы","пищеварение","утро","усталость"],icon:"⚡",details:"Магний цитрат — органическая форма с хорошей усвояемостью (около 80%). Обладает мягким слабительным эффектом, что полезно при запорах. Быстро восполняет дефицит магния, улучшает работу мышц и энергетический обмен. Лучше принимать утром или днём с едой. Не рекомендуется при склонности к диарее. Оптимальная форма для спортсменов и людей с активным образом жизни.",ozon:"https://ozon.ru/search/?text=магний+цитрат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+цитрат",iherb:"https://ru.iherb.com/c/magnesium-citrate"},
     {id:3,name:"Магний Малат",substance:"Магний + яблочная кислота",time:"Утро",dose:"200-400 мг",why:"Даёт энергию и бодрость. Помогает при хронической усталости.",goodWith:["B-комплекс","CoQ10"],badWith:["Железо"],tags:["энергия","бодрость","усталость","мышцы","утро"],icon:"🌅",details:"Магний малат — соединение магния с яблочной кислотой, которая участвует в цикле Кребса (производство энергии в клетках). Идеален для борьбы с хронической усталостью, фибромиалгией и мышечной слабостью. Яблочная кислота улучшает усвоение магния и стимулирует выработку АТФ — основного источника энергии клеток. Принимать утром натощак или с завтраком для максимальной энергии в течение дня.",ozon:"https://ozon.ru/search/?text=магний+малат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+малат",iherb:"https://ru.iherb.com/c/magnesium-malate"},
     {id:4,name:"Магний L-Треонат",substance:"Магний (для мозга)",time:"Утро/День",dose:"100-200 мг",why:"Проникает в мозг. Улучшает память и когнитивные функции.",goodWith:["Омега-3"],badWith:[],tags:["мозг","память","фокус","когнитивные"],icon:"🧠",details:"Магний L-треонат — единственная форма магния, способная преодолевать гематоэнцефалический барьер и напрямую воздействовать на мозг. Увеличивает плотность синапсов, улучшает нейропластичность, память и способность к обучению. Клинические исследования показывают улучшение когнитивных функций на 20-25% через 4-6 недель приёма. Особенно полезен для студентов, пожилых людей и тех, кто работает с информацией.",ozon:"https://ozon.ru/search/?text=магний+треонат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+треонат",iherb:"https://ru.iherb.com/c/magnesium-l-threonate"},
@@ -680,262 +466,6 @@ const supplementsDB = [
 ];
 
 // ==========================================
-// 💾 LOCAL STORAGE & AUTH
-// ==========================================
-let currentUser = null;
-let myStack = [];
-let wellnessLog = [];
-let chatHistory = [];
-let achievements = {first: false, active: false, streak3: false, streak10: false};
-let streakDays = 0;
-let lastTakenDate = null;
-let calendarData = {};
-let reminders = {browser: false, telegram: false, time: "09:00"};
-let currentSearchResults = [];
-let currentDisplayCount = 10;
-let currentSearchQuery = '';
-let searchMode = 'local';
-let internetResults = [];
-
-function getKey(k) { return `vita_${k}_${currentUser}`; }
-function save(k, d) { localStorage.setItem(getKey(k), JSON.stringify(d)); }
-function load(k) { return JSON.parse(localStorage.getItem(getKey(k)) || 'null'); }
-
-function handleLogin() {
-    const name = document.getElementById('username-input').value.trim();
-    if (!name) return alert('Введите имя');
-    currentUser = name;
-    localStorage.setItem('vitaUser', name);
-    requestPermissions();
-    initApp();
-}
-
-function logout() {
-    if(confirm('Выйти?')) {
-        localStorage.removeItem('vitaUser');
-        location.reload();
-    }
-}
-
-function requestPermissions() {
-    if ('Notification' in window && Notification.permission === 'default') {
-        Notification.requestPermission();
-    }
-}
-
-function initApp() {
-    currentUser = localStorage.getItem('vitaUser');
-    if (!currentUser) return document.getElementById('auth-overlay').style.display = 'flex';
-    
-    document.getElementById('auth-overlay').style.display = 'none';
-    document.getElementById('app-header').style.display = 'flex';
-    document.getElementById('main-content').style.display = 'block';
-    document.getElementById('chat-toggle').style.display = 'flex';
-    document.getElementById('display-user').textContent = currentUser;
-    
-    myStack = load('stack') || [];
-    wellnessLog = load('wellness') || [];
-    chatHistory = load('chat') || [];
-    achievements = load('achievements') || {first: false, active: false, streak3: false, streak10: false};
-    streakDays = load('streak') || 0;
-    lastTakenDate = load('lastTaken') || null;
-    calendarData = load('calendar') || {};
-    reminders = load('reminders') || {browser: false, telegram: false, time: "09:00"};
-    
-    document.getElementById('browser-reminder').checked = reminders.browser;
-    document.getElementById('telegram-reminder').checked = reminders.telegram;
-    document.getElementById('reminder-time').value = reminders.time;
-    
-    updateAchievements();
-    renderMoodChart();
-    renderCalendar();
-    scheduleReminders();
-    
-    if (myStack.length) {
-        updateSchedule();
-        document.getElementById('my-stack-section').classList.add('visible');
-    }
-    
-    // Show popular combos
-    document.getElementById('popular-combos').style.display = 'block';
-    
-    // Start notifications
-    startNotifications();
-}
-
-function goToMain() {
-    window.location.reload();
-}
-
-// ==========================================
-// 🔔 NOTIFICATIONS
-// ==========================================
-const fakeNotifications = [
-    {name: "Анна М.", product: "Магний Глицинат"},
-    {name: "Сергей К.", product: "Омега-3"},
-    {name: "Мария Д.", product: "Витамин D3"},
-    {name: "Алексей П.", product: "Креатин"},
-    {name: "Елена В.", product: "Коллаген"},
-    {name: "Дмитрий С.", product: "B-Complex"},
-    {name: "Ольга Р.", product: "Мелатонин"},
-    {name: "Игорь Н.", product: "Цинк"}
-];
-
-function startNotifications() {
-    setTimeout(() => {
-        showNotification();
-        setInterval(() => {
-            showNotification();
-        }, 45000); // Every 45 seconds
-    }, 10000); // First after 10 seconds
-}
-
-function showNotification() {
-    const toast = document.getElementById('notification-toast');
-    const notif = fakeNotifications[Math.floor(Math.random() * fakeNotifications.length)];
-    
-    document.getElementById('notif-name').textContent = notif.name;
-    document.getElementById('notif-product').textContent = notif.product;
-    
-    toast.classList.add('show');
-    
-    setTimeout(() => {
-        toast.classList.remove('show');
-    }, 4000);
-}
-
-// ==========================================
-// 📅 CALENDAR FUNCTIONS
-// ==========================================
-function renderCalendar() {
-    const grid = document.getElementById('calendar-grid');
-    const monthLabel = document.getElementById('current-month');
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth();
-    
-    grid.innerHTML = '';
-    
-    const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
-        "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
-    monthLabel.textContent = `${monthNames[month]} ${year}`;
-    
-    const dayHeaders = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
-    dayHeaders.forEach(day => {
-        const div = document.createElement('div');
-        div.className = 'calendar-day-header';
-        div.textContent = day;
-        grid.appendChild(div);
-    });
-    
-    const firstDay = new Date(year, month, 1).getDay() || 7;
-    const totalDays = new Date(year, month + 1, 0).getDate();
-    
-    for (let i = 1; i < firstDay; i++) {
-        const div = document.createElement('div');
-        div.className = 'calendar-day empty';
-        grid.appendChild(div);
-    }
-    
-    const today = now.getDate();
-    for (let day = 1; day <= totalDays; day++) {
-        const div = document.createElement('div');
-        const dateKey = `${year}-${month+1}-${day}`;
-        const dayData = calendarData[dateKey];
-        
-        div.className = 'calendar-day';
-        div.textContent = day;
-        
-        if (day === today) div.classList.add('today');
-        
-        if (dayData) {
-            const takenCount = dayData.taken || 0;
-            const totalCount = dayData.total || 0;
-            const takenList = dayData.takenList || [];
-            
-            if (totalCount > 0) {
-                if (takenCount === totalCount) {
-                    div.classList.add('full');
-                } else if (takenCount > 0) {
-                    div.classList.add('partial');
-                }
-            }
-            
-            if (takenList.length > 0) {
-                const tooltip = document.createElement('div');
-                tooltip.className = 'calendar-tooltip';
-                tooltip.innerHTML = takenList.map(name => `✅ ${name}`).join('<br>');
-                div.appendChild(tooltip);
-            }
-        }
-        
-        grid.appendChild(div);
-    }
-}
-
-function saveCalendarData(date, taken, total, takenList) {
-    const dateKey = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
-    calendarData[dateKey] = {taken, total, takenList};
-    save('calendar', calendarData);
-    renderCalendar();
-}
-
-// ==========================================
-// 🔔 REMINDER FUNCTIONS
-// ==========================================
-function toggleReminder(type, enabled) {
-    reminders[type] = enabled;
-    save('reminders', reminders);
-    
-    if (enabled && type === 'browser') {
-        requestPermissions();
-    }
-    
-    scheduleReminders();
-}
-
-function saveReminderTime() {
-    reminders.time = document.getElementById('reminder-time').value;
-    save('reminders', reminders);
-    scheduleReminders();
-}
-
-function scheduleReminders() {
-    if (window.reminderTimeout) clearTimeout(window.reminderTimeout);
-    
-    if (reminders.browser || reminders.telegram) {
-        const now = new Date();
-        const [hours, minutes] = reminders.time.split(':').map(Number);
-        const reminderTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
-        
-        if (reminderTime <= now) {
-            reminderTime.setDate(reminderTime.getDate() + 1);
-        }
-        
-        const delay = reminderTime - now;
-        window.reminderTimeout = setTimeout(() => {
-            sendReminder();
-            scheduleReminders();
-        }, delay);
-    }
-}
-
-function sendReminder() {
-    const message = `🌿 VITA | ЖивиЛегко\n\nПора принять добавки! 📋\n\nУ вас запланировано: ${myStack.length} добавок`;
-    
-    if (reminders.browser && 'Notification' in window && Notification.permission === 'granted') {
-        new Notification('🌿 VITA | Пора принять добавки!', {
-            body: `У вас ${myStack.length} добавок запланировано`,
-            icon: '🌿'
-        });
-    }
-    
-    if (reminders.telegram) {
-        console.log('Telegram reminder:', message);
-    }
-}
-
-// ==========================================
 // 🧭 NAVIGATION & SEARCH
 // ==========================================
 function switchTab(tab) {
@@ -945,585 +475,237 @@ function switchTab(tab) {
     document.getElementById('search-' + (tab === 'search' ? 'name' : tab)).classList.add('active');
     document.getElementById('autocomplete-list').style.display = 'none';
     document.getElementById('results-area').innerHTML = '';
-    currentSearchResults = [];
-    currentDisplayCount = 10;
+    currentSearchResults = []; currentDisplayCount = 10;
 }
 
 async function quickSearch(query) {
     document.getElementById('input-name').value = query;
-    const resultsArea = document.getElementById('results-area');
-    
-    resultsArea.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sec);"><i>🔍 Ищем в базе...</i></div>';
-    
-    try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
-        
-        const response = await fetch('/api/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                messages: [{
-                    role: "user",
-                    content: `Найди ВСЕ добавки из базы для запроса: "${query}". Верни ТОЛЬКО JSON: {"ids": [1, 4, 7, 12, 15, 16, 17, 21, 28]}. Ищи МАКСИМУМ подходящих добавок. База: 1-Магний Глицинат(сон,стресс), 2-Магний Цитрат(энергия,пищеварение), 3-Магний Малат(энергия,усталость,утро), 4-Магний Треонат(мозг), 5-Магний Таурат(сердце), 6-D3(иммунитет,энергия,утро), 7-Омега-3(мозг,сердце), 8-Цинк(иммунитет), 9-Креатин(мышцы,энергия), 10-Витамин C(иммунитет,усталость), 11-Мелатонин(сон), 12-B-Complex(энергия,нервы,утро), 13-Железо(энергия,анемия), 14-CoQ10(энергия,сердце), 15-Ашваганда(стресс,усталость), 16-Родиола(энергия,усталость,утро), 17-L-Тирозин(энергия,фокус), 18-Куркума(воспаление), 19-Пробиотики(кишечник), 20-Коллаген(кожа), 21-L-Теанин(расслабление), 22-Селен(щитовидка), 23-Йод(щитовидка,энергия), 24-Витамин E(кожа), 25-Биотин(волосы), 26-GABA(сон,расслабление), 27-Ресвератрол(долголетие), 28-NMN(энергия), 29-Протеин(мышцы), 30-K2(кости).`
-                }],
-                userId: currentUser
-            }),
-            signal: controller.signal
-        });
-        
-        clearTimeout(timeoutId);
-        const data = await response.json();
-        
-        if (data.reply) {
-            const jsonMatch = data.reply.match(/\{[\s\S]*"ids"[\s\S]*\}/);
-            if (jsonMatch) {
-                const result = JSON.parse(jsonMatch[0]);
-                currentSearchResults = supplementsDB.filter(item => result.ids.includes(item.id));
-                currentDisplayCount = 10;
-                renderResultsWithLoadMore(currentSearchResults);
-                return;
-            }
-        }
-    } catch (err) {
-        console.log('AI search failed, using local:', err);
-    }
-    
-    currentSearchResults = supplementsDB.filter(item => 
-        item.tags.some(tag => tag.includes(query.toLowerCase()))
-    );
+    document.getElementById('results-area').innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sec);"><i>🔍 Ищем в базе...</i></div>';
+    currentSearchResults = supplementsDB.filter(item => item.tags.some(tag => tag.includes(query.toLowerCase())));
     currentDisplayCount = 10;
     renderResultsWithLoadMore(currentSearchResults);
 }
 
 function handleAutocomplete(value) {
-    const list = document.getElementById('autocomplete-list');
-    list.innerHTML = '';
-    
-    if (!value || value.length < 2) {
-        list.style.display = 'none';
-        return;
-    }
-    
-    const matches = supplementsDB.filter(item => 
-        item.name.toLowerCase().includes(value.toLowerCase()) ||
-        item.substance.toLowerCase().includes(value.toLowerCase())
-    ).slice(0, 5);
-    
+    const list = document.getElementById('autocomplete-list'); list.innerHTML = '';
+    if (!value || value.length < 2) { list.style.display = 'none'; return; }
+    const matches = supplementsDB.filter(item => item.name.toLowerCase().includes(value.toLowerCase())).slice(0, 5);
     if (matches.length > 0) {
         matches.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'autocomplete-item';
-            div.innerHTML = `<strong>${item.name}</strong><br><small>${item.substance}</small>`;
-            div.onclick = () => {
-                document.getElementById('input-name').value = item.name;
-                list.style.display = 'none';
-                currentSearchResults = [item];
-                currentDisplayCount = 10;
-                renderResultsWithLoadMore(currentSearchResults);
-            };
+            const div = document.createElement('div'); div.className = 'autocomplete-item'; div.innerHTML = `<strong>${item.name}</strong>`;
+            div.onclick = () => { document.getElementById('input-name').value = item.name; list.style.display = 'none'; currentSearchResults = [item]; currentDisplayCount = 10; renderResultsWithLoadMore(currentSearchResults); };
             list.appendChild(div);
         });
         list.style.display = 'block';
-    } else {
-        list.style.display = 'none';
-    }
+    } else { list.style.display = 'none'; }
 }
 
 function searchByName() {
-    const q = document.getElementById('input-name').value.toLowerCase();
-    if (!q) return;
+    const q = document.getElementById('input-name').value.toLowerCase(); if (!q) return;
     document.getElementById('autocomplete-list').style.display = 'none';
-    currentSearchResults = supplementsDB.filter(i => 
-        i.name.toLowerCase().includes(q) || i.substance.toLowerCase().includes(q)
-    );
-    currentDisplayCount = 10;
-    renderResultsWithLoadMore(currentSearchResults);
+    currentSearchResults = supplementsDB.filter(i => i.name.toLowerCase().includes(q) || i.substance.toLowerCase().includes(q));
+    currentDisplayCount = 10; renderResultsWithLoadMore(currentSearchResults);
 }
 
 async function smartSearch(query) {
     const resultsArea = document.getElementById('results-area');
     resultsArea.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sec);"><i>🤔 Анализирую...</i></div>';
-    
     try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 4000);
-        
-        const response = await fetch('/api/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                messages: [{
-                    role: "user",
-                    content: `Найди ID добавок для запроса: "${query}". Верни ТОЛЬКО JSON: {"ids": [1, 5, 12]}. База: 1-Магний Глицинат(сон,стресс), 2-Магний Цитрат(энергия,пищеварение), 3-Магний Малат(энергия,усталость,утро), 4-Магний Треонат(мозг), 5-Магний Таурат(сердце), 6-D3(иммунитет,энергия,утро), 7-Омега-3(мозг,сердце), 8-Цинк(иммунитет), 9-Креатин(мышцы,энергия), 10-Витамин C(иммунитет,усталость), 11-Мелатонин(сон), 12-B-Complex(энергия,нервы,утро), 13-Железо(энергия,анемия), 14-CoQ10(энергия,сердце), 15-Ашваганда(стресс,усталость), 16-Родиола(энергия,усталость,утро), 17-L-Тирозин(энергия,фокус), 18-Куркума(воспаление), 19-Пробиотики(кишечник), 20-Коллаген(кожа), 21-L-Теанин(расслабление), 22-Селен(щитовидка), 23-Йод(щитовидка,энергия), 24-Витамин E(кожа), 25-Биотин(волосы), 26-GABA(сон,расслабление), 27-Ресвератрол(долголетие), 28-NMN(энергия), 29-Протеин(мышцы), 30-K2(кости).`
-                }],
-                userId: currentUser
-            }),
-            signal: controller.signal
-        });
-        
-        clearTimeout(timeoutId);
-        const data = await response.json();
-        
-        if (data.reply) {
-            const jsonMatch = data.reply.match(/\{[\s\S]*"ids"[\s\S]*\}/);
-            if (jsonMatch) {
-                const result = JSON.parse(jsonMatch[0]);
-                const items = supplementsDB.filter(item => result.ids.includes(item.id));
-                if (items.length > 0) {
-                    currentSearchResults = items;
-                    currentDisplayCount = 10;
-                    renderResultsWithLoadMore(currentSearchResults);
-                    return;
-                }
-            }
-        }
-    } catch (err) {
-        console.log('AI failed, using tags:', err);
-    }
-    
+        const controller = new AbortController(); const timeoutId = setTimeout(() => controller.abort(), 4000);
+        const response = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: [{ role: "user", content: `Найди ID добавок для: "${query}". Верни JSON: {"ids": [1, 5, 12]}. База: 1-Магний Глицинат(сон), 2-Магний Цитрат(энергия), 3-Магний Малат(усталость), 4-Магний Треонат(мозг), 5-Магний Таурат(сердце), 6-D3(иммунитет), 7-Омега-3(мозг), 8-Цинк(иммунитет), 9-Креатин(спорт), 10-Витамин C(иммунитет), 11-Мелатонин(сон), 12-B-Complex(нервы), 13-Железо(энергия), 14-CoQ10(сердце), 15-Ашваганда(стресс), 16-Родиола(выносливость), 17-L-Тирозин(фокус), 18-Куркума(суставы), 19-Пробиотики(кишечник), 20-Коллаген(кожа), 21-L-Теанин(расслабление), 22-Селен(щитовидка), 23-Йод(метаболизм), 24-Витамин E(кожа), 25-Биотин(волосы), 26-GABA(сон), 27-Ресвератрол(долголетие), 28-NMN(энергия), 29-Протеин(мышцы), 30-K2(кости).` }], userId: currentUser.email }), signal: controller.signal });
+        clearTimeout(timeoutId); const data = await response.json();
+        if (data.reply) { const jsonMatch = data.reply.match(/\{[\s\S]*"ids"[\s\S]*\}/); if (jsonMatch) { const result = JSON.parse(jsonMatch[0]); const items = supplementsDB.filter(item => result.ids.includes(item.id)); if (items.length > 0) { currentSearchResults = items; currentDisplayCount = 10; renderResultsWithLoadMore(currentSearchResults); return; } } }
+    } catch (err) { console.log('AI fallback:', err); }
     fallbackSearch(query);
 }
 
 function fallbackSearch(query) {
-    const q = query.toLowerCase().trim();
-    const words = q.split(' ').filter(w => w.length > 2);
-    
+    const q = query.toLowerCase().trim(); const words = q.split(' ').filter(w => w.length > 2);
     currentSearchResults = supplementsDB.filter(i => {
         const tagMatch = i.tags.some(tag => words.some(word => tag.includes(word) || word.includes(tag)));
         const nameMatch = i.name.toLowerCase().includes(q) || i.substance.toLowerCase().includes(q);
         const whyMatch = i.why.toLowerCase().includes(q);
-        
-        const keywords = {
-            'хочу выспаться': ['сон', 'бессонница', 'расслабление'],
-            'стать сильнее': ['спорт', 'мышцы', 'сила', 'энергия'],
-            'выносливость': ['энергия', 'спорт', 'сила', 'мышцы'],
-            'похудеть': ['метаболизм', 'энергия'],
-            'плохо встаю': ['энергия', 'утро', 'бодрость', 'усталость'],
-            'усталость': ['энергия', 'усталость', 'бодрость'],
-            'нет сил': ['энергия', 'усталость'],
-            'сон': ['сон', 'бессонница'],
-            'иммунитет': ['иммунитет'],
-            'стресс': ['стресс', 'тревога', 'нервы'],
-            'нервы': ['нервы', 'тревога', 'стресс'],
-            'память': ['мозг', 'память', 'фокус'],
-            'кожа': ['кожа', 'красота', 'волосы']
-        };
-        
+        const keywords = { 'хочу выспаться': ['сон'], 'стать сильнее': ['спорт','сила'], 'выносливость': ['энергия','спорт'], 'похудеть': ['метаболизм'], 'плохо встаю': ['энергия','утро'], 'усталость': ['энергия'], 'нет сил': ['энергия'], 'сон': ['сон'], 'иммунитет': ['иммунитет'], 'стресс': ['стресс','тревога'], 'нервы': ['нервы','тревога'], 'память': ['мозг'], 'кожа': ['кожа','красота'] };
         let keywordMatch = false;
-        for (const [key, tags] of Object.entries(keywords)) {
-            if (q.includes(key)) {
-                keywordMatch = i.tags.some(tag => tags.includes(tag));
-                break;
-            }
-        }
-        
+        for (const [key, tags] of Object.entries(keywords)) { if (q.includes(key)) { keywordMatch = i.tags.some(tag => tags.includes(tag)); break; } }
         return tagMatch || nameMatch || whyMatch || keywordMatch;
     });
-    
-    currentDisplayCount = 10;
-    renderResultsWithLoadMore(currentSearchResults);
+    currentDisplayCount = 10; renderResultsWithLoadMore(currentSearchResults);
 }
 
-function searchBySymptom() {
-    const query = document.getElementById('input-symptom').value.trim();
-    if (!query) return;
-    smartSearch(query);
-}
+function searchBySymptom() { const query = document.getElementById('input-symptom').value.trim(); if (!query) return; smartSearch(query); }
 
 function renderResultsWithLoadMore(items) {
     const c = document.getElementById('results-area');
-    if (!items.length) {
-        c.innerHTML = '<div style="text-align:center; padding:2rem; color:#888;">😕 Ничего не найдено. Попробуйте другой запрос.</div>';
-        return;
-    }
-    
-    const displayedItems = items.slice(0, currentDisplayCount);
-    
-    let html = displayedItems.map(i => `
+    if (!items.length) { c.innerHTML = '<div style="text-align:center; padding:2rem; color:#888;">😕 Ничего не найдено.</div>'; return; }
+    const displayed = items.slice(0, currentDisplayCount);
+    let html = displayed.map(i => `
         <div class="result-card">
             <h3><span class="icon">${i.icon}</span> ${i.name} <small style="color:var(--text-sec); font-size:0.9rem">(${i.substance})</small></h3>
             <p>${i.why}</p>
             <p><strong>⏰ Время:</strong> ${i.time} | <strong>💊 Доза:</strong> ${i.dose}</p>
             <div>${i.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
-            <div class="compatibility">
-                <div class="good">✅ Можно с: ${i.goodWith.join(', ') || 'всем'}</div>
-                <div class="bad">❌ Не с: ${i.badWith.join(', ') || 'нет ограничений'}</div>
-            </div>
+            <div class="compatibility"><div class="good">✅ Можно с: ${i.goodWith.join(', ') || 'всем'}</div><div class="bad">❌ Не с: ${i.badWith.join(', ') || 'нет ограничений'}</div></div>
             <button class="details-btn" onclick="toggleDetails(${i.id})">📖 Подробнее</button>
-            <div id="details-${i.id}" class="details-content">
-                <h4 style="margin:0 0 10px; color:var(--primary-dark);">📚 Подробная информация</h4>
-                <p style="margin:0; line-height:1.6;">${i.details}</p>
-            </div>
+            <div id="details-${i.id}" class="details-content"><h4 style="margin:0 0 10px; color:var(--primary-dark);">📚 Подробно</h4><p style="margin:0; line-height:1.6;">${i.details}</p></div>
             <button class="btn-primary" onclick="addToStack(${i.id})">➕ Добавить в план</button>
             <div class="buy-buttons">
                 <a href="${i.ozon}" target="_blank" class="buy-btn ozon">🛒 Ozon</a>
                 <a href="${i.wb}" target="_blank" class="buy-btn wb">🛍 Wildberries</a>
                 <a href="${i.iherb}" target="_blank" class="buy-btn iherb">🌿 iHerb</a>
             </div>
-        </div>
-    `).join('');
-    
-    if (currentDisplayCount < items.length) {
-        html += `
-            <div class="load-more">
-                <button class="load-more-btn" onclick="loadMore()">
-                    🔽 Показать ещё добавки
-                </button>
-            </div>
-        `;
-    }
-    
+        </div>`).join('');
+    if (currentDisplayCount < items.length) html += `<div class="load-more"><button class="load-more-btn" onclick="loadMore()">🔽 Показать ещё добавки</button></div>`;
     c.innerHTML = html;
 }
 
-function loadMore() {
-    currentDisplayCount += 10;
-    renderResultsWithLoadMore(currentSearchResults);
-}
-
-function toggleDetails(id) {
-    const details = document.getElementById(`details-${id}`);
-    details.classList.toggle('show');
-}
+function loadMore() { currentDisplayCount += 10; renderResultsWithLoadMore(currentSearchResults); }
+function toggleDetails(id) { document.getElementById(`details-${id}`).classList.toggle('show'); }
 
 function addCombo(ids) {
-    ids.forEach(id => {
-        const item = supplementsDB.find(i => i.id == id);
-        if (item && !myStack.find(i => i.id == id)) {
-            myStack.push({...item, taken: false});
-        }
-    });
-    save('stack', myStack);
-    updateSchedule();
-    document.getElementById('my-stack-section').scrollIntoView({behavior:'smooth'});
-    document.getElementById('my-stack-section').classList.add('visible');
-    alert('✅ Комбинация добавлена в ваш план!');
+    ids.forEach(id => { const item = supplementsDB.find(i => i.id == id); if (item && !userData.stack.find(i => i.id == id)) userData.stack.push({...item, taken: false}); });
+    saveToDB(); updateSchedule(); document.getElementById('my-stack-section').scrollIntoView({behavior:'smooth'}); document.getElementById('my-stack-section').classList.add('visible');
+    alert('✅ Комбинация добавлена!');
 }
 
 async function smartSearchWithProfile(query, age, weight) {
     const resultsArea = document.getElementById('results-area');
-    
     try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
-        
-        const response = await fetch('/api/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                messages: [{
-                    role: "user",
-                    content: `Пользователь: возраст ${age} лет, вес ${weight} кг. Цель: "${query}". Найди ID добавок из базы, которые подходят ИМЕННО для этого человека с учётом возраста и веса. Верни ТОЛЬКО JSON: {"ids": [1, 5, 12], "explanation": "краткое объяснение почему эти добавки"}. База: 1-Магний Глицинат(сон,стресс), 2-Магний Цитрат(энергия,пищеварение), 3-Магний Малат(энергия,усталость,утро), 4-Магний Треонат(мозг), 5-Магний Таурат(сердце), 6-D3(иммунитет,энергия,утро), 7-Омега-3(мозг,сердце), 8-Цинк(иммунитет), 9-Креатин(мышцы,энергия), 10-Витамин C(иммунитет,усталость), 11-Мелатонин(сон), 12-B-Complex(энергия,нервы,утро), 13-Железо(энергия,анемия), 14-CoQ10(энергия,сердце), 15-Ашваганда(стресс,усталость), 16-Родиола(энергия,усталость,утро), 17-L-Тирозин(энергия,фокус), 18-Куркума(воспаление), 19-Пробиотики(кишечник), 20-Коллаген(кожа), 21-L-Теанин(расслабление), 22-Селен(щитовидка), 23-Йод(щитовидка,энергия), 24-Витамин E(кожа), 25-Биотин(волосы), 26-GABA(сон,расслабление), 27-Ресвератрол(долголетие), 28-NMN(энергия), 29-Протеин(мышцы), 30-K2(кости).`
-                }],
-                userId: currentUser
-            }),
-            signal: controller.signal
-        });
-        
-        clearTimeout(timeoutId);
-        const data = await response.json();
-        
-        if (data.reply) {
-            const jsonMatch = data.reply.match(/\{[\s\S]*"ids"[\s\S]*\}/);
-            if (jsonMatch) {
-                const result = JSON.parse(jsonMatch[0]);
-                const items = supplementsDB.filter(item => result.ids.includes(item.id));
-                if (items.length > 0) {
-                    const personalizedHTML = `
-                        <div style="background: linear-gradient(135deg, #ecfdf5, #d1fae5); padding: 1.5rem; border-radius: 16px; margin-bottom: 2rem; border-left: 4px solid var(--primary);">
-                            <h3 style="margin:0 0 0.5rem; color:var(--primary-dark);">📋 Персональные рекомендации</h3>
-                            <p style="margin:0; color:var(--text);">
-                                <strong>Возраст:</strong> ${age} лет | <strong>Вес:</strong> ${weight} кг<br>
-                                <strong>Цель:</strong> ${query}<br><br>
-                                ${result.explanation || 'Подобрано на основе ваших параметров и цели.'}
-                            </p>
-                        </div>
-                    `;
-                    currentSearchResults = items;
-                    currentDisplayCount = 10;
-                    document.getElementById('results-area').innerHTML = personalizedHTML;
-                    renderResultsWithLoadMore(currentSearchResults);
-                    return;
-                }
-            }
-        }
-    } catch (err) {
-        console.log('AI failed:', err);
-    }
-    
+        const controller = new AbortController(); const timeoutId = setTimeout(() => controller.abort(), 5000);
+        const response = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: [{ role: "user", content: `Пользователь: ${age} лет, ${weight} кг. Цель: "${query}". Найди ID добавок. Верни JSON: {"ids": [1, 5, 12], "explanation": "почему"}. База: 1-Магний Глицинат(сон), 2-Магний Цитрат(энергия), 3-Магний Малат(усталость), 4-Магний Треонат(мозг), 5-Магний Таурат(сердце), 6-D3(иммунитет), 7-Омега-3(мозг), 8-Цинк(иммунитет), 9-Креатин(спорт), 10-Витамин C(иммунитет), 11-Мелатонин(сон), 12-B-Complex(нервы), 13-Железо(энергия), 14-CoQ10(сердце), 15-Ашваганда(стресс), 16-Родиола(выносливость), 17-L-Тирозин(фокус), 18-Куркума(суставы), 19-Пробиотики(кишечник), 20-Коллаген(кожа), 21-L-Теанин(расслабление), 22-Селен(щитовидка), 23-Йод(метаболизм), 24-Витамин E(кожа), 25-Биотин(волосы), 26-GABA(сон), 27-Ресвератрол(долголетие), 28-NMN(энергия), 29-Протеин(мышцы), 30-K2(кости).` }], userId: currentUser.email }), signal: controller.signal });
+        clearTimeout(timeoutId); const data = await response.json();
+        if (data.reply) { const jsonMatch = data.reply.match(/\{[\s\S]*"ids"[\s\S]*\}/); if (jsonMatch) { const result = JSON.parse(jsonMatch[0]); const items = supplementsDB.filter(item => result.ids.includes(item.id)); if (items.length > 0) { currentSearchResults = items; currentDisplayCount = 10; document.getElementById('results-area').innerHTML = `<div style="background: linear-gradient(135deg, #ecfdf5, #d1fae5); padding: 1.5rem; border-radius: 16px; margin-bottom: 2rem; border-left: 4px solid var(--primary);"><h3 style="margin:0 0 0.5rem; color:var(--primary-dark);">📋 Персонально для вас</h3><p style="margin:0;"><strong>Возраст:</strong> ${age} | <strong>Вес:</strong> ${weight} кг<br><strong>Цель:</strong> ${query}<br>${result.explanation || 'Подобрано на основе ваших параметров.'}</p></div>`; renderResultsWithLoadMore(currentSearchResults); return; } } }
+    } catch (err) { console.log('AI profile failed:', err); }
     fallbackSearch(query);
 }
 
 function generatePersonalPlan() {
-    const goal = document.getElementById('p-goal').value.trim();
-    const age = parseInt(document.getElementById('p-age').value) || 30;
-    const weight = parseInt(document.getElementById('p-weight').value) || 70;
-    
-    if (!goal) return alert('Укажите вашу цель');
-
-    const resultsArea = document.getElementById('results-area');
-    resultsArea.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sec);"><i>🤔 Анализирую ваш профиль и цель...</i></div>';
-    
-    smartSearchWithProfile(goal, age, weight);
-    
-    setTimeout(() => {
-        resultsArea.scrollIntoView({behavior: 'smooth'});
-    }, 100);
+    const goal = document.getElementById('p-goal').value.trim(); const age = parseInt(document.getElementById('p-age').value) || 30; const weight = parseInt(document.getElementById('p-weight').value) || 70;
+    if (!goal) return alert('Укажите цель');
+    document.getElementById('results-area').innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sec);"><i>🤔 Анализирую...</i></div>';
+    smartSearchWithProfile(goal, age, weight); setTimeout(() => document.getElementById('results-area').scrollIntoView({behavior: 'smooth'}), 100);
 }
 
-function renderResults(items) {
-    renderResultsWithLoadMore(items);
-}
-
+// ==========================================
+// 📦 STACK & SCHEDULE
+// ==========================================
 function addToStack(id) {
     const newItem = supplementsDB.find(i => i.id === id);
-    
-    const existingItem = myStack.find(i => {
-        const newSubstance = newItem.substance.toLowerCase().split('(')[0].trim();
-        const existingSubstance = i.substance.toLowerCase().split('(')[0].trim();
-        
-        return (newSubstance.includes('магний') && existingSubstance.includes('магний')) ||
-               (newSubstance.includes('витамин') && existingSubstance.includes('витамин') && newSubstance === existingSubstance) ||
-               newItem.id === i.id;
+    const existing = userData.stack.find(i => {
+        const n = newItem.substance.toLowerCase().split('(')[0].trim();
+        const e = i.substance.toLowerCase().split('(')[0].trim();
+        return (n.includes('магний') && e.includes('магний')) || (n.includes('витамин') && e.includes('витамин') && n === e) || newItem.id === i.id;
     });
-    
-    if (existingItem) {
-        const newDose = parseInt(newItem.dose.match(/\d+/g)?.[0] || '0');
-        const existingDose = parseInt(existingItem.dose.match(/\d+/g)?.[0] || '0');
-        const totalDose = newDose + existingDose;
-        
-        const confirmAdd = confirm(
-            `⚠️ Внимание!\n\n` +
-            `У вас уже есть "${existingItem.name}" в плане.\n` +
-            `Добавление "${newItem.name}" может привести к передозировке!\n\n` +
-            `Рекомендуемая суточная доза: 200-400 мг.\n` +
-            `У вас будет: ${existingDose} + ${newDose} = ${totalDose} мг\n\n` +
-            `Вы уверены, что хотите добавить?`
-        );
-        
-        if (!confirmAdd) return;
-    }
-    
-    if (myStack.find(i => i.id === id)) {
-        alert('✅ Эта добавка уже есть в вашем плане!');
-        return;
-    }
-    
-    myStack.push({...newItem, taken: false});
-    save('stack', myStack);
-    
-    if (!achievements.first && myStack.length >= 1) {
-        achievements.first = true;
-        alert('🌱 Достижение разблокировано: Первый шаг!');
-    }
-    if (!achievements.active && myStack.length >= 5) {
-        achievements.active = true;
-        alert('💪 Достижение разблокировано: Активный!');
-    }
-    save('achievements', achievements);
+    if (existing) { if(!confirm(`⚠️ Уже есть "${existing.name}". Добавить ещё?`)) return; }
+    if (userData.stack.find(i => i.id === id)) { alert('✅ Уже в плане!'); return; }
+    userData.stack.push({...newItem, taken: false}); saveToDB();
+    updateSchedule(); document.getElementById('my-stack-section').scrollIntoView({behavior:'smooth'}); document.getElementById('my-stack-section').classList.add('visible');
+    if (!userData.achievements.first) { userData.achievements.first = true; saveToDB(); alert('🌱 Достижение: Первый шаг!'); }
     updateAchievements();
-    
-    updateSchedule();
-    document.getElementById('my-stack-section').scrollIntoView({behavior:'smooth'});
-    document.getElementById('my-stack-section').classList.add('visible');
 }
 
 function updateSchedule() {
     const slots = {'Утро':[], 'День':[], 'Вечер':[]};
-    myStack.forEach(i => {
-        if(i.time.includes('Утро') || i.time.includes('натощак')) slots['Утро'].push(i);
-        else if(i.time.includes('Вечер') || i.time.includes('сна')) slots['Вечер'].push(i);
-        else slots['День'].push(i);
-    });
-    
-    const takenCount = myStack.filter(i => i.taken).length;
-    const totalCount = myStack.length;
-    const percent = totalCount > 0 ? (takenCount / totalCount * 100) : 0;
-    const takenList = myStack.filter(i => i.taken).map(i => i.name);
-    
-    document.getElementById('progress-fill').style.width = percent + '%';
-    document.getElementById('progress-text').textContent = `${takenCount} из ${totalCount} добавок принято`;
-    
-    document.getElementById('schedule-container').innerHTML = 
-        Object.entries(slots).map(([time, items]) => 
-            items.length ? `<div class="time-slot">
-                <div class="time-label">${getSlotIcon(time)} ${time}</div>
-                ${items.map(i => `
-                    <span class="pill-tag ${i.taken ? 'taken' : ''}" onclick="toggleTaken(${i.id})">
-                        ${i.taken ? '✅' : '⬜'} ${i.name}
-                    </span>
-                `).join('')}
-            </div>` : ''
-        ).join('');
-    
-    const today = new Date();
-    saveCalendarData(today, takenCount, totalCount, takenList);
+    userData.stack.forEach(i => { if(i.time.includes('Утро') || i.time.includes('натощак')) slots['Утро'].push(i); else if(i.time.includes('Вечер') || i.time.includes('сна')) slots['Вечер'].push(i); else slots['День'].push(i); });
+    const taken = userData.stack.filter(i => i.taken).length; const total = userData.stack.length; const pct = total > 0 ? (taken/total*100) : 0;
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-text').textContent = `${taken} из ${total} принято`;
+    document.getElementById('schedule-container').innerHTML = Object.entries(slots).map(([t, items]) => items.length ? `<div class="time-slot"><div class="time-label">${getSlotIcon(t)} ${t}</div>${items.map(i => `<span class="pill-tag ${i.taken?'taken':''}" onclick="toggleTaken(${i.id})">${i.taken?'✅':'⬜'} ${i.name}</span>`).join('')}</div>` : '').join('');
+    const today = new Date(); userData.calendar[`${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`] = {taken, total, takenList: userData.stack.filter(i=>i.taken).map(i=>i.name)}; saveToDB(); renderCalendar();
 }
 
-function getSlotIcon(time) {
-    if (time === 'Утро') return '🌅';
-    if (time === 'День') return '☀️';
-    return '🌙';
-}
-
-function toggleTaken(id) {
-    const item = myStack.find(i => i.id === id);
-    if (item) {
-        item.taken = !item.taken;
-        save('stack', myStack);
-        updateSchedule();
-        checkStreak();
-    }
-}
+function getSlotIcon(t) { return t==='Утро'?'🌅':t==='День'?'☀️':'🌙'; }
+function toggleTaken(id) { const item = userData.stack.find(i => i.id === id); if(item) { item.taken = !item.taken; saveToDB(); updateSchedule(); checkStreak(); } }
 
 function checkStreak() {
-    const today = new Date().toDateString();
-    if (lastTakenDate !== today) {
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        
-        if (lastTakenDate === yesterday.toDateString()) {
-            streakDays++;
-        } else if (lastTakenDate !== today) {
-            streakDays = 1;
-        }
-        
-        lastTakenDate = today;
-        save('streak', streakDays);
-        save('lastTaken', lastTakenDate);
-        
-        if (streakDays >= 3 && !achievements.streak3) {
-            achievements.streak3 = true;
-            save('achievements', achievements);
-            alert('🔥 Достижение разблокировано: Серия 3 дня!');
-            updateAchievements();
-        }
-        if (streakDays >= 10 && !achievements.streak10) {
-            achievements.streak10 = true;
-            save('achievements', achievements);
-            alert('⭐ Достижение разблокировано: Мастер 10 дней!');
-            updateAchievements();
-        }
-    }
+    const today = new Date().toDateString(); if (userData.lastTakenDate === today) return;
+    const yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
+    if (userData.lastTakenDate === yesterday.toDateString()) userData.streakDays++; else userData.streakDays = 1;
+    userData.lastTakenDate = today; saveToDB();
+    if (userData.streakDays >= 3 && !userData.achievements.streak3) { userData.achievements.streak3 = true; saveToDB(); alert('🔥 Серия 3 дня!'); updateAchievements(); }
+    if (userData.streakDays >= 10 && !userData.achievements.streak10) { userData.achievements.streak10 = true; saveToDB(); alert('⭐ Мастер 10 дней!'); updateAchievements(); }
 }
 
 function updateAchievements() {
-    if (achievements.first) document.getElementById('ach-1').classList.add('unlocked');
-    if (achievements.active) document.getElementById('ach-2').classList.add('unlocked');
-    if (achievements.streak3) document.getElementById('ach-3').classList.add('unlocked');
-    if (achievements.streak10) document.getElementById('ach-4').classList.add('unlocked');
+    if(userData.achievements.first) document.getElementById('ach-1').classList.add('unlocked');
+    if(userData.achievements.active) document.getElementById('ach-2').classList.add('unlocked');
+    if(userData.achievements.streak3) document.getElementById('ach-3').classList.add('unlocked');
+    if(userData.achievements.streak10) document.getElementById('ach-4').classList.add('unlocked');
 }
 
 // ==========================================
-// 📝 WELLNESS TRACKER
+// 📅 CALENDAR & REMINDERS & MOOD
 // ==========================================
-function selectMood(mood) {
-    document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
-    event.target.classList.add('selected');
-    event.target.dataset.mood = mood;
+function renderCalendar() {
+    const grid = document.getElementById('calendar-grid'); const monthLabel = document.getElementById('current-month'); const now = new Date();
+    grid.innerHTML = ''; const months = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+    monthLabel.textContent = `${months[now.getMonth()]} ${now.getFullYear()}`;
+    ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].forEach(d => { const div = document.createElement('div'); div.className='calendar-day-header'; div.textContent=d; grid.appendChild(div); });
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).getDay() || 7; const totalDays = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+    for(let i=1; i<firstDay; i++) { const div = document.createElement('div'); div.className='calendar-day empty'; grid.appendChild(div); }
+    for(let day=1; day<=totalDays; day++) {
+        const div = document.createElement('div'); const key = `${now.getFullYear()}-${now.getMonth()+1}-${day}`; const d = userData.calendar[key];
+        div.className='calendar-day'; div.textContent=day; if(day===now.getDate()) div.classList.add('today');
+        if(d && d.total>0) { if(d.taken===d.total) div.classList.add('full'); else if(d.taken>0) div.classList.add('partial'); }
+        if(d && d.takenList?.length) { const tip = document.createElement('div'); tip.className='calendar-tooltip'; tip.innerHTML=d.takenList.map(n=>`✅ ${n}`).join('<br>'); div.appendChild(tip); }
+        grid.appendChild(div);
+    }
 }
 
+function toggleReminder(type, val) { userData.reminders[type] = val; saveToDB(); if(val && type==='browser') requestPermissions(); scheduleReminders(); }
+function saveReminderTime() { userData.reminders.time = document.getElementById('reminder-time').value; saveToDB(); scheduleReminders(); }
+function scheduleReminders() {
+    if(window.reminderTimeout) clearTimeout(window.reminderTimeout);
+    if(userData.reminders.browser || userData.reminders.telegram) {
+        const now = new Date(); const [h,m] = userData.reminders.time.split(':').map(Number); const rt = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m);
+        if(rt <= now) rt.setDate(rt.getDate()+1);
+        window.reminderTimeout = setTimeout(() => { sendReminder(); scheduleReminders(); }, rt - now);
+    }
+}
+function sendReminder() {
+    if(userData.reminders.browser && 'Notification' in window && Notification.permission==='granted') new Notification('🌿 VITA | Пора принять добавки!', {body:`Запланировано: ${userData.stack.length}`, icon:'🌿'});
+}
+
+function selectMood(mood) { document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected')); event.target.classList.add('selected'); event.target.dataset.mood = mood; }
 function saveWellness() {
-    const note = document.getElementById('wellness-note').value;
-    const mood = document.querySelector('.mood-btn.selected')?.dataset.mood;
-    if (!note && !mood) return alert('Выберите настроение или напишите заметку');
-    
-    wellnessLog.push({date: new Date().toLocaleDateString(), mood, note});
-    save('wellness', wellnessLog);
-    renderMoodChart();
-    alert('✅ Сохранено!');
-    document.getElementById('wellness-note').value = '';
+    const note = document.getElementById('wellness-note').value; const mood = document.querySelector('.mood-btn.selected')?.dataset.mood;
+    if(!note && !mood) return alert('Выберите настроение');
+    userData.wellness.push({date: new Date().toLocaleDateString(), mood, note}); saveToDB(); renderMoodChart(); alert('✅ Сохранено!'); document.getElementById('wellness-note').value='';
 }
-
 function renderMoodChart() {
-    const container = document.getElementById('mood-days');
-    const last7Days = wellnessLog.slice(-7);
-    
-    if (!last7Days.length) {
-        container.innerHTML = '<p style="color:#888;">Пока нет данных. Отмечайте самочувствие каждый день!</p>';
-        return;
-    }
-    
-    container.innerHTML = last7Days.map(log => {
-        const moodEmoji = {bad: '😫', ok: '😐', good: '🙂', great: '🤩'}[log.mood] || '😐';
-        return `<div class="mood-day ${log.mood}" title="${log.date}: ${log.note || 'без заметок'}">${moodEmoji}</div>`;
-    }).join('');
+    const c = document.getElementById('mood-days'); const last7 = userData.wellness.slice(-7);
+    if(!last7.length) { c.innerHTML='<p style="color:#888;">Отмечайте самочувствие каждый день!</p>'; return; }
+    c.innerHTML = last7.map(l => `<div class="mood-day ${l.mood}" title="${l.date}: ${l.note||''}">${{bad:'😫',ok:'😐',good:'🙂',great:'🤩'}[l.mood]||'😐'}</div>`).join('');
 }
 
 // ==========================================
-// 💬 CHAT
+// 💬 CHAT & NOTIFICATIONS
 // ==========================================
-function toggleChat() {
-    document.getElementById('chat-modal').classList.toggle('open');
-}
-
+function toggleChat() { document.getElementById('chat-modal').classList.toggle('open'); }
 function sendMessage() {
-    const inp = document.getElementById('chat-input');
-    const q = inp.value.trim();
-    if (!q) return;
-
-    addMsg('user', q);
-    inp.value = '';
-    
-    const loadingDiv = document.createElement('div');
-    loadingDiv.className = 'msg ai';
-    loadingDiv.innerHTML = '<i>🌿 Думаю...</i>';
-    document.getElementById('chat-messages').appendChild(loadingDiv);
-
-    fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-            messages: [{ role: "user", content: q }],
-            userId: currentUser 
-        })
-    })
-    .then(res => res.json())
-    .then(data => {
-        loadingDiv.remove();
-        if (data.reply) {
-            const formatted = data.reply.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
-            addMsg('ai', formatted);
-        } else {
-            addMsg('ai', '⚠️ Ошибка: ' + (data.error || 'Нет ответа'));
-        }
-    })
-    .catch(err => {
-        loadingDiv.remove();
-        addMsg('ai', '⚠️ Нет связи с сервером. Проверьте VPN.');
-        console.error('Chat error:', err);
-    });
+    const inp = document.getElementById('chat-input'); const q = inp.value.trim(); if(!q) return;
+    addMsg('user', q); inp.value='';
+    const load = document.createElement('div'); load.className='msg ai'; load.innerHTML='<i>🌿 Думаю...</i>'; document.getElementById('chat-messages').appendChild(load);
+    fetch('/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({messages:[{role:"user",content:q}], userId:currentUser.email}) })
+    .then(r=>r.json()).then(d => { load.remove(); if(d.reply) addMsg('ai', d.reply.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')); else addMsg('ai','⚠️ Ошибка'); })
+    .catch(e => { load.remove(); addMsg('ai','⚠️ Нет связи'); });
 }
+function addMsg(role, text) { const box=document.getElementById('chat-messages'); const div=document.createElement('div'); div.className=`msg ${role}`; div.innerHTML=text; box.appendChild(div); box.scrollTop=box.scrollHeight; }
+document.getElementById('chat-input').addEventListener('keypress', e => { if(e.key==='Enter') sendMessage(); });
+document.addEventListener('click', e => { if(!e.target.closest('.autocomplete-container')) document.getElementById('autocomplete-list').style.display='none'; });
 
-function addMsg(role, text) {
-    const box = document.getElementById('chat-messages');
-    const div = document.createElement('div');
-    div.className = `msg ${role}`;
-    div.innerHTML = text;
-    box.appendChild(div);
-    box.scrollTop = box.scrollHeight;
-    
-    chatHistory.push({role, text});
-    if(chatHistory.length > 50) chatHistory.shift();
-    save('chat', chatHistory);
-}
-
-document.getElementById('chat-input').addEventListener('keypress', e => {
-    if(e.key === 'Enter') sendMessage();
-});
-
-document.addEventListener('click', (e) => {
-    if (!e.target.closest('.autocomplete-container')) {
-        document.getElementById('autocomplete-list').style.display = 'none';
-    }
-});
+const fakeNotifs = [{n:"Анна М.",p:"Магний Глицинат"},{n:"Сергей К.",p:"Омега-3"},{n:"Мария Д.",p:"Витамин D3"},{n:"Алексей П.",p:"Креатин"},{n:"Елена В.",p:"Коллаген"}];
+function startNotifications() { setTimeout(()=>{showNotif(); setInterval(showNotif, 45000);}, 10000); }
+function showNotif() { const t=document.getElementById('notification-toast'); const n=fakeNotifs[Math.floor(Math.random()*fakeNotifs.length)]; document.getElementById('notif-name').textContent=n.n; document.getElementById('notif-product').textContent=n.p; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 4000); }
 
 // ==========================================
 // 🚀 INIT
 // ==========================================
-window.onload = initApp;
+window.onload = () => {
+    supabase.auth.getSession().then(({  { session } }) => {
+        if(session) { currentUser = session.user; loadFromDB(); }
+    });
+};
 </script>
-
 </body>
 </html>
