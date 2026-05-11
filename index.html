@@ -3,301 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VITA | Персональный помощник по здоровью</title>
-    <meta name="description" content="VITA — умный подбор витаминов и БАДов">
+    <title>VITA | Вход</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #059669; --primary-light: #10b981; --primary-dark: #047857; --bg: #f8fafc; --text: #0f172a; --border: #e2e8f0; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%); min-height: 100vh; color: var(--text); }
-        
-        /* Auth Screen */
-        .auth-wrapper { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: rgba(15,23,42,0.95); position: fixed; top: 0; left: 0; width: 100%; z-index: 9999; }
-        .auth-box { background: white; padding: 3rem; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-width: 420px; width: 90%; text-align: center; animation: slideUp 0.5s ease; }
-        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .auth-box h2 { color: var(--primary-dark); margin-bottom: 0.5rem; font-size: 2rem; }
-        .auth-box p { color: #64748b; margin-bottom: 2rem; }
-        .auth-input { width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 12px; font-size: 16px; margin-bottom: 1rem; text-align: center; }
-        .auth-btn { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; border: none; padding: 14px; width: 100%; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 16px; transition: transform 0.2s; }
-        .auth-btn:hover { transform: translateY(-2px); }
-        .auth-error { color: #ef4444; margin-top: 1rem; font-size: 0.9rem; min-height: 20px; }
-
-        /* Main App */
-        .app-container { max-width: 1200px; margin: 0 auto; padding: 2rem; display: none; }
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; padding: 1rem 0; border-bottom: 1px solid var(--border); }
-        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary-dark); cursor: pointer; }
-        .user-info { display: flex; align-items: center; gap: 1rem; }
-        .logout-btn { color: #ef4444; background: none; border: 1px solid #fecaca; padding: 8px 16px; border-radius: 8px; cursor: pointer; }
-
-        .hero { text-align: center; margin-bottom: 3rem; }
-        .hero h1 { font-size: 2.5rem; color: var(--primary-dark); margin-bottom: 1rem; }
-        .hero p { color: #64748b; font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
-
-        .tabs { display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem; }
-        .tab-btn { padding: 10px 20px; border: none; background: white; border-radius: 20px; cursor: pointer; font-weight: 600; color: #64748b; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: all 0.2s; }
-        .tab-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(5,150,105,0.3); }
-
-        .content-box { background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 2rem; }
-        .input-group { display: flex; gap: 1rem; margin-bottom: 1rem; }
-        input[type="text"], input[type="number"] { flex: 1; padding: 12px; border: 2px solid var(--border); border-radius: 10px; font-size: 16px; }
-        .action-btn { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-weight: 600; }
-        
-        .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-        .card { border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; transition: transform 0.2s; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .card h3 { color: var(--primary-dark); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px; }
-        .tags { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0; }
-        .tag { background: #ecfdf5; color: var(--primary-dark); padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; }
-        .buy-btns { display: flex; gap: 8px; margin-top: 1rem; }
-        .buy-btn { flex: 1; padding: 8px; text-align: center; border-radius: 8px; text-decoration: none; color: white; font-weight: 600; font-size: 0.9rem; }
-        .ozon { background: #005bff; } .wb { background: #cb11ab; } .iherb { background: #00a651; }
+        body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; }
+        .box { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center; max-width: 400px; width: 90%; }
+        h1 { color: #059669; margin-bottom: 10px; }
+        input { width: 100%; padding: 15px; margin: 20px 0; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 16px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: #059669; color: white; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #047857; }
+        .error { color: red; margin-top: 10px; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
-
-    <!-- AUTH SCREEN -->
-    <div id="auth-screen" class="auth-wrapper">
-        <div class="auth-box">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">🌿</div>
-            <h2>VITA | Вход</h2>
-            <p>Введите Email для синхронизации данных</p>
-            <input type="email" id="email-input" class="auth-input" placeholder="example@mail.com">
-            <button class="auth-btn" onclick="handleLogin()">Войти / Регистрация</button>
-            <div id="auth-error" class="auth-error"></div>
+    <div class="box">
+        <div id="login-screen">
+            <h1>🌿 VITA</h1>
+            <p>Введите Email для входа</p>
+            <input type="email" id="email" placeholder="example@mail.com">
+            <button onclick="login()">Войти / Регистрация</button>
+            <div id="error" class="error"></div>
         </div>
-    </div>
-
-    <!-- MAIN APP -->
-    <div id="app-screen" class="app-container">
-        <header>
-            <div class="logo" onclick="location.reload()">🌿 VITA</div>
-            <div class="user-info">
-                <span id="user-display" style="font-weight: 600;"></span>
-                <button class="logout-btn" onclick="handleLogout()">Выйти</button>
-            </div>
-        </header>
-
-        <div class="hero">
-            <h1>Экспертный подход к вашему здоровью</h1>
-            <p>Персональные рекомендации добавок с доказанной эффективностью.</p>
-        </div>
-
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('search')">🔍 Поиск</button>
-            <button class="tab-btn" onclick="switchTab('plan')">📋 Мой план</button>
-        </div>
-
-        <div id="tab-search" class="content-box">
-            <div class="input-group">
-                <input type="text" id="search-input" placeholder="Что беспокоит? (сон, усталость, иммунитет...)">
-                <button class="action-btn" onclick="performSearch()">Найти</button>
-            </div>
-            <div id="results" class="results-grid"></div>
-        </div>
-
-        <div id="tab-plan" class="content-box" style="display: none;">
-            <h3 style="margin-bottom: 1rem;">Ваш список добавок</h3>
-            <div id="plan-list"></div>
+        <div id="app-screen" class="hidden">
+            <h1>Добро пожаловать!</h1>
+            <p id="user-email"></p>
+            <button onclick="logout()" style="background:#ef4444">Выйти</button>
         </div>
     </div>
 
     <script>
-        // 1. CONFIGURATION
-        const SUPABASE_URL = 'https://yrfheqvpiuqzncgqhgrwn.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_RixoV9Q-BGCygKgIREwaEg_jN1QabOe';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const supabaseUrl = 'https://yrfheqvpiuqzncgqhgrwn.supabase.co';
+        const supabaseKey = 'sb_publishable_RixoV9Q-BGCygKgIREwaEg_jN1QabOe';
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        let currentUser = null;
-        let myPlan = [];
-
-        // 2. SUPPLEMENTS DATABASE (30 Items)
-        const DB = [
-            {id:1,name:"Магний Глицинат",tags:["сон","тревога","стресс"],icon:"😴",ozon:"https://ozon.ru/search/?text=магний+глицинат",wb:"https://wb.ru/search/?text=магний+глицинат",iherb:"https://iherb.com/c/magnesium-glycinate"},
-            {id:2,name:"Магний Цитрат",tags:["энергия","пищеварение"],icon:"⚡",ozon:"https://ozon.ru/search/?text=магний+цитрат",wb:"https://wb.ru/search/?text=магний+цитрат",iherb:"https://iherb.com/c/magnesium-citrate"},
-            {id:3,name:"Магний Малат",tags:["энергия","усталость","утро"],icon:"🌅",ozon:"https://ozon.ru/search/?text=магний+малат",wb:"https://wb.ru/search/?text=магний+малат",iherb:"https://iherb.com/c/magnesium-malate"},
-            {id:4,name:"Магний L-Треонат",tags:["мозг","память","фокус"],icon:"🧠",ozon:"https://ozon.ru/search/?text=магний+треонат",wb:"https://wb.ru/search/?text=магний+треонат",iherb:"https://iherb.com/c/magnesium-l-threonate"},
-            {id:5,name:"Магний Таурат",tags:["сердце","давление"],icon:"❤️",ozon:"https://ozon.ru/search/?text=магний+таурат",wb:"https://wb.ru/search/?text=магний+таурат",iherb:"https://iherb.com/c/magnesium-taurate"},
-            {id:6,name:"Витамин D3",tags:["иммунитет","настроение","кости","энергия"],icon:"☀️",ozon:"https://ozon.ru/search/?text=витамин+d3",wb:"https://wb.ru/search/?text=витамин+d3",iherb:"https://iherb.com/c/vitamin-d"},
-            {id:7,name:"Омега-3",tags:["мозг","сердце","кожа"],icon:"🐟",ozon:"https://ozon.ru/search/?text=омега-3",wb:"https://wb.ru/search/?text=омега-3",iherb:"https://iherb.com/c/omega-3"},
-            {id:8,name:"Цинк",tags:["иммунитет","кожа"],icon:"🛡️",ozon:"https://ozon.ru/search/?text=цинк",wb:"https://wb.ru/search/?text=цинк",iherb:"https://iherb.com/c/zinc"},
-            {id:9,name:"Креатин",tags:["спорт","масса","сила"],icon:"💪",ozon:"https://ozon.ru/search/?text=креатин",wb:"https://wb.ru/search/?text=креатин",iherb:"https://iherb.com/c/creatine"},
-            {id:10,name:"Витамин C",tags:["иммунитет","кожа","энергия"],icon:"🍊",ozon:"https://ozon.ru/search/?text=витамин+c",wb:"https://wb.ru/search/?text=витамин+c",iherb:"https://iherb.com/c/vitamin-c"},
-            {id:11,name:"Мелатонин",tags:["сон","бессонница"],icon:"🌙",ozon:"https://ozon.ru/search/?text=мелатонин",wb:"https://wb.ru/search/?text=мелатонин",iherb:"https://iherb.com/c/melatonin"},
-            {id:12,name:"B-Complex",tags:["энергия","нервы","стресс"],icon:"⚡",ozon:"https://ozon.ru/search/?text=витамины+группы+b",wb:"https://wb.ru/search/?text=витамины+b",iherb:"https://iherb.com/c/vitamin-b-complex"},
-            {id:13,name:"Железо",tags:["энергия","анемия"],icon:"🩸",ozon:"https://ozon.ru/search/?text=железо",wb:"https://wb.ru/search/?text=железо",iherb:"https://iherb.com/c/iron"},
-            {id:14,name:"CoQ10",tags:["сердце","энергия"],icon:"❤️",ozon:"https://ozon.ru/search/?text=коэнзим+q10",wb:"https://wb.ru/search/?text=коэнзим+q10",iherb:"https://iherb.com/c/coq10"},
-            {id:15,name:"Ашваганда",tags:["стресс","тревога","сон"],icon:"🌿",ozon:"https://ozon.ru/search/?text=ашваганда",wb:"https://wb.ru/search/?text=ашваганда",iherb:"https://iherb.com/c/ashwagandha"},
-            {id:16,name:"Родиола Розовая",tags:["энергия","усталость","настроение"],icon:"🌸",ozon:"https://ozon.ru/search/?text=родиола+розовая",wb:"https://wb.ru/search/?text=родиола",iherb:"https://iherb.com/c/rhodiola"},
-            {id:17,name:"L-Тирозин",tags:["энергия","фокус","настроение"],icon:"🎯",ozon:"https://ozon.ru/search/?text=l-тирозин",wb:"https://wb.ru/search/?text=l-тирозин",iherb:"https://iherb.com/c/l-tyrosine"},
-            {id:18,name:"Куркума",tags:["воспаление","суставы"],icon:"🧡",ozon:"https://ozon.ru/search/?text=куркума",wb:"https://wb.ru/search/?text=куркума",iherb:"https://iherb.com/c/turmeric"},
-            {id:19,name:"Пробиотики",tags:["кишечник","иммунитет"],icon:"🦠",ozon:"https://ozon.ru/search/?text=пробиотики",wb:"https://wb.ru/search/?text=пробиотики",iherb:"https://iherb.com/c/probiotics"},
-            {id:20,name:"Коллаген",tags:["кожа","суставы","красота"],icon:"✨",ozon:"https://ozon.ru/search/?text=коллаген",wb:"https://wb.ru/search/?text=коллаген",iherb:"https://iherb.com/c/collagen"},
-            {id:21,name:"L-Теанин",tags:["фокус","расслабление"],icon:"🧘",ozon:"https://ozon.ru/search/?text=l-теанин",wb:"https://wb.ru/search/?text=l-теанин",iherb:"https://iherb.com/c/l-theanine"},
-            {id:22,name:"Селен",tags:["щитовидка","иммунитет"],icon:"🦋",ozon:"https://ozon.ru/search/?text=селен",wb:"https://wb.ru/search/?text=селен",iherb:"https://iherb.com/c/selenium"},
-            {id:23,name:"Йод",tags:["щитовидка","метаболизм"],icon:"🔷",ozon:"https://ozon.ru/search/?text=йод",wb:"https://wb.ru/search/?text=йод",iherb:"https://iherb.com/c/iodine"},
-            {id:24,name:"Витамин E",tags:["кожа","антиоксидант"],icon:"🌟",ozon:"https://ozon.ru/search/?text=витамин+e",wb:"https://wb.ru/search/?text=витамин+e",iherb:"https://iherb.com/c/vitamin-e"},
-            {id:25,name:"Биотин",tags:["волосы","ногти","красота"],icon:"💅",ozon:"https://ozon.ru/search/?text=биотин",wb:"https://wb.ru/search/?text=биотин",iherb:"https://iherb.com/c/biotin"},
-            {id:26,name:"GABA",tags:["сон","тревога"],icon:"😌",ozon:"https://ozon.ru/search/?text=gaba",wb:"https://wb.ru/search/?text=gaba",iherb:"https://iherb.com/c/gaba"},
-            {id:27,name:"Ресвератрол",tags:["долголетие","сердце"],icon:"🍇",ozon:"https://ozon.ru/search/?text=ресвератрол",wb:"https://wb.ru/search/?text=ресвератрол",iherb:"https://iherb.com/c/resveratrol"},
-            {id:28,name:"NMN",tags:["долголетие","энергия"],icon:"⏳",ozon:"https://ozon.ru/search/?text=nmn",wb:"https://wb.ru/search/?text=nmn",iherb:"https://iherb.com/c/nmn"},
-            {id:29,name:"Протеин",tags:["спорт","мышцы"],icon:"🥤",ozon:"https://ozon.ru/search/?text=протеин",wb:"https://wb.ru/search/?text=протеин",iherb:"https://iherb.com/c/protein-powders"},
-            {id:30,name:"Витамин K2",tags:["кости","сердце"],icon:"🦴",ozon:"https://ozon.ru/search/?text=витамин+k2",wb:"https://wb.ru/search/?text=витамин+k2",iherb:"https://iherb.com/c/vitamin-k2"}
-        ];
-
-        // 3. AUTH FUNCTIONS
-        async function handleLogin() {
-            const email = document.getElementById('email-input').value.trim();
-            const errorDiv = document.getElementById('auth-error');
-            const btn = document.querySelector('.auth-btn');
-
+        async function login() {
+            const email = document.getElementById('email').value;
+            const errorDiv = document.getElementById('error');
+            
             if (!email.includes('@')) {
-                errorDiv.textContent = 'Введите корректный Email';
+                errorDiv.textContent = 'Введите корректный email';
                 return;
             }
 
-            errorDiv.textContent = '';
-            btn.textContent = 'Загрузка...';
-            btn.disabled = true;
+            errorDiv.textContent = 'Загрузка...';
+            
+            // Пробуем войти
+            let { data, error } = await supabaseClient.auth.signInWithPassword({
+                email: email,
+                password: 'vita123'
+            });
 
-            try {
-                // 1. Try Sign In
-                const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+            // Если не вышло - регистрируем
+            if (error) {
+                const { data: regData, error: regError } = await supabaseClient.auth.signUp({
                     email: email,
-                    password: 'vita_pass_' + email
+                    password: 'vita123'
                 });
-
-                if (signInError) {
-                    // 2. If fails, try Sign Up
-                    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-                        email: email,
-                        password: 'vita_pass_' + email
-                    });
-
-                    if (signUpError) throw signUpError;
-                    
-                    alert('✅ Регистрация успешна! Теперь войдите.');
-                    btn.textContent = 'Войти / Регистрация';
-                    btn.disabled = false;
+                
+                if (regError) {
+                    errorDiv.textContent = regError.message;
                     return;
                 }
-
-                // Success
-                currentUser = signInData.user;
-                loadUserData();
-                initApp();
-
-            } catch (error) {
-                console.error(error);
-                errorDiv.textContent = 'Ошибка: ' + error.message;
-                btn.textContent = 'Войти / Регистрация';
-                btn.disabled = false;
+                alert('✅ Регистрация успешна! Войдите еще раз.');
+                errorDiv.textContent = '';
+                return;
             }
+
+            // Успешный вход
+            showApp(email);
         }
 
-        async function handleLogout() {
-            await supabase.auth.signOut();
+        async function logout() {
+            await supabaseClient.auth.signOut();
             location.reload();
         }
 
-        async function loadUserData() {
-            // В реальном проекте здесь загрузка из Supabase
-            // Сейчас используем LocalStorage для простоты
-            const saved = localStorage.getItem('vita_plan_' + currentUser.email);
-            if (saved) myPlan = JSON.parse(saved);
+        function showApp(email) {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('app-screen').classList.remove('hidden');
+            document.getElementById('user-email').textContent = email;
         }
 
-        function saveUserData() {
-            localStorage.setItem('vita_plan_' + currentUser.email, JSON.stringify(myPlan));
-        }
-
-        // 4. APP LOGIC
-        function initApp() {
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('app-screen').style.display = 'block';
-            document.getElementById('user-display').textContent = currentUser.email.split('@')[0];
-            renderPlan();
-        }
-
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            document.getElementById('tab-search').style.display = tab === 'search' ? 'block' : 'none';
-            document.getElementById('tab-plan').style.display = tab === 'plan' ? 'block' : 'none';
-        }
-
-        function performSearch() {
-            const query = document.getElementById('search-input').value.toLowerCase();
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '';
-
-            const filtered = DB.filter(item => 
-                item.tags.some(tag => tag.includes(query)) || 
-                item.name.toLowerCase().includes(query)
-            );
-
-            if (filtered.length === 0) {
-                resultsDiv.innerHTML = '<p style="text-align:center; width:100%; color:#888;">Ничего не найдено. Попробуйте "сон", "энергия", "спорт".</p>';
-                return;
-            }
-
-            filtered.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <h3>${item.icon} ${item.name}</h3>
-                    <div class="tags">${item.tags.map(t => `<span class="tag">#${t}</span>`).join('')}</div>
-                    <div class="buy-btns">
-                        <a href="${item.ozon}" target="_blank" class="buy-btn ozon">Ozon</a>
-                        <a href="${item.wb}" target="_blank" class="buy-btn wb">WB</a>
-                        <a href="${item.iherb}" target="_blank" class="buy-btn iherb">iHerb</a>
-                    </div>
-                    <button onclick="addToPlan(${item.id})" style="margin-top:10px; width:100%; padding:8px; background:#f0fdf4; border:1px solid #10b981; color:#047857; border-radius:8px; cursor:pointer;">➕ В мой план</button>
-                `;
-                resultsDiv.appendChild(card);
-            });
-        }
-
-        function addToPlan(id) {
-            const item = DB.find(i => i.id === id);
-            if (!myPlan.find(i => i.id === id)) {
-                myPlan.push(item);
-                saveUserData();
-                renderPlan();
-                alert(`✅ ${item.name} добавлен в план!`);
-            } else {
-                alert('⚠️ Уже есть в плане!');
-            }
-        }
-
-        function renderPlan() {
-            const list = document.getElementById('plan-list');
-            if (myPlan.length === 0) {
-                list.innerHTML = '<p style="text-align:center; color:#888;">План пуст. Добавьте добавки из поиска.</p>';
-                return;
-            }
-            list.innerHTML = myPlan.map(item => `
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:1rem; border-bottom:1px solid var(--border);">
-                    <span>${item.icon} <strong>${item.name}</strong></span>
-                    <button onclick="removeFromPlan(${item.id})" style="color:#ef4444; background:none; border:none; cursor:pointer;">❌</button>
-                </div>
-            `).join('');
-        }
-
-        function removeFromPlan(id) {
-            myPlan = myPlan.filter(i => i.id !== id);
-            saveUserData();
-            renderPlan();
-        }
-
-        // 5. INIT ON LOAD
-        window.onload = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
+        // Проверяем сессию при загрузке
+        window.onload = async function() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
-                currentUser = session.user;
-                loadUserData();
-                initApp();
+                showApp(session.user.email);
             }
         };
     </script>
