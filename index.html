@@ -11,7 +11,7 @@
         :root {
             --primary: #059669; --primary-light: #10b981; --primary-dark: #047857;
             --accent: #f59e0b; --danger: #ef4444; --success: #22c55e;
-            --bg: #ffffff; --card: #ffffff; --text: #0f172a; --text-sec: #64748b;
+            --bg: #f8fafc; --card: #ffffff; --text: #0f172a; --text-sec: #64748b;
             --border: #e2e8f0; --radius: 20px; --shadow: 0 10px 40px rgba(5,150,105,0.1);
         }
         * { box-sizing: border-box; }
@@ -22,25 +22,6 @@
             margin: 0; padding: 0; line-height: 1.6; 
             overflow-x: hidden;
             position: relative;
-        }
-        
-        .floating-leaf {
-            position: fixed;
-            font-size: 200px;
-            opacity: 0.08;
-            pointer-events: none;
-            z-index: 0;
-            animation: float 20s infinite ease-in-out;
-        }
-        .leaf-1 { top: 10%; left: 10%; animation-delay: 0s; }
-        .leaf-2 { top: 60%; right: 10%; animation-delay: 5s; }
-        .leaf-3 { bottom: 10%; left: 50%; animation-delay: 10s; }
-        
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(30px, -30px) rotate(90deg); }
-            50% { transform: translate(-20px, 20px) rotate(180deg); }
-            75% { transform: translate(40px, 10px) rotate(270deg); }
         }
         
         #auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
@@ -59,7 +40,7 @@
         .auth-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(5,150,105,0.4); }
 
         header { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); 
-            padding: 1rem 2rem; border-bottom: 1px solid var(--border); 
+            padding: 1rem 2rem; border-bottom: 1px solid rgba(226,232,240,0.5); 
             position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
         .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s; }
         .logo:hover { transform: scale(1.05); }
@@ -72,7 +53,7 @@
 
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; position: relative; z-index: 1; }
         
-        /* NEW HERO STYLING */
+        /* HERO STYLING */
         .hero { 
             text-align: center; 
             margin-bottom: 2rem; 
@@ -114,26 +95,28 @@
             flex-wrap: wrap;
         }
         .hero-badge {
-            background: white;
-            padding: 10px 20px;
+            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+            padding: 12px 22px;
             border-radius: 50px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: 600;
             color: var(--primary-dark);
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
+            cursor: default;
+            box-shadow: none;
         }
         
-        .tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; background: white; 
-            padding: 0.5rem; border-radius: 60px; box-shadow: var(--shadow); 
+        .tabs { display: flex; gap: 0.8rem; margin-bottom: 2rem; background: white; 
+            padding: 0.8rem; border-radius: 60px; box-shadow: 0 4px 20px rgba(5,150,105,0.08); 
             width: fit-content; margin-left: auto; margin-right: auto; }
-        .tab-btn { padding: 12px 20px; border: none; background: transparent; 
-            color: var(--text-sec); border-radius: 50px; cursor: pointer; font-weight: 600; 
+        .tab-btn { padding: 16px 28px; border: none; background: transparent; 
+            color: var(--text-sec); border-radius: 50px; cursor: pointer; font-weight: 700; font-size: 16px;
             transition: all 0.3s; }
+        .tab-btn:hover { background: #f0fdf4; color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(5,150,105,0.15); }
         .tab-btn.active { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); 
-            color: white; box-shadow: 0 4px 12px rgba(5,150,105,0.3); }
+            color: white; box-shadow: 0 6px 15px rgba(5,150,105,0.35); transform: translateY(-2px); }
         
         .search-box { display: none; background: var(--card); padding: 2rem; 
             border-radius: var(--radius); box-shadow: var(--shadow); animation: slideUp 0.5s ease; }
@@ -248,7 +231,7 @@
             margin: 0;
         }
         
-        #my-stack-section { display: none; margin-top: 3rem; border-top: 2px dashed var(--border); padding-top: 2rem; }
+        #my-stack-section { display: none; margin-top: 3rem; border-top: none; padding-top: 3rem; }
         #my-stack-section.visible { display: block; }
         
         .main-grid { display: grid; grid-template-columns: 1fr 350px; gap: 2rem; }
@@ -388,7 +371,7 @@
             gap: 12px;
             z-index: 998;
             animation: slideIn 0.5s ease;
-            max-width: 300px;
+            max-width: 320px;
         }
         @keyframes slideIn {
             from { transform: translateX(-100px); opacity: 0; }
@@ -396,8 +379,8 @@
         }
         .notification-toast.show { display: flex; }
         .notification-icon { font-size: 1.5rem; }
-        .notification-text { font-size: 0.9rem; color: var(--text); }
-        .notification-text strong { display: block; color: var(--primary-dark); }
+        .notification-text { font-size: 0.9rem; color: var(--text); line-height: 1.4; }
+        .notification-text strong { display: block; color: var(--primary-dark); margin-bottom: 2px; }
 
         @media (max-width: 768px) {
             .hero h1 { font-size: 2rem; }
@@ -405,18 +388,15 @@
             #chat-modal { width: calc(100% - 48px); right: 24px; }
             .buy-buttons { flex-direction: column; }
             .buy-btn { width: 100%; }
-            .floating-leaf { font-size: 100px; }
             .quick-filters { flex-direction: column; }
             .filter-btn { width: 100%; }
             .notification-toast { left: 24px; right: 24px; bottom: 100px; max-width: none; }
+            .tabs { width: 100%; flex-wrap: wrap; justify-content: center; }
+            .tab-btn { flex: 1 1 auto; padding: 12px 16px; font-size: 14px; }
         }
     </style>
 </head>
 <body>
-
-<div class="floating-leaf leaf-1">🌿</div>
-<div class="floating-leaf leaf-2">🍃</div>
-<div class="floating-leaf leaf-3">🌱</div>
 
 <div id="auth-overlay">
     <div class="auth-box">
@@ -442,16 +422,16 @@
         <p>Анализируем научные исследования, чтобы вы получали только работающие добавки. Персональные рекомендации с гарантией эффективности.</p>
         
         <div class="hero-badges">
-            <div class="hero-badge">🔬 Научный подход</div>
+            <div class="hero-badge">✅ Научный подход</div>
             <div class="hero-badge">✅ Доказанная эффективность</div>
-            <div class="hero-badge">🎯 Индивидуальный подбор</div>
+            <div class="hero-badge">✅ Индивидуальный подбор</div>
         </div>
     </div>
 
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('search')">🔍 Поиск</button>
         <button class="tab-btn" onclick="switchTab('symptom')">🩺 По симптому</button>
-        <button class="tab-btn" onclick="switchTab('personal')">📋 Мой план</button>
+        <button class="tab-btn" onclick="switchTab('personal')">📋 Создай свой план</button>
     </div>
 
     <div id="search-name" class="search-box active">
@@ -638,7 +618,7 @@
     <div class="notification-icon">🛒</div>
     <div class="notification-text">
         <strong id="notif-name">Анна М.</strong>
-        купила <span id="notif-product">Магний Глицинат</span>
+        <span>выбрал(а)</span> <span id="notif-product">Магний Глицинат</span>
     </div>
 </div>
 
@@ -1491,7 +1471,7 @@ function sendMessage() {
     })
     .catch(err => {
         loadingDiv.remove();
-        addMsg('ai', '⚠️ Нет связи с сервером. Проверьте VPN.');
+        addMsg('ai', '⚠️ Нет связи с сервером. Проверьте подключение.');
         console.error('Chat error:', err);
     });
 }
