@@ -1538,19 +1538,18 @@ function finishOnboarding() {
 }
 
 // Генерация рекомендаций квиза - ИСПРАВЛЕНО: без дубликатов
+// ИСПРАВЛЕННАЯ функция подбора - С КНОПКОЙ "ПОКАЗАТЬ ЕЩЁ"
 function generateQuizRecommendations(goals) {
     const plan = [];
     const addedIds = new Set();
-    const addedSubstances = new Set(); // Чтобы не добавлять 3 магния
+    const addedSubstances = new Set();
     
     goals.forEach(goal => {
-        // Ищем добавки по тегам
-        const matches = supplementsDB.filter(s => 
-            s.tags && s.tags.some(tag => tag.includes(goal.toLowerCase())) ||
-            goal.toLowerCase().includes(s.tags ? s.tags.join(' ') : '')
-        );
+        const matches = supplementsDB.filter(s => {
+            if (!s.tags) return false;
+            return s.tags.some(tag => tag.includes(goal.toLowerCase()));
+        });
         
-        // Добавляем первые 2 подходящие добавки БЕЗ дубликатов веществ
         matches.forEach(match => {
             const substance = match.substance.split('(')[0].trim().toLowerCase();
             if (!addedIds.has(match.id) && !addedSubstances.has(substance)) {
@@ -1558,6 +1557,64 @@ function generateQuizRecommendations(goals) {
                 addedIds.add(match.id);
                 addedSubstances.add(substance);
             }
+        });
+    });
+
+    if (plan.length === 0) {
+        document.getElementById('popular-combos').style.display = 'block';
+        return;
+    }
+
+    quizRecommendations = plan;
+    
+    // Сохраняем результаты в currentSearchResults для работы loadMore
+    currentSearchResults = plan;
+    currentDisplayCount = 10; // Показываем первые 10
+    
+    const container = document.getElementById('quiz-recommendations');
+    const formContainer = document.getElementById('manual-plan-form');
+
+    let html = `<div style="background: linear-gradient(135deg, #ecfdf5, #d1fae5); padding: 1.5rem; border-radius: 16px; margin-bottom: 1.5rem; border-left: 4px solid var(--primary);">
+        <h3 style="margin:0 0 0.5rem; color:var(--primary-dark);">✨ ${currentUser}, мы подобрали ваш стартовый план</h3>
+        <p style="margin:0; color:var(--text);">На основе ваших целей: <strong>${goals.join(', ')}</strong>. Найдено добавок: <strong>${plan.length}</strong>.</p>
+    </div>`;
+    
+    // Используем renderResultsWithLoadMore для отображения с кнопкой "Показать ещё"
+    const displayedItems = plan.slice(0, currentDisplayCount);
+    
+    html += displayedItems.map(i => {
+        const tagsHtml = i.tags ? i.tags.map(t => `<span class="tag">${t}</span>`).join('') : '';
+        return `<div class="result-card" style="margin-bottom:1rem;">
+            <div class="card-header"><div class="card-icon">${i.icon}</div><div><h3>${i.name}</h3><div class="substance">${i.substance}</div></div></div>
+            <p>${i.why}</p><p><strong>⏰</strong> ${i.time} | <strong>💊</strong> ${i.dose}</p>
+            ${tagsHtml ? `<div style="margin:8px 0;">${tagsHtml}</div>` : ''}
+            <button class="details-btn" onclick="toggleDetails(${i.id})">📖 Подробнее</button>
+            <div id="details-${i.id}" class="details-content"><p>${i.details}</p></div>
+            <div class="buy-buttons" style="margin-top:0.5rem;">
+                <a href="${i.ozon}" target="_blank" class="buy-btn ozon" style="font-size:0.8rem;">🛒 Ozon</a>
+                <a href="${i.wb}" target="_blank" class="buy-btn wb" style="font-size:0.8rem;">🛍 WB</a>
+                <a href="${i.iherb}" target="_blank" class="buy-btn iherb" style="font-size:0.8rem;">🌿 iHerb</a>
+            </div>
+        </div>`;
+    }).join('');
+    
+    // Кнопка "Показать ещё" если добавок больше 10
+    if (currentDisplayCount < plan.length) {
+        html += `<div class="load-more"><button class="load-more-btn" onclick="loadMoreQuiz()">🔽 Показать ещё добавки (${plan.length - currentDisplayCount})</button></div>`;
+    }
+    
+    html += `<button class="btn-primary" onclick="addQuizToStack()" style="margin-top:1.5rem; font-size:1.1rem;">✅ Добавить всё (${plan.length}) в расписание</button>`;
+    
+    container.innerHTML = html;
+    container.style.display = 'block';
+    if(formContainer) formContainer.style.display = 'none';
+}
+
+// Функция для кнопки "Показать ещё" в квизе
+function loadMoreQuiz() {
+    currentDisplayCount += 10;
+    generateQuizRecommendations(quizGoals);
+}
         });
     });
 
