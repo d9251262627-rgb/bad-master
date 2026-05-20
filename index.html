@@ -1498,6 +1498,12 @@ function finishOnboarding() {
         quizGoals.push(customGoal.toLowerCase());
     }
     
+    // Заполняем поля возраста и веса в форме
+    const age = document.getElementById('ob-age').value;
+    const weight = document.getElementById('ob-weight').value;
+    if (age) document.getElementById('p-age').value = age;
+    if (weight) document.getElementById('p-weight').value = weight;
+    
     localStorage.setItem('vitaUser', currentUser);
     document.getElementById('onboarding-overlay').style.display = 'none';
     document.getElementById('app-header').style.display = 'flex';
@@ -1537,7 +1543,7 @@ function finishOnboarding() {
     startNotifications();
 }
 
-// ГЕНЕРАЦИЯ РЕКОМЕНДАЦИЙ С КНОПКОЙ "ПОКАЗАТЬ ЕЩЁ"
+// ГЕНЕРАЦИЯ РЕКОМЕНДАЦИЙ С КНОПКОЙ "ПОКАЗАТЬ ЕЩЁ" И ОТДЕЛЬНЫМИ КНОПКАМИ "ДОБАВИТЬ"
 function generateQuizRecommendations(goals) {
     const plan = [];
     const addedIds = new Set();
@@ -1587,6 +1593,7 @@ function generateQuizRecommendations(goals) {
             ${tagsHtml ? `<div style="margin:8px 0;">${tagsHtml}</div>` : ''}
             <button class="details-btn" onclick="toggleDetails(${i.id})">📖 Подробнее</button>
             <div id="details-${i.id}" class="details-content"><p>${i.details}</p></div>
+            <button class="btn-primary" onclick="addToStack(${i.id})" style="margin-top:10px;">➕ В план</button>
             <div class="buy-buttons" style="margin-top:0.5rem;">
                 <a href="${i.ozon}" target="_blank" class="buy-btn ozon" style="font-size:0.8rem;">🛒 Ozon</a>
                 <a href="${i.wb}" target="_blank" class="buy-btn wb" style="font-size:0.8rem;">🛍 WB</a>
