@@ -1545,8 +1545,8 @@ function generateQuizRecommendations(goals) {
     goals.forEach(goal => {
         // Ищем добавки по тегам
         const matches = supplementsDB.filter(s => 
-            s.tags.some(tag => tag.includes(goal.toLowerCase())) ||
-            goal.toLowerCase().includes(tag)
+            s.tags && s.tags.some(tag => tag.includes(goal.toLowerCase())) ||
+            goal.toLowerCase().includes(s.tags ? s.tags.join(' ') : '')
         );
         
         // Добавляем первые 2 подходящие добавки
@@ -1574,9 +1574,11 @@ function generateQuizRecommendations(goals) {
     </div>`;
 
     plan.forEach(i => {
+        const tagsHtml = i.tags ? i.tags.map(t => `<span class="tag">${t}</span>`).join('') : '';
         html += `<div class="result-card" style="margin-bottom:1rem;">
             <div class="card-header"><div class="card-icon">${i.icon}</div><div><h3>${i.name}</h3><div class="substance">${i.substance}</div></div></div>
             <p>${i.why}</p><p><strong>⏰</strong> ${i.time} | <strong>💊</strong> ${i.dose}</p>
+            ${tagsHtml ? `<div style="margin:8px 0;">${tagsHtml}</div>` : ''}
             <button class="details-btn" onclick="toggleDetails(${i.id})">📖 Подробнее</button>
             <div id="details-${i.id}" class="details-content"><p>${i.details}</p></div>
             <div class="buy-buttons" style="margin-top:0.5rem;">
@@ -1900,7 +1902,7 @@ async function quickSearch(query) {
     }
     
     currentSearchResults = supplementsDB.filter(item => 
-        item.tags.some(tag => tag.includes(query.toLowerCase()))
+        item.tags && item.tags.some(tag => tag.includes(query.toLowerCase()))
     );
     currentDisplayCount = 10;
     renderResultsWithLoadMore(currentSearchResults);
@@ -2000,7 +2002,7 @@ function fallbackSearch(query) {
     const words = q.split(' ').filter(w => w.length > 2);
     
     currentSearchResults = supplementsDB.filter(i => {
-        const tagMatch = i.tags.some(tag => words.some(word => tag.includes(word) || word.includes(tag)));
+        const tagMatch = i.tags && i.tags.some(tag => words.some(word => tag.includes(word) || word.includes(tag)));
         const nameMatch = i.name.toLowerCase().includes(q) || i.substance.toLowerCase().includes(q);
         const whyMatch = i.why.toLowerCase().includes(q);
         
@@ -2023,7 +2025,7 @@ function fallbackSearch(query) {
         let keywordMatch = false;
         for (const [key, tags] of Object.entries(keywords)) {
             if (q.includes(key)) {
-                keywordMatch = i.tags.some(tag => tags.includes(tag));
+                keywordMatch = i.tags && i.tags.some(tag => tags.includes(tag));
                 break;
             }
         }
@@ -2050,12 +2052,13 @@ function renderResultsWithLoadMore(items) {
     
     const displayedItems = items.slice(0, currentDisplayCount);
     
-    let html = displayedItems.map(i => `
-        <div class="result-card">
+    let html = displayedItems.map(i => {
+        const tagsHtml = i.tags ? i.tags.map(t => `<span class="tag">${t}</span>`).join('') : '';
+        return `<div class="result-card">
             <h3><span class="icon">${i.icon}</span> ${i.name} <small style="color:var(--text-sec); font-size:0.9rem">(${i.substance})</small></h3>
             <p>${i.why}</p>
             <p><strong>⏰ Время:</strong> ${i.time} | <strong>💊 Доза:</strong> ${i.dose}</p>
-            <div>${i.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+            ${tagsHtml ? `<div style="margin:8px 0;">${tagsHtml}</div>` : ''}
             <div class="compatibility">
                 <div class="good">✅ Можно с: ${i.goodWith.join(', ') || 'всем'}</div>
                 <div class="bad">❌ Не с: ${i.badWith.join(', ') || 'нет ограничений'}</div>
@@ -2071,8 +2074,8 @@ function renderResultsWithLoadMore(items) {
                 <a href="${i.wb}" target="_blank" class="buy-btn wb">🛍 Wildberries</a>
                 <a href="${i.iherb}" target="_blank" class="buy-btn iherb">🌿 iHerb</a>
             </div>
-        </div>
-    `).join('');
+        </div>`;
+    }).join('');
     
     if (currentDisplayCount < items.length) {
         html += `
