@@ -1214,10 +1214,16 @@
     </div>
 
     <div id="search-personal" class="search-box">
-        <input type="number" id="p-age" placeholder="Возраст">
-        <input type="number" id="p-weight" placeholder="Вес (кг)">
-        <input type="text" id="p-goal" placeholder="Цель (хочу высыпаться)">
-        <button class="btn-primary" onclick="generatePersonalPlan()">Составить план</button>
+        <!-- Контейнер для рекомендаций квиза -->
+        <div id="quiz-recommendations" style="display:none;"></div>
+        
+        <!-- Ручная форма (скрывается после квиза) -->
+        <div id="manual-plan-form">
+            <input type="number" id="p-age" placeholder="Возраст">
+            <input type="number" id="p-weight" placeholder="Вес (кг)">
+            <input type="text" id="p-goal" placeholder="Цель (хочу высыпаться)">
+            <button class="btn-primary" onclick="generatePersonalPlan()">Составить план</button>
+        </div>
     </div>
 
     <div id="results-area"></div>
@@ -1433,6 +1439,7 @@ let currentSearchQuery = '';
 let searchMode = 'local';
 let internetResults = [];
 let quizGoals = []; // Для онбординга
+let quizRecommendations = []; // Для хранения рекомендаций квиза
 
 function getKey(k) { return `vita_${k}_${currentUser}`; }
 function save(k, d) { localStorage.setItem(getKey(k), JSON.stringify(d)); }
@@ -1498,19 +1505,40 @@ function finishOnboarding() {
     document.getElementById('chat-toggle').style.display = 'flex';
     document.getElementById('display-user').textContent = currentUser;
     
-    // Генерируем план на основе выбранных целей
+    // Инициализация данных вручную (без вызова initApp, чтобы не сбрасывать вкладки)
+    myStack = load('stack') || [];
+    wellnessLog = load('wellness') || [];
+    chatHistory = load('chat') || [];
+    achievements = load('achievements') || {first: false, active: false, streak3: false, streak10: false};
+    streakDays = load('streak') || 0;
+    lastTakenDate = load('lastTaken') || null;
+    calendarData = load('calendar') || {};
+    reminders = load('reminders') || {browser: false, telegram: false, time: "09:00"};
+    document.getElementById('browser-reminder').checked = reminders.browser;
+    document.getElementById('telegram-reminder').checked = reminders.telegram;
+    document.getElementById('reminder-time').value = reminders.time;
+    updateAchievements(); renderMoodChart(); renderCalendar(); scheduleReminders();
+    if (myStack.length) { updateSchedule(); document.getElementById('my-stack-section').classList.add('visible'); }
+
+    // Генерируем рекомендации и переключаем вкладку
     if (quizGoals.length > 0) {
-        generateStarterPlan(quizGoals);
+        generateQuizRecommendations(quizGoals);
+        // Переключаем на вкладку "Создай свой план"
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-btn')[2].classList.add('active');
+        document.querySelectorAll('.search-box').forEach(b => b.classList.remove('active'));
+        document.getElementById('search-personal').classList.add('active');
+        document.getElementById('popular-combos').style.display = 'none';
     } else {
         document.getElementById('popular-combos').style.display = 'block';
     }
-    
+
     requestPermissions();
-    initApp();
     startNotifications();
 }
 
-function generateStarterPlan(goals) {
+// Генерация рекомендаций квиза
+function generateQuizRecommendations(goals) {
     const plan = [];
     const addedIds = new Set();
     
@@ -1529,21 +1557,55 @@ function generateStarterPlan(goals) {
             }
         });
     });
-    
+
     if (plan.length === 0) {
         // Если ничего не найдено, показываем популярные комбинации
         document.getElementById('popular-combos').style.display = 'block';
         return;
     }
-    
-    myStack = plan;
+
+    quizRecommendations = plan;
+    const container = document.getElementById('quiz-recommendations');
+    const formContainer = document.getElementById('manual-plan-form');
+
+    let html = `<div style="background: linear-gradient(135deg, #ecfdf5, #d1fae5); padding: 1.5rem; border-radius: 16px; margin-bottom: 1.5rem; border-left: 4px solid var(--primary);">
+        <h3 style="margin:0 0 0.5rem; color:var(--primary-dark);">✨ ${currentUser}, мы подобрали ваш стартовый план</h3>
+        <p style="margin:0; color:var(--text);">На основе ваших целей: <strong>${goals.join(', ')}</strong>. Проверьте добавки и добавьте в расписание.</p>
+    </div>`;
+
+    plan.forEach(i => {
+        html += `<div class="result-card" style="margin-bottom:1rem;">
+            <div class="card-header"><div class="card-icon">${i.icon}</div><div><h3>${i.name}</h3><div class="substance">${i.substance}</div></div></div>
+            <p>${i.why}</p><p><strong>⏰</strong> ${i.time} | <strong>💊</strong> ${i.dose}</p>
+            <button class="details-btn" onclick="toggleDetails(${i.id})">📖 Подробнее</button>
+            <div id="details-${i.id}" class="details-content"><p>${i.details}</p></div>
+            <div class="buy-buttons" style="margin-top:0.5rem;">
+                <a href="${i.ozon}" target="_blank" class="buy-btn ozon" style="font-size:0.8rem;">🛒 Ozon</a>
+                <a href="${i.wb}" target="_blank" class="buy-btn wb" style="font-size:0.8rem;">🛍 WB</a>
+                <a href="${i.iherb}" target="_blank" class="buy-btn iherb" style="font-size:0.8rem;">🌿 iHerb</a>
+            </div>
+        </div>`;
+    });
+    html += `<button class="btn-primary" onclick="addQuizToStack()" style="margin-top:1.5rem; font-size:1.1rem;">✅ Добавить всё в расписание</button>`;
+    container.innerHTML = html;
+    container.style.display = 'block';
+    if(formContainer) formContainer.style.display = 'none';
+}
+
+// Добавление всех рекомендаций квиза в стек
+function addQuizToStack() {
+    quizRecommendations.forEach(item => {
+        if (!myStack.find(i => i.id === item.id)) {
+            myStack.push(item);
+        }
+    });
     save('stack', myStack);
     updateSchedule();
     document.getElementById('my-stack-section').classList.add('visible');
-    document.getElementById('my-stack-section').scrollIntoView({behavior: 'smooth'});
-    
-    const goalText = goals.join(', ');
-    alert(`✨ Отлично! Мы подобрали ваш стартовый план для: ${goalText}\n\nДобавлено ${plan.length} добавок. Перейдите в раздел "Создай свой план", чтобы увидеть расписание.`);
+    document.getElementById('quiz-recommendations').style.display = 'none';
+    document.getElementById('manual-plan-form').style.display = 'block';
+    alert('✅ План добавлен в расписание! Переходите к трекингу.');
+    setTimeout(() => document.getElementById('my-stack-section').scrollIntoView({behavior: 'smooth'}), 500);
 }
 
 // ==========================================
