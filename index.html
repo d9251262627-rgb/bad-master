@@ -15,182 +15,1074 @@
             --border: #e2e8f0; --radius: 20px; --shadow: 0 10px 40px rgba(5,150,105,0.1);
         }
         * { box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; line-height: 1.6; overflow-x: hidden; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg);
+            color: var(--text); 
+            margin: 0; padding: 0; line-height: 1.6; 
+            overflow-x: hidden;
+            position: relative;
+        }
         
-        #onboarding-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.95); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
-        .onboarding-box { background: white; padding: 2.5rem; border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); max-width: 480px; width: 100%; text-align: center; animation: slideUp 0.5s ease; }
-        @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        /* ONBOARDING STYLES */
+        #onboarding-overlay { 
+            position: fixed; 
+            inset: 0; 
+            background: rgba(15,23,42,0.95); 
+            backdrop-filter: blur(12px); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 9999; 
+            padding: 20px;
+        }
+        .onboarding-box { 
+            background: white; 
+            padding: 2.5rem; 
+            border-radius: 24px; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25); 
+            max-width: 480px; 
+            width: 100%; 
+            text-align: center;
+            animation: slideUp 0.5s ease; 
+            position: relative; 
+            z-index: 1; 
+        }
+        @keyframes slideUp { 
+            from { transform: translateY(40px); opacity: 0; } 
+            to { transform: translateY(0); opacity: 1; } 
+        }
         .onboarding-step { display: none; }
         .onboarding-step.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .step-indicator { display: flex; justify-content: center; gap: 8px; margin-bottom: 24px; }
-        .step-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); transition: all 0.3s; }
-        .step-dot.active { background: var(--primary); width: 30px; border-radius: 10px; }
-        .step-dot.completed { background: var(--success); }
-        .onboarding-box h2 { margin: 0 0 0.5rem; color: var(--primary-dark); font-size: 1.8rem; }
-        .onboarding-box p { color: var(--text-sec); margin-bottom: 1.5rem; }
-        .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 1rem 0; }
-        .quiz-option { padding: 14px; border: 2px solid var(--border); background: white; border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.2s; text-align: center; position: relative; }
-        .quiz-option:hover { border-color: var(--primary); background: #ecfdf5; transform: translateY(-2px); }
-        .quiz-option.selected { border-color: var(--primary); background: #ecfdf5; color: var(--primary-dark); }
-        .quiz-option.selected::after { content: '✓'; position: absolute; top: 5px; right: 8px; font-size: 14px; color: var(--primary); }
-        .custom-input-wrapper { margin-top: 15px; padding: 15px; background: #f8fafc; border-radius: 12px; border: 2px dashed var(--border); }
-        .custom-input-wrapper label { display: block; font-size: 0.9rem; color: var(--text-sec); margin-bottom: 8px; font-weight: 600; }
-        .custom-input-wrapper input { width: 100%; padding: 10px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px; }
-        .custom-input-wrapper input:focus { border-color: var(--primary); outline: none; }
-        .auth-input { width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 12px; font-size: 16px; margin: 1rem 0; text-align: center; }
-        .auth-input:focus { border-color: var(--primary); outline: none; }
-        .auth-btn { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; border: none; padding: 14px; width: 100%; border-radius: 12px; font-weight: 700; cursor: pointer; transition: transform 0.2s; margin-top: 10px; font-size: 16px; }
-        .auth-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(5,150,105,0.4); }
-        .btn-secondary { background: white; color: var(--text-sec); border: 2px solid var(--border); padding: 12px; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: all 0.2s; }
-        .btn-secondary:hover { border-color: var(--text-sec); color: var(--text); }
-        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
-        .btn-group .auth-btn { flex: 1; }
+        
+        .step-indicator { 
+            display: flex; 
+            justify-content: center; 
+            gap: 8px; 
+            margin-bottom: 24px; 
+        }
+        .step-dot { 
+            width: 10px; 
+            height: 10px; 
+            border-radius: 50%; 
+            background: var(--border); 
+            transition: all 0.3s; 
+        }
+        .step-dot.active { 
+            background: var(--primary); 
+            width: 30px; 
+            border-radius: 10px; 
+        }
+        .step-dot.completed { 
+            background: var(--success); 
+        }
+        
+        .onboarding-box h2 { 
+            margin: 0 0 0.5rem; 
+            color: var(--primary-dark); 
+            font-size: 1.8rem; 
+        }
+        .onboarding-box p { 
+            color: var(--text-sec); 
+            margin-bottom: 1.5rem; 
+        }
+        
+        .quiz-options { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 10px; 
+            margin: 1rem 0; 
+        }
+        .quiz-option { 
+            padding: 14px; 
+            border: 2px solid var(--border); 
+            background: white; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            transition: all 0.2s; 
+            text-align: center;
+            position: relative;
+        }
+        .quiz-option:hover { 
+            border-color: var(--primary); 
+            background: #ecfdf5; 
+            transform: translateY(-2px);
+        }
+        .quiz-option.selected { 
+            border-color: var(--primary); 
+            background: #ecfdf5; 
+            color: var(--primary-dark);
+        }
+        .quiz-option.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 5px;
+            right: 8px;
+            font-size: 14px;
+            color: var(--primary);
+        }
+        
+        .custom-input-wrapper {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 2px dashed var(--border);
+        }
+        .custom-input-wrapper label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-sec);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .custom-input-wrapper input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .custom-input-wrapper input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .auth-input { 
+            width: 100%; 
+            padding: 14px; 
+            border: 2px solid var(--border); 
+            border-radius: 12px; 
+            font-size: 16px; 
+            margin: 1rem 0; 
+            text-align: center; 
+        }
+        .auth-input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .auth-btn { 
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); 
+            color: white; 
+            border: none; 
+            padding: 14px; 
+            width: 100%; 
+            border-radius: 12px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: transform 0.2s; 
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        .auth-btn:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 20px rgba(5,150,105,0.4); 
+        }
+        .auth-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--text-sec);
+            border: 2px solid var(--border);
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+        .btn-secondary:hover {
+            border-color: var(--text-sec);
+            color: var(--text);
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .btn-group .auth-btn {
+            flex: 1;
+        }
 
-        #auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.9); backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; z-index: 9999; }
-        .auth-box { background: white; padding: 2.5rem; border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); max-width: 420px; width: 90%; text-align: center; animation: slideUp 0.5s ease; }
+        /* AUTH OVERLAY (fallback) */
+        #auth-overlay { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(15,23,42,0.9); 
+            backdrop-filter: blur(12px); 
+            display: none;
+            align-items: center; 
+            justify-content: center; 
+            z-index: 9999; 
+        }
+        .auth-box { 
+            background: white; 
+            padding: 2.5rem; 
+            border-radius: 24px; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25); 
+            max-width: 420px; 
+            width: 90%; 
+            text-align: center;
+            animation: slideUp 0.5s ease; 
+            position: relative; 
+            z-index: 1; 
+        }
 
-        header { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); padding: 1rem 2rem; border-bottom: 1px solid rgba(226,232,240,0.5); position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s; }
+        header { 
+            background: rgba(255,255,255,0.95); 
+            backdrop-filter: blur(12px); 
+            padding: 1rem 2rem; 
+            border-bottom: 1px solid rgba(226,232,240,0.5); 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .logo { 
+            font-size: 1.5rem; 
+            font-weight: 800; 
+            color: var(--primary-dark); 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            cursor: pointer; 
+            transition: transform 0.2s; 
+        }
         .logo:hover { transform: scale(1.05); }
-        .user-badge { background: linear-gradient(135deg, #ecfdf5, #d1fae5); color: var(--primary-dark); padding: 8px 14px; border-radius: 50px; font-weight: 600; font-size: 0.9rem; }
-        .logout-btn { background: transparent; border: 1px solid var(--border); color: var(--text-sec); padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
-        .logout-btn:hover { background: #fef2f2; color: var(--danger); }
+        .user-badge { 
+            background: linear-gradient(135deg, #ecfdf5, #d1fae5); 
+            color: var(--primary-dark); 
+            padding: 8px 14px; 
+            border-radius: 50px; 
+            font-weight: 600; 
+            font-size: 0.9rem; 
+        }
+        .logout-btn { 
+            background: transparent; 
+            border: 1px solid var(--border); 
+            color: var(--text-sec); 
+            padding: 8px 12px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+        }
+        .logout-btn:hover { 
+            background: #fef2f2; 
+            color: var(--danger); 
+        }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
-        .hero { text-align: center; margin-bottom: 2rem; animation: fadeIn 1s ease; padding: 3rem 2rem; background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%); border-radius: 30px; box-shadow: 0 20px 60px rgba(5,150,105,0.1); }
-        .hero h1 { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900; margin: 1rem 0; background: linear-gradient(135deg, #047857 0%, #10b981 50%, #059669 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1.2; }
-        .hero h1 span { display: block; font-size: 2.2rem; margin-top: 0.5rem; }
-        .hero p { font-size: 1.2rem; color: var(--text-sec); max-width: 800px; margin: 0 auto; line-height: 1.8; }
-        .hero-badges { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap; }
-        .hero-badge { background: linear-gradient(135deg, #ecfdf5, #d1fae5); padding: 12px 22px; border-radius: 50px; font-size: 0.95rem; font-weight: 600; color: var(--primary-dark); display: inline-flex; align-items: center; gap: 8px; cursor: default; box-shadow: none; }
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 2rem 1.5rem; 
+            position: relative; 
+            z-index: 1; 
+        }
         
-        .tabs { display: flex; gap: 0.8rem; margin-bottom: 2rem; background: white; padding: 0.8rem; border-radius: 60px; box-shadow: 0 4px 20px rgba(5,150,105,0.08); width: fit-content; margin-left: auto; margin-right: auto; }
-        .tab-btn { padding: 16px 28px; border: none; background: transparent; color: var(--text-sec); border-radius: 50px; cursor: pointer; font-weight: 700; font-size: 16px; transition: all 0.3s; }
-        .tab-btn:hover { background: #f0fdf4; color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(5,150,105,0.15); }
-        .tab-btn.active { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; box-shadow: 0 6px 15px rgba(5,150,105,0.35); transform: translateY(-2px); }
+        .hero { 
+            text-align: center; 
+            margin-bottom: 2rem; 
+            animation: fadeIn 1s ease;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(5,150,105,0.1);
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .hero h1 { 
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem; 
+            font-weight: 900; 
+            margin: 1rem 0;
+            background: linear-gradient(135deg, #047857 0%, #10b981 50%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+        .hero h1 span { 
+            display: block;
+            font-size: 2.2rem;
+            margin-top: 0.5rem;
+        }
+        .hero p { 
+            font-size: 1.2rem; 
+            color: var(--text-sec);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+        .hero-badges {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .hero-badge {
+            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+            padding: 12px 22px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: default;
+            box-shadow: none;
+        }
         
-        .search-box { display: none; background: var(--card); padding: 2rem; border-radius: var(--radius); box-shadow: var(--shadow); animation: slideUp 0.5s ease; }
+        .tabs { 
+            display: flex; 
+            gap: 0.8rem; 
+            margin-bottom: 2rem; 
+            background: white; 
+            padding: 0.8rem; 
+            border-radius: 60px; 
+            box-shadow: 0 4px 20px rgba(5,150,105,0.08); 
+            width: fit-content; 
+            margin-left: auto; 
+            margin-right: auto; 
+        }
+        .tab-btn { 
+            padding: 16px 28px; 
+            border: none; 
+            background: transparent; 
+            color: var(--text-sec); 
+            border-radius: 50px; 
+            cursor: pointer; 
+            font-weight: 700; 
+            font-size: 16px;
+            transition: all 0.3s; 
+        }
+        .tab-btn:hover { 
+            background: #f0fdf4; 
+            color: var(--primary); 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 12px rgba(5,150,105,0.15); 
+        }
+        .tab-btn.active { 
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); 
+            color: white; 
+            box-shadow: 0 6px 15px rgba(5,150,105,0.35); 
+            transform: translateY(-2px); 
+        }
+        
+        .search-box { 
+            display: none; 
+            background: var(--card); 
+            padding: 2rem; 
+            border-radius: var(--radius); 
+            box-shadow: var(--shadow); 
+            animation: slideUp 0.5s ease; 
+        }
         .search-box.active { display: block; }
-        .quick-filters { display: flex; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap; justify-content: center; }
-        .filter-btn { padding: 10px 18px; border: 2px solid var(--border); background: white; border-radius: 25px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
-        .filter-btn:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
-        input[type="text"], input[type="number"], input[type="time"], input[type="email"] { width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 14px; font-size: 16px; margin-bottom: 1rem; transition: border-color 0.3s; }
-        input:focus { border-color: var(--primary); outline: none; }
+        
+        .quick-filters { 
+            display: flex; 
+            gap: 10px; 
+            margin-bottom: 1rem; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+        }
+        .filter-btn { 
+            padding: 10px 18px; 
+            border: 2px solid var(--border); 
+            background: white; 
+            border-radius: 25px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            transition: all 0.2s; 
+        }
+        .filter-btn:hover { 
+            border-color: var(--primary); 
+            color: var(--primary); 
+            transform: translateY(-2px); 
+        }
+        
+        input[type="text"], input[type="number"], input[type="time"], input[type="email"] { 
+            width: 100%; 
+            padding: 14px; 
+            border: 2px solid var(--border); 
+            border-radius: 14px; 
+            font-size: 16px; 
+            margin-bottom: 1rem; 
+            transition: border-color 0.3s; 
+        }
+        input:focus { 
+            border-color: var(--primary); 
+            outline: none; 
+        }
+        
         .autocomplete-container { position: relative; }
-        .autocomplete-list { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid var(--border); border-radius: 12px; margin-top: 5px; max-height: 300px; overflow-y: auto; z-index: 1000; box-shadow: var(--shadow); display: none; }
-        .autocomplete-item { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid var(--border); transition: background 0.2s; }
+        .autocomplete-list { 
+            position: absolute; 
+            top: 100%; 
+            left: 0; 
+            right: 0; 
+            background: white; 
+            border: 1px solid var(--border); 
+            border-radius: 12px; 
+            margin-top: 5px; 
+            max-height: 300px; 
+            overflow-y: auto; 
+            z-index: 1000; 
+            box-shadow: var(--shadow); 
+            display: none; 
+        }
+        .autocomplete-item { 
+            padding: 12px 16px; 
+            cursor: pointer; 
+            border-bottom: 1px solid var(--border); 
+            transition: background 0.2s; 
+        }
         .autocomplete-item:hover { background: #f0fdf4; }
         .autocomplete-item:last-child { border-bottom: none; }
-        .btn-primary { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; border: none; padding: 16px; border-radius: 14px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 1rem; transition: transform 0.2s; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(5,150,105,0.4); }
-        .btn-secondary-main { background: white; color: var(--primary); border: 2px solid var(--primary); padding: 12px; border-radius: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 1rem; }
-        .btn-secondary-main:hover { background: #f0fdf4; transform: translateY(-2px); }
+        
+        .btn-primary { 
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); 
+            color: white; 
+            border: none; 
+            padding: 16px; 
+            border-radius: 14px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            width: 100%; 
+            margin-top: 1rem; 
+            transition: transform 0.2s; 
+        }
+        .btn-primary:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 20px rgba(5,150,105,0.4); 
+        }
+        
+        .btn-secondary-main { 
+            background: white; 
+            color: var(--primary); 
+            border: 2px solid var(--primary); 
+            padding: 12px; 
+            border-radius: 14px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            margin-top: 1rem; 
+        }
+        .btn-secondary-main:hover { 
+            background: #f0fdf4; 
+            transform: translateY(-2px); 
+        }
 
         #results-area { margin-top: 2rem; }
-        .result-card { background: var(--card); border-radius: 20px; padding: 1.5rem; margin-bottom: 1.2rem; box-shadow: var(--shadow); border-left: 5px solid var(--primary); animation: slideUp 0.5s ease; transition: transform 0.2s; }
-        .result-card:hover { transform: translateY(-5px); box-shadow: 0 15px 50px rgba(5,150,105,0.15); }
-        .result-card h3 { margin: 0 0 0.5rem; color: var(--primary-dark); display: flex; align-items: center; gap: 8px; }
+        .result-card { 
+            background: var(--card); 
+            border-radius: 20px; 
+            padding: 1.5rem; 
+            margin-bottom: 1.2rem; 
+            box-shadow: var(--shadow); 
+            border-left: 5px solid var(--primary); 
+            animation: slideUp 0.5s ease;
+            transition: transform 0.2s; 
+        }
+        .result-card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 15px 50px rgba(5,150,105,0.15); 
+        }
+        .result-card h3 { 
+            margin: 0 0 0.5rem; 
+            color: var(--primary-dark); 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+        }
         .result-card .icon { font-size: 1.5rem; }
-        .tag { display: inline-block; background: #ecfdf5; color: var(--primary-dark); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; margin: 4px; }
-        .compatibility { margin-top: 1rem; padding: 1rem; background: #f8fafc; border-radius: 12px; }
+        .tag { 
+            display: inline-block; 
+            background: #ecfdf5; 
+            color: var(--primary-dark); 
+            padding: 4px 12px; 
+            border-radius: 20px; 
+            font-size: 0.8rem; 
+            margin: 4px; 
+        }
+        .compatibility { 
+            margin-top: 1rem; 
+            padding: 1rem; 
+            background: #f8fafc; 
+            border-radius: 12px; 
+        }
         .compatibility .good { color: var(--success); }
         .compatibility .bad { color: var(--danger); }
-        .buy-buttons { display: flex; gap: 10px; margin-top: 1rem; flex-wrap: wrap; }
-        .buy-btn { flex: 1; min-width: 120px; padding: 10px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: transform 0.2s; text-decoration: none; text-align: center; color: white; }
-        .buy-btn.ozon { background: #005bff; } .buy-btn.wb { background: #cb11ab; } .buy-btn.iherb { background: #00a651; }
+        .buy-buttons { 
+            display: flex; 
+            gap: 10px; 
+            margin-top: 1rem; 
+            flex-wrap: wrap; 
+        }
+        .buy-btn { 
+            flex: 1; 
+            min-width: 120px; 
+            padding: 10px; 
+            border: none; 
+            border-radius: 10px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: transform 0.2s; 
+            text-decoration: none; 
+            text-align: center; 
+            color: white; 
+        }
+        .buy-btn.ozon { background: #005bff; }
+        .buy-btn.wb { background: #cb11ab; }
+        .buy-btn.iherb { background: #00a651; }
         .buy-btn:hover { transform: scale(1.05); }
-        .details-btn { background: linear-gradient(135deg, #60a5fa, #3b82f6); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 10px; }
-        .details-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(59,130,246,0.4); }
-        .details-content { display: none; margin-top: 1rem; padding: 1rem; background: linear-gradient(135deg, #eff6ff, #dbeafe); border-radius: 12px; border-left: 4px solid #3b82f6; }
-        .details-content.show { display: block; animation: slideDown 0.3s ease; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .details-btn { 
+            background: linear-gradient(135deg, #60a5fa, #3b82f6); 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 10px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            margin-top: 10px; 
+        }
+        .details-btn:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 12px rgba(59,130,246,0.4); 
+        }
+        
+        .details-content { 
+            display: none; 
+            margin-top: 1rem; 
+            padding: 1rem; 
+            background: linear-gradient(135deg, #eff6ff, #dbeafe); 
+            border-radius: 12px; 
+            border-left: 4px solid #3b82f6; 
+        }
+        .details-content.show { 
+            display: block; 
+            animation: slideDown 0.3s ease; 
+        }
+        @keyframes slideDown { 
+            from { opacity: 0; transform: translateY(-10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
         .load-more { text-align: center; margin: 2rem 0; }
-        .load-more-btn { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; border: none; padding: 14px 40px; border-radius: 25px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 1rem; }
-        .load-more-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(5,150,105,0.4); }
+        .load-more-btn { 
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); 
+            color: white; 
+            border: none; 
+            padding: 14px 40px; 
+            border-radius: 25px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            font-size: 1rem; 
+        }
+        .load-more-btn:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 20px rgba(5,150,105,0.4); 
+        }
         
-        .popular-combos { background: linear-gradient(135deg, #fef3c7, #fde68a); border-radius: 20px; padding: 2rem; margin: 3rem 0; box-shadow: 0 10px 40px rgba(245,158,11,0.2); }
-        .popular-combos h3 { font-family: 'Playfair Display', serif; color: #92400e; margin: 0 0 1.5rem; font-size: 1.8rem; }
-        .combo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
-        .combo-card { background: white; padding: 1.5rem; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); cursor: pointer; transition: all 0.3s; }
-        .combo-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
-        .combo-card h4 { color: var(--primary-dark); margin: 0 0 0.5rem; }
-        .combo-card p { color: var(--text-sec); font-size: 0.9rem; margin: 0; }
+        .popular-combos {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 3rem 0;
+            box-shadow: 0 10px 40px rgba(245,158,11,0.2);
+        }
+        .popular-combos h3 {
+            font-family: 'Playfair Display', serif;
+            color: #92400e;
+            margin: 0 0 1.5rem;
+            font-size: 1.8rem;
+        }
+        .combo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        .combo-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .combo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        .combo-card h4 {
+            color: var(--primary-dark);
+            margin: 0 0 0.5rem;
+        }
+        .combo-card p {
+            color: var(--text-sec);
+            font-size: 0.9rem;
+            margin: 0;
+        }
         
-        #my-stack-section { display: none; margin-top: 3rem; border-top: none; padding-top: 3rem; }
+        #my-stack-section { 
+            display: none; 
+            margin-top: 3rem; 
+            border-top: none; 
+            padding-top: 3rem; 
+        }
         #my-stack-section.visible { display: block; }
-        .main-grid { display: grid; grid-template-columns: 1fr 350px; gap: 2rem; }
-        @media (max-width: 968px) { .main-grid { grid-template-columns: 1fr; } }
-        .schedule-box { background: var(--card); border-radius: 20px; padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 2rem; }
-        .time-slot { margin-bottom: 1rem; padding: 1rem; background: linear-gradient(135deg, #f8fafc, #f1f5f9); border-radius: 14px; }
-        .time-label { font-weight: 800; color: var(--primary-dark); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px; }
-        .pill-tag { display: inline-flex; align-items: center; gap: 6px; background: white; padding: 8px 12px; border-radius: 10px; margin: 4px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.2s; }
-        .pill-tag.taken { background: linear-gradient(135deg, #dcfce7, #bbf7d0); border: 2px solid var(--primary); color: var(--primary-dark); }
+        
+        .main-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 350px; 
+            gap: 2rem; 
+        }
+        @media (max-width: 968px) { 
+            .main-grid { grid-template-columns: 1fr; } 
+        }
+        
+        .schedule-box { 
+            background: var(--card); 
+            border-radius: 20px; 
+            padding: 1.5rem; 
+            box-shadow: var(--shadow); 
+            margin-bottom: 2rem; 
+        }
+        .time-slot { 
+            margin-bottom: 1rem; 
+            padding: 1rem; 
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9); 
+            border-radius: 14px; 
+        }
+        .time-label { 
+            font-weight: 800; 
+            color: var(--primary-dark); 
+            margin-bottom: 0.5rem; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+        }
+        .pill-tag { 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 6px; 
+            background: white; 
+            padding: 8px 12px; 
+            border-radius: 10px; 
+            margin: 4px; 
+            cursor: pointer; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05); 
+            transition: all 0.2s; 
+        }
+        .pill-tag.taken { 
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0); 
+            border: 2px solid var(--primary); 
+            color: var(--primary-dark); 
+        }
         .pill-tag:hover { transform: scale(1.05); }
-        .progress-container { background: white; border-radius: 20px; padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 2rem; }
-        .progress-bar { background: #e2e8f0; border-radius: 10px; height: 20px; overflow: hidden; margin: 1rem 0; }
-        .progress-fill { background: linear-gradient(90deg, var(--primary-light), var(--primary-dark)); height: 100%; border-radius: 10px; transition: width 0.5s ease; }
-        .progress-text { text-align: center; font-weight: 600; color: var(--primary-dark); }
-        .calendar-widget { background: white; border-radius: 20px; padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 2rem; }
-        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
-        .calendar-day-header { font-weight: 600; color: var(--text-sec); padding: 5px; font-size: 0.8rem; }
-        .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; position: relative; }
+        
+        .progress-container { 
+            background: white; 
+            border-radius: 20px; 
+            padding: 1.5rem; 
+            box-shadow: var(--shadow); 
+            margin-bottom: 2rem; 
+        }
+        .progress-bar { 
+            background: #e2e8f0; 
+            border-radius: 10px; 
+            height: 20px; 
+            overflow: hidden; 
+            margin: 1rem 0; 
+        }
+        .progress-fill { 
+            background: linear-gradient(90deg, var(--primary-light), var(--primary-dark)); 
+            height: 100%; 
+            border-radius: 10px; 
+            transition: width 0.5s ease; 
+        }
+        .progress-text { 
+            text-align: center; 
+            font-weight: 600; 
+            color: var(--primary-dark); 
+        }
+        
+        .calendar-widget { 
+            background: white; 
+            border-radius: 20px; 
+            padding: 1.5rem; 
+            box-shadow: var(--shadow); 
+            margin-bottom: 2rem; 
+        }
+        .calendar-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 1rem; 
+        }
+        .calendar-grid { 
+            display: grid; 
+            grid-template-columns: repeat(7, 1fr); 
+            gap: 5px; 
+            text-align: center; 
+        }
+        .calendar-day-header { 
+            font-weight: 600; 
+            color: var(--text-sec); 
+            padding: 5px; 
+            font-size: 0.8rem; 
+        }
+        .calendar-day { 
+            aspect-ratio: 1; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-radius: 50%; 
+            font-size: 0.85rem; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            position: relative; 
+        }
         .calendar-day:hover { background: #f1f5f9; }
-        .calendar-day.today { border: 2px solid var(--primary); font-weight: 700; }
-        .calendar-day.full { background: var(--success); color: white; }
-        .calendar-day.partial { background: var(--accent); color: white; }
-        .calendar-day.empty { background: transparent; cursor: default; }
-        .calendar-tooltip { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: var(--text); color: white; padding: 8px 12px; border-radius: 8px; font-size: 0.75rem; white-space: nowrap; z-index: 100; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2); margin-bottom: 5px; }
-        .calendar-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--text); }
+        .calendar-day.today { 
+            border: 2px solid var(--primary); 
+            font-weight: 700; 
+        }
+        .calendar-day.full { 
+            background: var(--success); 
+            color: white; 
+        }
+        .calendar-day.partial { 
+            background: var(--accent); 
+            color: white; 
+        }
+        .calendar-day.empty { 
+            background: transparent; 
+            cursor: default; 
+        }
+        
+        .calendar-tooltip {
+            position: absolute; 
+            bottom: 100%; 
+            left: 50%; 
+            transform: translateX(-50%);
+            background: var(--text); 
+            color: white; 
+            padding: 8px 12px; 
+            border-radius: 8px;
+            font-size: 0.75rem; 
+            white-space: nowrap; 
+            z-index: 100; 
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); 
+            margin-bottom: 5px;
+        }
+        .calendar-tooltip::after {
+            content: ''; 
+            position: absolute; 
+            top: 100%; 
+            left: 50%;
+            transform: translateX(-50%); 
+            border: 5px solid transparent;
+            border-top-color: var(--text);
+        }
         .calendar-day:hover .calendar-tooltip { display: block; }
-        .achievements { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .achievement { background: linear-gradient(135deg, #fffbeb, #fff7ed); border: 2px solid #fed7aa; border-radius: 14px; padding: 1rem; text-align: center; opacity: 0.5; transition: all 0.3s; }
-        .achievement.unlocked { opacity: 1; border-color: var(--accent); box-shadow: 0 4px 12px rgba(245,158,11,0.3); animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-        .achievement-icon { font-size: 2rem; margin-bottom: 0.5rem; }
-        .reminder-settings { background: white; border-radius: 20px; padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 2rem; }
-        .reminder-toggle { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; padding: 1rem; background: #f8fafc; border-radius: 12px; }
-        .toggle-switch { position: relative; width: 50px; height: 26px; }
-        .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: 0.3s; border-radius: 26px; }
-        .toggle-slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: 0.3s; border-radius: 50%; }
+        
+        .achievements { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+            gap: 1rem; 
+            margin-top: 1rem; 
+        }
+        .achievement { 
+            background: linear-gradient(135deg, #fffbeb, #fff7ed); 
+            border: 2px solid #fed7aa; 
+            border-radius: 14px; 
+            padding: 1rem; 
+            text-align: center;
+            opacity: 0.5; 
+            transition: all 0.3s; 
+        }
+        .achievement.unlocked { 
+            opacity: 1; 
+            border-color: var(--accent); 
+            box-shadow: 0 4px 12px rgba(245,158,11,0.3); 
+            animation: pulse 2s infinite; 
+        }
+        @keyframes pulse { 
+            0%, 100% { transform: scale(1); } 
+            50% { transform: scale(1.05); } 
+        }
+        .achievement-icon { 
+            font-size: 2rem; 
+            margin-bottom: 0.5rem; 
+        }
+        
+        .reminder-settings { 
+            background: white; 
+            border-radius: 20px; 
+            padding: 1.5rem; 
+            box-shadow: var(--shadow); 
+            margin-bottom: 2rem; 
+        }
+        .reminder-toggle { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            margin-bottom: 1rem; 
+            padding: 1rem; 
+            background: #f8fafc; 
+            border-radius: 12px; 
+        }
+        .toggle-switch { 
+            position: relative; 
+            width: 50px; 
+            height: 26px; 
+        }
+        .toggle-switch input { 
+            opacity: 0; 
+            width: 0; 
+            height: 0; 
+        }
+        .toggle-slider { 
+            position: absolute; 
+            cursor: pointer; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
+            background-color: #ccc; 
+            transition: 0.3s; 
+            border-radius: 26px; 
+        }
+        .toggle-slider:before { 
+            position: absolute; 
+            content: ""; 
+            height: 20px; 
+            width: 20px; 
+            left: 3px; 
+            bottom: 3px; 
+            background-color: white; 
+            transition: 0.3s; 
+            border-radius: 50%; 
+        }
         input:checked + .toggle-slider { background-color: var(--primary); }
         input:checked + .toggle-slider:before { transform: translateX(24px); }
-        .tracker-card { background: linear-gradient(135deg, #fffbeb, #fff7ed); border: 1px solid #fed7aa; border-radius: 20px; padding: 1.5rem; margin-top: 2rem; box-shadow: var(--shadow); }
-        .mood-selector { display: flex; gap: 15px; margin: 15px 0; }
-        .mood-btn { font-size: 2rem; background: white; border: 2px solid var(--border); border-radius: 50%; width: 50px; height: 50px; cursor: pointer; transition: all 0.2s; }
-        .mood-btn.selected { background: var(--accent); border-color: var(--accent); transform: scale(1.2); box-shadow: 0 4px 12px rgba(245,158,11,0.4); }
-        .mood-chart { margin-top: 1rem; padding: 1rem; background: white; border-radius: 12px; min-height: 100px; }
-        .mood-day { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; margin: 2px; border-radius: 50%; background: #e2e8f0; font-size: 0.8rem; }
-        .mood-day.bad { background: #fecaca; } .mood-day.ok { background: #fde68a; } .mood-day.good { background: #86efac; } .mood-day.great { background: #22c55e; color: white; }
-        #chat-toggle { position: fixed; bottom: 24px; right: 24px; background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; cursor: pointer; z-index: 999; box-shadow: 0 8px 20px rgba(5,150,105,0.4); transition: transform 0.2s; }
+        
+        .tracker-card { 
+            background: linear-gradient(135deg, #fffbeb, #fff7ed); 
+            border: 1px solid #fed7aa; 
+            border-radius: 20px; 
+            padding: 1.5rem; 
+            margin-top: 2rem; 
+            box-shadow: var(--shadow); 
+        }
+        .mood-selector { 
+            display: flex; 
+            gap: 15px; 
+            margin: 15px 0; 
+        }
+        .mood-btn { 
+            font-size: 2rem; 
+            background: white; 
+            border: 2px solid var(--border); 
+            border-radius: 50%; 
+            width: 50px; 
+            height: 50px; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+        }
+        .mood-btn.selected { 
+            background: var(--accent); 
+            border-color: var(--accent); 
+            transform: scale(1.2); 
+            box-shadow: 0 4px 12px rgba(245,158,11,0.4); 
+        }
+        .mood-chart { 
+            margin-top: 1rem; 
+            padding: 1rem; 
+            background: white; 
+            border-radius: 12px; 
+            min-height: 100px; 
+        }
+        .mood-day { 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            width: 30px; 
+            height: 30px; 
+            margin: 2px; 
+            border-radius: 50%; 
+            background: #e2e8f0; 
+            font-size: 0.8rem; 
+        }
+        .mood-day.bad { background: #fecaca; }
+        .mood-day.ok { background: #fde68a; }
+        .mood-day.good { background: #86efac; }
+        .mood-day.great { background: #22c55e; color: white; }
+        
+        #chat-toggle { 
+            position: fixed; 
+            bottom: 24px; 
+            right: 24px; 
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); 
+            color: white; 
+            width: 64px; 
+            height: 64px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 1.8rem; 
+            cursor: pointer; 
+            z-index: 999; 
+            box-shadow: 0 8px 20px rgba(5,150,105,0.4); 
+            transition: transform 0.2s; 
+        }
         #chat-toggle:hover { transform: scale(1.1); }
-        #chat-modal { position: fixed; bottom: 100px; right: 24px; width: 360px; height: 480px; background: var(--card); border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); display: none; flex-direction: column; overflow: hidden; z-index: 999; animation: slideUp 0.3s ease; }
+        #chat-modal { 
+            position: fixed; 
+            bottom: 100px; 
+            right: 24px; 
+            width: 360px; 
+            height: 480px; 
+            background: var(--card); 
+            border-radius: 24px; 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2); 
+            display: none; 
+            flex-direction: column; 
+            overflow: hidden; 
+            z-index: 999; 
+            animation: slideUp 0.3s ease; 
+        }
         #chat-modal.open { display: flex; }
-        .chat-header { background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); color: white; padding: 16px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+        .chat-header { 
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-dark)); 
+            color: white; 
+            padding: 16px; 
+            font-weight: 700; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
         .chat-close { cursor: pointer; font-size: 1.2rem; }
-        #chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #f8fafc; }
-        .msg { max-width: 85%; padding: 12px 16px; border-radius: 18px; font-size: 0.9rem; animation: fadeIn 0.3s ease; }
-        .msg.ai { background: white; align-self: flex-start; border: 1px solid var(--border); }
-        .msg.user { background: linear-gradient(135deg, #dcfce7, #bbf7d0); align-self: flex-end; }
-        .chat-input { padding: 12px; border-top: 1px solid var(--border); display: flex; gap: 8px; }
-        .chat-input input { flex: 1; border: 1px solid var(--border); border-radius: 50px; padding: 10px 16px; margin: 0; }
-        .chat-input button { background: var(--primary); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; transition: transform 0.2s; }
+        #chat-messages { 
+            flex: 1; 
+            overflow-y: auto; 
+            padding: 16px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+            background: #f8fafc; 
+        }
+        .msg { 
+            max-width: 85%; 
+            padding: 12px 16px; 
+            border-radius: 18px; 
+            font-size: 0.9rem; 
+            animation: fadeIn 0.3s ease; 
+        }
+        .msg.ai { 
+            background: white; 
+            align-self: flex-start; 
+            border: 1px solid var(--border); 
+        }
+        .msg.user { 
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0); 
+            align-self: flex-end; 
+        }
+        .chat-input { 
+            padding: 12px; 
+            border-top: 1px solid var(--border); 
+            display: flex; 
+            gap: 8px; 
+        }
+        .chat-input input { 
+            flex: 1; 
+            border: 1px solid var(--border); 
+            border-radius: 50px; 
+            padding: 10px 16px; 
+            margin: 0; 
+        }
+        .chat-input button { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            border-radius: 50%; 
+            width: 40px; 
+            height: 40px; 
+            cursor: pointer; 
+            transition: transform 0.2s; 
+        }
         .chat-input button:hover { transform: scale(1.1); }
-        .disclaimer { margin-top: 3rem; padding: 1.5rem; background: white; border-radius: 16px; font-size: 0.8rem; color: var(--text-sec); text-align: center; box-shadow: var(--shadow); }
-        .notification-toast { position: fixed; bottom: 100px; left: 24px; background: white; padding: 1rem 1.5rem; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); display: none; align-items: center; gap: 12px; z-index: 998; animation: slideIn 0.5s ease; max-width: 320px; }
-        @keyframes slideIn { from { transform: translateX(-100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        .disclaimer { 
+            margin-top: 3rem; 
+            padding: 1.5rem; 
+            background: white; 
+            border-radius: 16px; 
+            font-size: 0.8rem; 
+            color: var(--text-sec); 
+            text-align: center; 
+            box-shadow: var(--shadow); 
+        }
+
+        .notification-toast {
+            position: fixed;
+            bottom: 100px;
+            left: 24px;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 998;
+            animation: slideIn 0.5s ease;
+            max-width: 320px;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
         .notification-toast.show { display: flex; }
         .notification-icon { font-size: 1.5rem; }
-        .notification-text { font-size: 0.9rem; color: var(--text); line-height: 1.4; }
-        .notification-text strong { display: block; color: var(--primary-dark); margin-bottom: 2px; }
+        .notification-text { 
+            font-size: 0.9rem; 
+            color: var(--text); 
+            line-height: 1.4; 
+        }
+        .notification-text strong { 
+            display: block; 
+            color: var(--primary-dark); 
+            margin-bottom: 2px; 
+        }
 
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2rem; } .hero h1 span { font-size: 1.5rem; }
+            .hero h1 { font-size: 2rem; }
+            .hero h1 span { font-size: 1.5rem; }
             #chat-modal { width: calc(100% - 48px); right: 24px; }
-            .buy-buttons { flex-direction: column; } .buy-btn { width: 100%; }
-            .quick-filters { flex-direction: column; } .filter-btn { width: 100%; }
+            .buy-buttons { flex-direction: column; }
+            .buy-btn { width: 100%; }
+            .quick-filters { flex-direction: column; }
+            .filter-btn { width: 100%; }
             .notification-toast { left: 24px; right: 24px; bottom: 100px; max-width: none; }
             .tabs { width: 100%; flex-wrap: wrap; justify-content: center; }
             .tab-btn { flex: 1 1 auto; padding: 12px 16px; font-size: 14px; }
@@ -201,6 +1093,7 @@
 </head>
 <body>
 
+<!-- ONBOARDING QUIZ -->
 <div id="onboarding-overlay">
     <div class="onboarding-box">
         <div class="step-indicator">
@@ -208,6 +1101,8 @@
             <div class="step-dot" id="dot-2"></div>
             <div class="step-dot" id="dot-3"></div>
         </div>
+        
+        <!-- Шаг 1: Имя -->
         <div class="onboarding-step active" id="step-1">
             <div style="font-size:3rem; margin-bottom:1rem;">🌿</div>
             <h2>Добро пожаловать в VITA</h2>
@@ -216,10 +1111,13 @@
             <button class="auth-btn" onclick="nextStep(1)">Продолжить →</button>
             <button class="btn-secondary" onclick="skipOnboarding()">Пропустить</button>
         </div>
+
+        <!-- Шаг 2: Выбор целей -->
         <div class="onboarding-step" id="step-2">
             <div style="font-size:3rem; margin-bottom:1rem;">🎯</div>
             <h2>Что для вас важно?</h2>
             <p>Выберите ваши цели (можно несколько)</p>
+            
             <div class="quiz-options">
                 <div class="quiz-option" onclick="toggleGoal(this, 'сон')">💤 Лучше спать</div>
                 <div class="quiz-option" onclick="toggleGoal(this, 'энергия')">⚡ Больше энергии</div>
@@ -228,21 +1126,27 @@
                 <div class="quiz-option" onclick="toggleGoal(this, 'мозг')">🧠 Фокус и память</div>
                 <div class="quiz-option" onclick="toggleGoal(this, 'спорт')">💪 Спорт и мышцы</div>
             </div>
+            
             <div class="custom-input-wrapper">
                 <label>📝 Другое (напишите своё):</label>
                 <input type="text" id="ob-custom-goal" placeholder="Например: улучшить кожу, похудеть...">
             </div>
+            
             <div class="btn-group">
                 <button class="btn-secondary" onclick="prevStep(2)">← Назад</button>
                 <button class="auth-btn" onclick="nextStep(2)">Далее →</button>
             </div>
         </div>
+
+        <!-- Шаг 3: Параметры -->
         <div class="onboarding-step" id="step-3">
             <div style="font-size:3rem; margin-bottom:1rem;">📊</div>
             <h2>Параметры для точности</h2>
             <p>Это поможет рассчитать дозировки (необязательно)</p>
+            
             <input type="number" id="ob-age" class="auth-input" placeholder="Возраст (например, 30)">
             <input type="number" id="ob-weight" class="auth-input" placeholder="Вес в кг (например, 70)">
+            
             <div class="btn-group">
                 <button class="btn-secondary" onclick="prevStep(3)">← Назад</button>
                 <button class="auth-btn" onclick="finishOnboarding()">✨ Создать мой план</button>
@@ -251,6 +1155,7 @@
     </div>
 </div>
 
+<!-- AUTH OVERLAY (fallback) -->
 <div id="auth-overlay">
     <div class="auth-box">
         <div style="font-size:3rem; margin-bottom:1rem;">🌿</div>
@@ -273,6 +1178,7 @@
     <div class="hero">
         <h1>Экспертный подход к<span>вашему здоровью</span></h1>
         <p>Анализируем научные исследования, чтобы вы получали только работающие добавки. Персональные рекомендации с гарантией эффективности.</p>
+        
         <div class="hero-badges">
             <div class="hero-badge">✅ Научный подход</div>
             <div class="hero-badge">✅ Доказанная эффективность</div>
@@ -294,6 +1200,7 @@
             <button class="filter-btn" onclick="quickSearch('спорт')">💪 Для спорта</button>
             <button class="filter-btn" onclick="quickSearch('иммунитет')">🛡️ Иммунитет</button>
         </div>
+        
         <div class="autocomplete-container">
             <input type="text" id="input-name" placeholder="Название добавки (Магний, Омега-3...)" oninput="handleAutocomplete(this.value)">
             <div id="autocomplete-list" class="autocomplete-list"></div>
@@ -307,13 +1214,10 @@
     </div>
 
     <div id="search-personal" class="search-box">
-        <div id="quiz-recommendations" style="display:none;"></div>
-        <div id="manual-plan-form">
-            <input type="number" id="p-age" placeholder="Возраст">
-            <input type="number" id="p-weight" placeholder="Вес (кг)">
-            <input type="text" id="p-goal" placeholder="Цель (хочу высыпаться)">
-            <button class="btn-primary" onclick="generatePersonalPlan()">Составить план</button>
-        </div>
+        <input type="number" id="p-age" placeholder="Возраст">
+        <input type="number" id="p-weight" placeholder="Вес (кг)">
+        <input type="text" id="p-goal" placeholder="Цель (хочу высыпаться)">
+        <button class="btn-primary" onclick="generatePersonalPlan()">Составить план</button>
     </div>
 
     <div id="results-area"></div>
@@ -321,10 +1225,26 @@
     <div class="popular-combos" id="popular-combos" style="display:none;">
         <h3>🔥 Популярные комбинации</h3>
         <div class="combo-grid">
-            <div class="combo-card" onclick="addCombo(['6', '7', '30'])"><h4>💪 Энергия + Иммунитет</h4><p>D3 + Омега-3 + K2</p><small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 15%</small></div>
-            <div class="combo-card" onclick="addCombo(['1', '11', '26'])"><h4>😴 Качественный сон</h4><p>Магний + Мелатонин + GABA</p><small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 10%</small></div>
-            <div class="combo-card" onclick="addCombo(['4', '7', '17'])"><h4>🧠 Фокус и память</h4><p>Магний L-Треонат + Омега-3 + L-Тирозин</p><small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 12%</small></div>
-            <div class="combo-card" onclick="addCombo(['9', '29', '3'])"><h4>🏋️ Спорт и мышцы</h4><p>Креатин + Протеин + Магний Малат</p><small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 18%</small></div>
+            <div class="combo-card" onclick="addCombo(['6', '7', '30'])">
+                <h4>💪 Энергия + Иммунитет</h4>
+                <p>D3 + Омега-3 + K2</p>
+                <small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 15%</small>
+            </div>
+            <div class="combo-card" onclick="addCombo(['1', '11', '26'])">
+                <h4>😴 Качественный сон</h4>
+                <p>Магний + Мелатонин + GABA</p>
+                <small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 10%</small>
+            </div>
+            <div class="combo-card" onclick="addCombo(['4', '7', '17'])">
+                <h4>🧠 Фокус и память</h4>
+                <p>Магний L-Треонат + Омега-3 + L-Тирозин</p>
+                <small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 12%</small>
+            </div>
+            <div class="combo-card" onclick="addCombo(['9', '29', '3'])">
+                <h4>🏋️ Спорт и мышцы</h4>
+                <p>Креатин + Протеин + Магний Малат</p>
+                <small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 18%</small>
+            </div>
         </div>
     </div>
 
@@ -332,21 +1252,45 @@
         <div class="main-grid">
             <div>
                 <h2>📅 Ваше расписание</h2>
+                
                 <div class="progress-container">
                     <h3>🎯 Прогресс сегодня</h3>
-                    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width: 0%"></div></div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                    </div>
                     <div class="progress-text" id="progress-text">0 из 0 добавок принято</div>
                 </div>
-                <div class="schedule-box" id="schedule-container"><p style="text-align:center; color:#888;">Добавьте добавки из поиска</p></div>
+
+                <div class="schedule-box" id="schedule-container">
+                    <p style="text-align:center; color:#888;">Добавьте добавки из поиска</p>
+                </div>
+
                 <div class="progress-container">
                     <h3>🏆 Достижения</h3>
                     <div class="achievements" id="achievements-container">
-                        <div class="achievement" id="ach-1"><div class="achievement-icon">🌱</div><div>Первый шаг</div><small>Добавить 1 добавку</small></div>
-                        <div class="achievement" id="ach-2"><div class="achievement-icon">💪</div><div>Активный</div><small>5 добавок в плане</small></div>
-                        <div class="achievement" id="ach-3"><div class="achievement-icon">🔥</div><div>Серия 3 дня</div><small>Принимать 3 дня подряд</small></div>
-                        <div class="achievement" id="ach-4"><div class="achievement-icon">⭐</div><div>Мастер</div><small>10 дней подряд</small></div>
+                        <div class="achievement" id="ach-1">
+                            <div class="achievement-icon">🌱</div>
+                            <div>Первый шаг</div>
+                            <small>Добавить 1 добавку</small>
+                        </div>
+                        <div class="achievement" id="ach-2">
+                            <div class="achievement-icon">💪</div>
+                            <div>Активный</div>
+                            <small>5 добавок в плане</small>
+                        </div>
+                        <div class="achievement" id="ach-3">
+                            <div class="achievement-icon">🔥</div>
+                            <div>Серия 3 дня</div>
+                            <small>Принимать 3 дня подряд</small>
+                        </div>
+                        <div class="achievement" id="ach-4">
+                            <div class="achievement-icon">⭐</div>
+                            <div>Мастер</div>
+                            <small>10 дней подряд</small>
+                        </div>
                     </div>
                 </div>
+
                 <div class="tracker-card">
                     <h3>😊 Самочувствие сегодня</h3>
                     <div class="mood-selector">
@@ -357,47 +1301,86 @@
                     </div>
                     <textarea id="wellness-note" placeholder="Заметки..." rows="2" style="width:100%; margin-top:10px; padding: 10px; border-radius: 8px; border: 1px solid var(--border);"></textarea>
                     <button class="btn-primary" onclick="saveWellness()">Сохранить</button>
-                    <div class="mood-chart" id="mood-chart"><h4>📊 График за неделю</h4><div id="mood-days"></div></div>
+                    
+                    <div class="mood-chart" id="mood-chart">
+                        <h4>📊 График за неделю</h4>
+                        <div id="mood-days"></div>
+                    </div>
                 </div>
             </div>
+
             <div>
                 <div class="calendar-widget">
-                    <div class="calendar-header"><h3 style="margin:0;">📅 Календарь</h3><span id="current-month" style="font-weight:600; color:var(--primary);"></span></div>
+                    <div class="calendar-header">
+                        <h3 style="margin:0;">📅 Календарь</h3>
+                        <span id="current-month" style="font-weight:600; color:var(--primary);"></span>
+                    </div>
                     <div class="calendar-grid" id="calendar-grid"></div>
                 </div>
+
                 <div class="reminder-settings">
                     <h3>🔔 Напоминания</h3>
+                    
                     <div class="reminder-toggle">
-                        <div><div style="font-weight:600;">Браузерные уведомления</div><small style="color:var(--text-sec);">Push в браузере</small></div>
-                        <label class="toggle-switch"><input type="checkbox" id="browser-reminder" onchange="toggleReminder('browser', this.checked)"><span class="toggle-slider"></span></label>
+                        <div>
+                            <div style="font-weight:600;">Браузерные уведомления</div>
+                            <small style="color:var(--text-sec);">Push-уведомления в браузере</small>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="browser-reminder" onchange="toggleReminder('browser', this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
                     </div>
+
                     <div class="reminder-toggle">
-                        <div><div style="font-weight:600;">Telegram</div><small style="color:var(--text-sec);">@zhivi_legko_bot</small></div>
-                        <label class="toggle-switch"><input type="checkbox" id="telegram-reminder" onchange="toggleReminder('telegram', this.checked)"><span class="toggle-slider"></span></label>
+                        <div>
+                            <div style="font-weight:600;">Telegram</div>
+                            <small style="color:var(--text-sec);">@zhivi_legko_bot</small>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="telegram-reminder" onchange="toggleReminder('telegram', this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
                     </div>
-                    <div style="margin-top:1rem;"><label style="font-weight:600; display:block; margin-bottom:0.5rem;">⏰ Время напоминаний:</label><input type="time" id="reminder-time" value="09:00" onchange="saveReminderTime()"></div>
+
+                    <div style="margin-top:1rem;">
+                        <label style="font-weight:600; display:block; margin-bottom:0.5rem;">⏰ Время напоминаний:</label>
+                        <input type="time" id="reminder-time" value="09:00" onchange="saveReminderTime()">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="disclaimer">⚠️ Сервис носит информационный характер. Перед приёмом любых добавок проконсультируйтесь с врачом.</div>
 </div>
 
 <div id="chat-toggle" onclick="toggleChat()" style="display:none;">💬</div>
 <div id="chat-modal">
-    <div class="chat-header"><span>🌿 Помощник</span><span class="chat-close" onclick="toggleChat()">✖</span></div>
-    <div id="chat-messages"><div class="msg ai">🌿 Привет! Я помощник VITA. Спросите: "Что для сна?", "Какие добавки для иммунитета?"</div></div>
-    <div class="chat-input"><input type="text" id="chat-input" placeholder="Спросить о добавках..."><button onclick="sendMessage()">📤</button></div>
+    <div class="chat-header">
+        <span>🌿 Помощник</span>
+        <span class="chat-close" onclick="toggleChat()">✖</span>
+    </div>
+    <div id="chat-messages">
+        <div class="msg ai">🌿 Привет! Я помощник VITA. Спросите: "Что для сна?", "Какие добавки для иммунитета?"</div>
+    </div>
+    <div class="chat-input">
+        <input type="text" id="chat-input" placeholder="Спросить о добавках...">
+        <button onclick="sendMessage()">📤</button>
+    </div>
 </div>
 
 <div class="notification-toast" id="notification-toast">
     <div class="notification-icon">🛒</div>
-    <div class="notification-text"><strong id="notif-name">Анна М.</strong><span>выбрал(а)</span> <span id="notif-product">Магний Глицинат</span></div>
+    <div class="notification-text">
+        <strong id="notif-name">Анна М.</strong>
+        <span>выбрал(а)</span> <span id="notif-product">Магний Глицинат</span>
+    </div>
 </div>
 
 <script>
 // ==========================================
-// 📦 БАЗА ДАННЫХ (30 добавок - Полная версия)
+// 📦 БАЗА ДАННЫХ (30 добавок)
 // ==========================================
 const supplementsDB = [
     {id:1,name:"Магний Глицинат",substance:"Магний (хелат)",time:"Вечер",dose:"200-400 мг",why:"Лучшая форма для сна и расслабления. Не вызывает расстройства ЖКТ.",goodWith:["Мелатонин","B6"],badWith:["Железо","Кальций"],tags:["сон","тревога","стресс","расслабление"],icon:"😴",details:"Магний глицинат — это хелатная форма магния, связанная с аминокислотой глицином. Обладает высокой биодоступностью (до 90%) и не вызывает диарею. Глицин дополнительно успокаивает нервную систему, улучшает качество сна и снижает тревожность. Рекомендуется принимать за 1-2 часа до сна для максимального расслабления мышц и нервной системы. Особенно полезен при хроническом стрессе, бессоннице и мышечных спазмах.",ozon:"https://ozon.ru/search/?text=магний+глицинат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+глицинат",iherb:"https://ru.iherb.com/c/magnesium-glycinate"},
@@ -446,8 +1429,10 @@ let calendarData = {};
 let reminders = {browser: false, telegram: false, time: "09:00"};
 let currentSearchResults = [];
 let currentDisplayCount = 10;
-let quizGoals = [];
-let quizRecommendations = [];
+let currentSearchQuery = '';
+let searchMode = 'local';
+let internetResults = [];
+let quizGoals = []; // Для онбординга
 
 function getKey(k) { return `vita_${k}_${currentUser}`; }
 function save(k, d) { localStorage.setItem(getKey(k), JSON.stringify(d)); }
@@ -458,8 +1443,11 @@ function load(k) { return JSON.parse(localStorage.getItem(getKey(k)) || 'null');
 // ==========================================
 function toggleGoal(element, goal) {
     element.classList.toggle('selected');
-    if (quizGoals.includes(goal)) quizGoals = quizGoals.filter(g => g !== goal);
-    else quizGoals.push(goal);
+    if (quizGoals.includes(goal)) {
+        quizGoals = quizGoals.filter(g => g !== goal);
+    } else {
+        quizGoals.push(goal);
+    }
 }
 
 function nextStep(step) {
@@ -468,8 +1456,12 @@ function nextStep(step) {
         if (!name) return alert('Пожалуйста, введите ваше имя');
         currentUser = name;
     }
+    
+    // Скрываем текущий шаг
     document.getElementById(`step-${step}`).classList.remove('active');
+    // Показываем следующий
     document.getElementById(`step-${step + 1}`).classList.add('active');
+    // Обновляем индикаторы
     document.getElementById(`dot-${step}`).classList.remove('active');
     document.getElementById(`dot-${step}`).classList.add('completed');
     document.getElementById(`dot-${step + 1}`).classList.add('active');
@@ -489,9 +1481,15 @@ function skipOnboarding() {
 }
 
 function finishOnboarding() {
-    if (!currentUser) currentUser = document.getElementById('ob-name').value.trim() || 'Гость';
+    if (!currentUser) {
+        currentUser = document.getElementById('ob-name').value.trim() || 'Гость';
+    }
+    
+    // Добавляем кастомную цель если есть
     const customGoal = document.getElementById('ob-custom-goal').value.trim();
-    if (customGoal) quizGoals.push(customGoal.toLowerCase());
+    if (customGoal) {
+        quizGoals.push(customGoal.toLowerCase());
+    }
     
     localStorage.setItem('vitaUser', currentUser);
     document.getElementById('onboarding-overlay').style.display = 'none';
@@ -499,90 +1497,57 @@ function finishOnboarding() {
     document.getElementById('main-content').style.display = 'block';
     document.getElementById('chat-toggle').style.display = 'flex';
     document.getElementById('display-user').textContent = currentUser;
-
-    // Инициализация данных
-    myStack = load('stack') || [];
-    wellnessLog = load('wellness') || [];
-    chatHistory = load('chat') || [];
-    achievements = load('achievements') || {first: false, active: false, streak3: false, streak10: false};
-    streakDays = load('streak') || 0;
-    lastTakenDate = load('lastTaken') || null;
-    calendarData = load('calendar') || {};
-    reminders = load('reminders') || {browser: false, telegram: false, time: "09:00"};
-    document.getElementById('browser-reminder').checked = reminders.browser;
-    document.getElementById('telegram-reminder').checked = reminders.telegram;
-    document.getElementById('reminder-time').value = reminders.time;
-    updateAchievements(); renderMoodChart(); renderCalendar(); scheduleReminders();
-    if (myStack.length) { updateSchedule(); document.getElementById('my-stack-section').classList.add('visible'); }
-
-    // Логика квиза
+    
+    // Генерируем план на основе выбранных целей
     if (quizGoals.length > 0) {
-        generateQuizRecommendations(quizGoals);
-        // Жёсткое переключение на вкладку "Создай свой план"
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-btn')[2].classList.add('active');
-        document.querySelectorAll('.search-box').forEach(b => b.classList.remove('active'));
-        document.getElementById('search-personal').classList.add('active');
-        document.getElementById('popular-combos').style.display = 'none';
+        generateStarterPlan(quizGoals);
     } else {
         document.getElementById('popular-combos').style.display = 'block';
     }
-
+    
     requestPermissions();
+    initApp();
     startNotifications();
 }
 
-function generateQuizRecommendations(goals) {
+function generateStarterPlan(goals) {
     const plan = [];
     const addedIds = new Set();
+    
     goals.forEach(goal => {
-        const matches = supplementsDB.filter(s => s.tags.some(tag => tag.includes(goal.toLowerCase())) || goal.toLowerCase().includes(tag));
+        // Ищем добавки по тегам
+        const matches = supplementsDB.filter(s => 
+            s.tags.some(tag => tag.includes(goal.toLowerCase())) ||
+            goal.toLowerCase().includes(tag)
+        );
+        
+        // Добавляем первые 2 подходящие добавки
         matches.slice(0, 2).forEach(match => {
-            if (!addedIds.has(match.id)) { plan.push({...match, taken: false}); addedIds.add(match.id); }
+            if (!addedIds.has(match.id)) {
+                plan.push({...match, taken: false});
+                addedIds.add(match.id);
+            }
         });
     });
-
-    if (plan.length === 0) { document.getElementById('popular-combos').style.display = 'block'; return; }
-    quizRecommendations = plan;
-    const container = document.getElementById('quiz-recommendations');
-    const formContainer = document.getElementById('manual-plan-form');
-
-    let html = `<div style="background: linear-gradient(135deg, #ecfdf5, #d1fae5); padding: 1.5rem; border-radius: 16px; margin-bottom: 1.5rem; border-left: 4px solid var(--primary);">
-        <h3 style="margin:0 0 0.5rem; color:var(--primary-dark);">✨ ${currentUser}, мы подобрали ваш стартовый план</h3>
-        <p style="margin:0; color:var(--text);">На основе ваших целей: <strong>${goals.join(', ')}</strong>. Проверьте добавки и добавьте в расписание.</p>
-    </div>`;
-
-    plan.forEach(i => {
-        html += `<div class="result-card" style="margin-bottom:1rem;">
-            <div class="card-header"><div class="card-icon">${i.icon}</div><div><h3>${i.name}</h3><div class="substance">${i.substance}</div></div></div>
-            <p>${i.why}</p><p><strong>⏰</strong> ${i.time} | <strong>💊</strong> ${i.dose}</p>
-            <button class="details-btn" onclick="toggleDetails(${i.id})">📖 Подробнее</button>
-            <div id="details-${i.id}" class="details-content"><p>${i.details}</p></div>
-            <div class="buy-buttons" style="margin-top:0.5rem;">
-                <a href="${i.ozon}" target="_blank" class="buy-btn ozon" style="font-size:0.8rem;">🛒 Ozon</a>
-                <a href="${i.wb}" target="_blank" class="buy-btn wb" style="font-size:0.8rem;">🛍 WB</a>
-                <a href="${i.iherb}" target="_blank" class="buy-btn iherb" style="font-size:0.8rem;">🌿 iHerb</a>
-            </div>
-        </div>`;
-    });
-    html += `<button class="btn-primary" onclick="addQuizToStack()" style="margin-top:1.5rem; font-size:1.1rem;">✅ Добавить всё в расписание</button>`;
-    container.innerHTML = html;
-    container.style.display = 'block';
-    if(formContainer) formContainer.style.display = 'none';
-}
-
-function addQuizToStack() {
-    quizRecommendations.forEach(item => { if (!myStack.find(i => i.id === item.id)) myStack.push(item); });
-    save('stack', myStack); updateSchedule();
+    
+    if (plan.length === 0) {
+        // Если ничего не найдено, показываем популярные комбинации
+        document.getElementById('popular-combos').style.display = 'block';
+        return;
+    }
+    
+    myStack = plan;
+    save('stack', myStack);
+    updateSchedule();
     document.getElementById('my-stack-section').classList.add('visible');
-    document.getElementById('quiz-recommendations').style.display = 'none';
-    document.getElementById('manual-plan-form').style.display = 'block';
-    alert('✅ План добавлен в расписание! Переходите к трекингу.');
-    setTimeout(() => document.getElementById('my-stack-section').scrollIntoView({behavior: 'smooth'}), 500);
+    document.getElementById('my-stack-section').scrollIntoView({behavior: 'smooth'});
+    
+    const goalText = goals.join(', ');
+    alert(`✨ Отлично! Мы подобрали ваш стартовый план для: ${goalText}\n\nДобавлено ${plan.length} добавок. Перейдите в раздел "Создай свой план", чтобы увидеть расписание.`);
 }
 
 // ==========================================
-// 🔐 AUTH & INIT
+// 🔐 AUTH FUNCTIONS
 // ==========================================
 function handleLogin() {
     const name = document.getElementById('username-input').value.trim();
@@ -593,12 +1558,26 @@ function handleLogin() {
     initApp();
 }
 
-function logout() { if(confirm('Выйти?')) { localStorage.removeItem('vitaUser'); location.reload(); } }
-function requestPermissions() { if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission(); }
+function logout() {
+    if(confirm('Выйти?')) {
+        localStorage.removeItem('vitaUser');
+        location.reload();
+    }
+}
+
+function requestPermissions() {
+    if ('Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission();
+    }
+}
 
 function initApp() {
     currentUser = localStorage.getItem('vitaUser');
-    if (!currentUser) { document.getElementById('onboarding-overlay').style.display = 'flex'; return; }
+    if (!currentUser) {
+        document.getElementById('onboarding-overlay').style.display = 'flex';
+        return;
+    }
+    
     document.getElementById('auth-overlay').style.display = 'none';
     document.getElementById('app-header').style.display = 'flex';
     document.getElementById('main-content').style.display = 'block';
@@ -617,74 +1596,190 @@ function initApp() {
     document.getElementById('browser-reminder').checked = reminders.browser;
     document.getElementById('telegram-reminder').checked = reminders.telegram;
     document.getElementById('reminder-time').value = reminders.time;
-    updateAchievements(); renderMoodChart(); renderCalendar(); scheduleReminders();
-    if (myStack.length) { updateSchedule(); document.getElementById('my-stack-section').classList.add('visible'); }
+    
+    updateAchievements();
+    renderMoodChart();
+    renderCalendar();
+    scheduleReminders();
+    
+    if (myStack.length) {
+        updateSchedule();
+        document.getElementById('my-stack-section').classList.add('visible');
+    }
+    
     document.getElementById('popular-combos').style.display = 'block';
     startNotifications();
 }
 
-function goToMain() { window.location.reload(); }
+function goToMain() {
+    window.location.reload();
+}
 
 // ==========================================
 // 🔔 NOTIFICATIONS
 // ==========================================
 const fakeNotifications = [
-    {name: "Анна М.", product: "Магний Глицинат"}, {name: "Сергей К.", product: "Омега-3"},
-    {name: "Мария Д.", product: "Витамин D3"}, {name: "Алексей П.", product: "Креатин"},
-    {name: "Елена В.", product: "Коллаген"}, {name: "Дмитрий С.", product: "B-Complex"},
-    {name: "Ольга Р.", product: "Мелатонин"}, {name: "Игорь Н.", product: "Цинк"}
+    {name: "Анна М.", product: "Магний Глицинат"},
+    {name: "Сергей К.", product: "Омега-3"},
+    {name: "Мария Д.", product: "Витамин D3"},
+    {name: "Алексей П.", product: "Креатин"},
+    {name: "Елена В.", product: "Коллаген"},
+    {name: "Дмитрий С.", product: "B-Complex"},
+    {name: "Ольга Р.", product: "Мелатонин"},
+    {name: "Игорь Н.", product: "Цинк"}
 ];
-function startNotifications() { setTimeout(() => { showNotification(); setInterval(showNotification, 45000); }, 10000); }
+
+function startNotifications() {
+    setTimeout(() => {
+        showNotification();
+        setInterval(() => {
+            showNotification();
+        }, 45000);
+    }, 10000);
+}
+
 function showNotification() {
     const toast = document.getElementById('notification-toast');
     const notif = fakeNotifications[Math.floor(Math.random() * fakeNotifications.length)];
+    
     document.getElementById('notif-name').textContent = notif.name;
     document.getElementById('notif-product').textContent = notif.product;
+    
     toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 4000);
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 4000);
 }
 
 // ==========================================
-// 📅 CALENDAR & REMINDERS
+// 📅 CALENDAR FUNCTIONS
 // ==========================================
 function renderCalendar() {
-    const grid = document.getElementById('calendar-grid'), m = document.getElementById('current-month');
-    const n = new Date(), y = n.getFullYear(), mo = n.getMonth();
+    const grid = document.getElementById('calendar-grid');
+    const monthLabel = document.getElementById('current-month');
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    
     grid.innerHTML = '';
-    const names = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
-    m.textContent = `${names[mo]} ${y}`;
-    ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].forEach(d => { const e = document.createElement('div'); e.className='calendar-day-header'; e.textContent=d; grid.appendChild(e); });
-    const fd = new Date(y, mo, 1).getDay() || 7, td = new Date(y, mo + 1, 0).getDate();
-    for (let i = 1; i < fd; i++) { const e = document.createElement('div'); e.className='calendar-day empty'; grid.appendChild(e); }
-    const today = n.getDate();
-    for (let d = 1; d <= td; d++) {
-        const e = document.createElement('div'), dk = `${y}-${mo+1}-${d}`, dd = calendarData[dk];
-        e.className = 'calendar-day'; e.textContent = d;
-        if (d === today) e.classList.add('today');
-        if (dd) { if(dd.total>0) e.classList.add(dd.taken===dd.total?'full':'partial'); }
-        grid.appendChild(e);
+    
+    const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+        "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+    monthLabel.textContent = `${monthNames[month]} ${year}`;
+    
+    const dayHeaders = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+    dayHeaders.forEach(day => {
+        const div = document.createElement('div');
+        div.className = 'calendar-day-header';
+        div.textContent = day;
+        grid.appendChild(div);
+    });
+    
+    const firstDay = new Date(year, month, 1).getDay() || 7;
+    const totalDays = new Date(year, month + 1, 0).getDate();
+    
+    for (let i = 1; i < firstDay; i++) {
+        const div = document.createElement('div');
+        div.className = 'calendar-day empty';
+        grid.appendChild(div);
+    }
+    
+    const today = now.getDate();
+    for (let day = 1; day <= totalDays; day++) {
+        const div = document.createElement('div');
+        const dateKey = `${year}-${month+1}-${day}`;
+        const dayData = calendarData[dateKey];
+        
+        div.className = 'calendar-day';
+        div.textContent = day;
+        
+        if (day === today) div.classList.add('today');
+        
+        if (dayData) {
+            const takenCount = dayData.taken || 0;
+            const totalCount = dayData.total || 0;
+            const takenList = dayData.takenList || [];
+            
+            if (totalCount > 0) {
+                if (takenCount === totalCount) {
+                    div.classList.add('full');
+                } else if (takenCount > 0) {
+                    div.classList.add('partial');
+                }
+            }
+            
+            if (takenList.length > 0) {
+                const tooltip = document.createElement('div');
+                tooltip.className = 'calendar-tooltip';
+                tooltip.innerHTML = takenList.map(name => `✅ ${name}`).join('<br>');
+                div.appendChild(tooltip);
+            }
+        }
+        
+        grid.appendChild(div);
     }
 }
+
 function saveCalendarData(date, taken, total, takenList) {
-    const dk = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
-    calendarData[dk] = {taken, total, takenList}; save('calendar', calendarData); renderCalendar();
+    const dateKey = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+    calendarData[dateKey] = {taken, total, takenList};
+    save('calendar', calendarData);
+    renderCalendar();
 }
+
+// ==========================================
+// 🔔 REMINDER FUNCTIONS
+// ==========================================
 function toggleReminder(type, enabled) {
-    reminders[type] = enabled; save('reminders', reminders);
-    if(enabled && type==='browser' && 'Notification' in window) Notification.requestPermission();
+    reminders[type] = enabled;
+    save('reminders', reminders);
+    
+    if (enabled && type === 'browser') {
+        requestPermissions();
+    }
+    
     scheduleReminders();
 }
-function saveReminderTime() { reminders.time = document.getElementById('reminder-time').value; save('reminders', reminders); scheduleReminders(); }
+
+function saveReminderTime() {
+    reminders.time = document.getElementById('reminder-time').value;
+    save('reminders', reminders);
+    scheduleReminders();
+}
+
 function scheduleReminders() {
-    if(window.reminderTimeout) clearTimeout(window.reminderTimeout);
-    if(reminders.browser || reminders.telegram) {
-        const n = new Date(), [h,m] = reminders.time.split(':').map(Number);
-        const rt = new Date(n.getFullYear(), n.getMonth(), n.getDate(), h, m);
-        if(rt <= n) rt.setDate(rt.getDate()+1);
+    if (window.reminderTimeout) clearTimeout(window.reminderTimeout);
+    
+    if (reminders.browser || reminders.telegram) {
+        const now = new Date();
+        const [hours, minutes] = reminders.time.split(':').map(Number);
+        const reminderTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
+        
+        if (reminderTime <= now) {
+            reminderTime.setDate(reminderTime.getDate() + 1);
+        }
+        
+        const delay = reminderTime - now;
         window.reminderTimeout = setTimeout(() => {
-            if(reminders.browser && Notification.permission==='granted') new Notification('🌿 VITA | Пора принять добавки!', {body:`Запланировано: ${myStack.length}`});
+            sendReminder();
             scheduleReminders();
-        }, rt - n);
+        }, delay);
+    }
+}
+
+function sendReminder() {
+    const message = `🌿 VITA | ЖивиЛегко\n\nПора принять добавки! 📋\n\nУ вас запланировано: ${myStack.length} добавок`;
+    
+    if (reminders.browser && 'Notification' in window && Notification.permission === 'granted') {
+        new Notification('🌿 VITA | Пора принять добавки!', {
+            body: `У вас ${myStack.length} добавок запланировано`,
+            icon: '🌿'
+        });
+    }
+    
+    if (reminders.telegram) {
+        console.log('Telegram reminder:', message);
     }
 }
 
@@ -698,110 +1793,585 @@ function switchTab(tab) {
     document.getElementById('search-' + (tab === 'search' ? 'name' : tab)).classList.add('active');
     document.getElementById('autocomplete-list').style.display = 'none';
     document.getElementById('results-area').innerHTML = '';
-    currentSearchResults = []; currentDisplayCount = 10;
+    currentSearchResults = [];
+    currentDisplayCount = 10;
 }
+
 async function quickSearch(query) {
     document.getElementById('input-name').value = query;
-    const res = document.getElementById('results-area');
-    res.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-sec);"><i>🔍 Ищем...</i></div>';
+    const resultsArea = document.getElementById('results-area');
+    
+    resultsArea.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sec);"><i>🔍 Ищем в базе...</i></div>';
+    
     try {
-        const c = new AbortController(), t = setTimeout(()=>c.abort(), 4000);
-        const r = await fetch('/api/chat', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({messages:[{role:"user", content:`Найди добавки для: ${query}. Верни JSON {"ids":[1,2,3]}`}]}), signal:c.signal});
-        clearTimeout(t); const d = await r.json();
-        if(d.reply) { const j = d.reply.match(/\{[\s\S]*"ids"[\s\S]*\}/); if(j) { const ids = JSON.parse(j[0]).ids; currentSearchResults = supplementsDB.filter(i=>ids.includes(i.id)); currentDisplayCount=10; renderResultsWithLoadMore(currentSearchResults); return; } }
-    } catch(e) { console.log('AI failed'); }
-    currentSearchResults = supplementsDB.filter(i => i.tags.some(t=>t.includes(query.toLowerCase())));
-    currentDisplayCount = 10; renderResultsWithLoadMore(currentSearchResults);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                messages: [{
+                    role: "user",
+                    content: `Найди ВСЕ добавки из базы для запроса: "${query}". Верни ТОЛЬКО JSON: {"ids": [1, 4, 7, 12, 15, 16, 17, 21, 28]}. Ищи МАКСИМУМ подходящих добавок.`
+                }],
+                userId: currentUser
+            }),
+            signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        const data = await response.json();
+        
+        if (data.reply) {
+            const jsonMatch = data.reply.match(/\{[\s\S]*"ids"[\s\S]*\}/);
+            if (jsonMatch) {
+                const result = JSON.parse(jsonMatch[0]);
+                currentSearchResults = supplementsDB.filter(item => result.ids.includes(item.id));
+                currentDisplayCount = 10;
+                renderResultsWithLoadMore(currentSearchResults);
+                return;
+            }
+        }
+    } catch (err) {
+        console.log('AI search failed, using local:', err);
+    }
+    
+    currentSearchResults = supplementsDB.filter(item => 
+        item.tags.some(tag => tag.includes(query.toLowerCase()))
+    );
+    currentDisplayCount = 10;
+    renderResultsWithLoadMore(currentSearchResults);
 }
-function handleAutocomplete(v) {
-    const l = document.getElementById('autocomplete-list'); l.innerHTML = '';
-    if(!v || v.length<2) { l.style.display='none'; return; }
-    const m = supplementsDB.filter(i=>i.name.toLowerCase().includes(v.toLowerCase())||i.substance.toLowerCase().includes(v.toLowerCase())).slice(0,5);
-    if(m.length>0) { m.forEach(i=>{ const d=document.createElement('div'); d.className='autocomplete-item'; d.innerHTML=`<strong>${i.name}</strong><br><small>${i.substance}</small>`; d.onclick=()=>{ document.getElementById('input-name').value=i.name; l.style.display='none'; currentSearchResults=[i]; currentDisplayCount=10; renderResultsWithLoadMore(currentSearchResults); }; l.appendChild(d); }); l.style.display='block'; } else { l.style.display='none'; }
+
+function handleAutocomplete(value) {
+    const list = document.getElementById('autocomplete-list');
+    list.innerHTML = '';
+    
+    if (!value || value.length < 2) {
+        list.style.display = 'none';
+        return;
+    }
+    
+    const matches = supplementsDB.filter(item => 
+        item.name.toLowerCase().includes(value.toLowerCase()) ||
+        item.substance.toLowerCase().includes(value.toLowerCase())
+    ).slice(0, 5);
+    
+    if (matches.length > 0) {
+        matches.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'autocomplete-item';
+            div.innerHTML = `<strong>${item.name}</strong><br><small>${item.substance}</small>`;
+            div.onclick = () => {
+                document.getElementById('input-name').value = item.name;
+                list.style.display = 'none';
+                currentSearchResults = [item];
+                currentDisplayCount = 10;
+                renderResultsWithLoadMore(currentSearchResults);
+            };
+            list.appendChild(div);
+        });
+        list.style.display = 'block';
+    } else {
+        list.style.display = 'none';
+    }
 }
-function searchByName() { const q=document.getElementById('input-name').value.toLowerCase(); if(!q)return; document.getElementById('autocomplete-list').style.display='none'; currentSearchResults=supplementsDB.filter(i=>i.name.toLowerCase().includes(q)||i.substance.toLowerCase().includes(q)); currentDisplayCount=10; renderResultsWithLoadMore(currentSearchResults); }
+
+function searchByName() {
+    const q = document.getElementById('input-name').value.toLowerCase();
+    if (!q) return;
+    document.getElementById('autocomplete-list').style.display = 'none';
+    currentSearchResults = supplementsDB.filter(i => 
+        i.name.toLowerCase().includes(q) || i.substance.toLowerCase().includes(q)
+    );
+    currentDisplayCount = 10;
+    renderResultsWithLoadMore(currentSearchResults);
+}
+
 async function smartSearch(query) {
-    const r = document.getElementById('results-area'); r.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-sec);"><i>🤔 Анализирую...</i></div>';
+    const resultsArea = document.getElementById('results-area');
+    resultsArea.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sec);"><i>🤔 Анализирую...</i></div>';
+    
     try {
-        const c = new AbortController(), t = setTimeout(()=>c.abort(), 4000);
-        const res = await fetch('/api/chat', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({messages:[{role:"user", content:`Найди добавки для: ${query}. Верни JSON {"ids":[1,2,3]}`}]}), signal:c.signal});
-        clearTimeout(t); const d = await res.json();
-        if(d.reply) { const j = d.reply.match(/\{[\s\S]*"ids"[\s\S]*\}/); if(j) { const ids = JSON.parse(j[0]).ids; currentSearchResults = supplementsDB.filter(i=>ids.includes(i.id)); currentDisplayCount=10; renderResultsWithLoadMore(currentSearchResults); return; } }
-    } catch(e) { console.log('AI failed'); }
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000);
+        
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                messages: [{
+                    role: "user",
+                    content: `Найди ID добавок для запроса: "${query}". Верни ТОЛЬКО JSON: {"ids": [1, 5, 12]}.`
+                }],
+                userId: currentUser
+            }),
+            signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        const data = await response.json();
+        
+        if (data.reply) {
+            const jsonMatch = data.reply.match(/\{[\s\S]*"ids"[\s\S]*\}/);
+            if (jsonMatch) {
+                const result = JSON.parse(jsonMatch[0]);
+                const items = supplementsDB.filter(item => result.ids.includes(item.id));
+                if (items.length > 0) {
+                    currentSearchResults = items;
+                    currentDisplayCount = 10;
+                    renderResultsWithLoadMore(currentSearchResults);
+                    return;
+                }
+            }
+        }
+    } catch (err) {
+        console.log('AI failed, using tags:', err);
+    }
+    
     fallbackSearch(query);
 }
+
 function fallbackSearch(query) {
-    const q = query.toLowerCase().trim(), w = q.split(' ').filter(x=>x.length>2);
+    const q = query.toLowerCase().trim();
+    const words = q.split(' ').filter(w => w.length > 2);
+    
     currentSearchResults = supplementsDB.filter(i => {
-        const tM = i.tags.some(t=>w.some(x=>t.includes(x)||x.includes(t)));
-        const nM = i.name.toLowerCase().includes(q)||i.substance.toLowerCase().includes(q);
-        const wM = i.why.toLowerCase().includes(q);
-        const kw = {'хочу выспаться':['сон'],'стать сильнее':['спорт','мышцы'],'усталость':['энергия','усталость'],'нет сил':['энергия'],'иммунитет':['иммунитет'],'стресс':['стресс','тревога'],'память':['мозг','память'],'кожа':['кожа','красота']};
-        let kM = false; for(const[k,t] of Object.entries(kw)) if(q.includes(k)){kM=i.tags.some(x=>t.includes(x));break;}
-        return tM||nM||wM||kM;
+        const tagMatch = i.tags.some(tag => words.some(word => tag.includes(word) || word.includes(tag)));
+        const nameMatch = i.name.toLowerCase().includes(q) || i.substance.toLowerCase().includes(q);
+        const whyMatch = i.why.toLowerCase().includes(q);
+        
+        const keywords = {
+            'хочу выспаться': ['сон', 'бессонница', 'расслабление'],
+            'стать сильнее': ['спорт', 'мышцы', 'сила', 'энергия'],
+            'выносливость': ['энергия', 'спорт', 'сила', 'мышцы'],
+            'похудеть': ['метаболизм', 'энергия'],
+            'плохо встаю': ['энергия', 'утро', 'бодрость', 'усталость'],
+            'усталость': ['энергия', 'усталость', 'бодрость'],
+            'нет сил': ['энергия', 'усталость'],
+            'сон': ['сон', 'бессонница'],
+            'иммунитет': ['иммунитет'],
+            'стресс': ['стресс', 'тревога', 'нервы'],
+            'нервы': ['нервы', 'тревога', 'стресс'],
+            'память': ['мозг', 'память', 'фокус'],
+            'кожа': ['кожа', 'красота', 'волосы']
+        };
+        
+        let keywordMatch = false;
+        for (const [key, tags] of Object.entries(keywords)) {
+            if (q.includes(key)) {
+                keywordMatch = i.tags.some(tag => tags.includes(tag));
+                break;
+            }
+        }
+        
+        return tagMatch || nameMatch || whyMatch || keywordMatch;
     });
-    currentDisplayCount=10; renderResultsWithLoadMore(currentSearchResults);
+    
+    currentDisplayCount = 10;
+    renderResultsWithLoadMore(currentSearchResults);
 }
-function searchBySymptom() { const q=document.getElementById('input-symptom').value.trim(); if(!q)return; smartSearch(q); }
+
+function searchBySymptom() {
+    const query = document.getElementById('input-symptom').value.trim();
+    if (!query) return;
+    smartSearch(query);
+}
+
 function renderResultsWithLoadMore(items) {
     const c = document.getElementById('results-area');
-    if(!items.length) { c.innerHTML='<div style="text-align:center;padding:2rem;color:#888;">😕 Ничего не найдено.</div>'; return; }
-    const d = items.slice(0, currentDisplayCount);
-    let h = d.map(i=>`<div class="result-card"><h3><span class="icon">${i.icon}</span> ${i.name} <small style="color:var(--text-sec);font-size:0.9rem">(${i.substance})</small></h3><p>${i.why}</p><p><strong>⏰</strong> ${i.time} | <strong>💊</strong> ${i.dose}</p><div>${i.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div><div class="compatibility"><div class="good">✅ ${i.goodWith.join(', ')||'всем'}</div><div class="bad">❌ ${i.badWith.join(', ')||'нет'}</div></div><button class="details-btn" onclick="toggleDetails(${i.id})">📖 Подробнее</button><div id="details-${i.id}" class="details-content"><p>${i.details}</p></div><button class="btn-primary" onclick="addToStack(${i.id})">➕ В план</button><div class="buy-buttons"><a href="${i.ozon}" target="_blank" class="buy-btn ozon">🛒 Ozon</a><a href="${i.wb}" target="_blank" class="buy-btn wb">🛍 WB</a><a href="${i.iherb}" target="_blank" class="buy-btn iherb">🌿 iHerb</a></div></div>`).join('');
-    if(currentDisplayCount < items.length) h += `<div class="load-more"><button class="load-more-btn" onclick="loadMore()">🔽 Показать ещё добавки</button></div>`;
-    c.innerHTML = h;
-}
-function loadMore() { currentDisplayCount += 10; renderResultsWithLoadMore(currentSearchResults); }
-function toggleDetails(id) { document.getElementById(`details-${id}`).classList.toggle('show'); }
-function addCombo(ids) { ids.forEach(id=>{const i=supplementsDB.find(s=>s.id==id);if(i&&!myStack.find(s=>s.id==id))myStack.push({...i,taken:false});}); save('stack',myStack); updateSchedule(); document.getElementById('my-stack-section').classList.add('visible'); alert('✅ Добавлено!'); }
-
-// ==========================================
-// 📋 STACK & SCHEDULE
-// ==========================================
-function addToStack(id) {
-    const n = supplementsDB.find(i=>i.id===id);
-    const ex = myStack.find(i=>{ const ns=n.substance.split('(')[0].trim(), es=i.substance.split('(')[0].trim(); return (ns.includes('магний')&&es.includes('магний'))||(ns.includes('витамин')&&es.includes('витамин')&&ns===es)||n.id===i.id; });
-    if(ex) {
-        const nd=parseInt(n.dose.match(/\d+/g)?.[0]||'0'), ed=parseInt(ex.dose.match(/\d+/g)?.[0]||'0');
-        if(!confirm(`⚠️ Уже есть "${ex.name}" в плане.\nДобавить "${n.name}"? (Доза: ${ed}+${nd}=${ed+nd} мг)`)) return;
+    if (!items.length) {
+        c.innerHTML = '<div style="text-align:center; padding:2rem; color:#888;">😕 Ничего не найдено. Попробуйте другой запрос.</div>';
+        return;
     }
-    if(myStack.find(i=>i.id===id)) { alert('✅ Уже в плане'); return; }
-    myStack.push({...n, taken:false}); save('stack', myStack);
-    if(!achievements.first && myStack.length>=1){achievements.first=true;alert('🌱 Первый шаг!');}
-    if(!achievements.active && myStack.length>=5){achievements.active=true;alert('💪 Активный!');}
-    save('achievements', achievements); updateAchievements(); updateSchedule();
-    document.getElementById('my-stack-section').classList.add('visible');
+    
+    const displayedItems = items.slice(0, currentDisplayCount);
+    
+    let html = displayedItems.map(i => `
+        <div class="result-card">
+            <h3><span class="icon">${i.icon}</span> ${i.name} <small style="color:var(--text-sec); font-size:0.9rem">(${i.substance})</small></h3>
+            <p>${i.why}</p>
+            <p><strong>⏰ Время:</strong> ${i.time} | <strong>💊 Доза:</strong> ${i.dose}</p>
+            <div>${i.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+            <div class="compatibility">
+                <div class="good">✅ Можно с: ${i.goodWith.join(', ') || 'всем'}</div>
+                <div class="bad">❌ Не с: ${i.badWith.join(', ') || 'нет ограничений'}</div>
+            </div>
+            <button class="details-btn" onclick="toggleDetails(${i.id})">📖 Подробнее</button>
+            <div id="details-${i.id}" class="details-content">
+                <h4 style="margin:0 0 10px; color:var(--primary-dark);">📚 Подробная информация</h4>
+                <p style="margin:0; line-height:1.6;">${i.details}</p>
+            </div>
+            <button class="btn-primary" onclick="addToStack(${i.id})">➕ Добавить в план</button>
+            <div class="buy-buttons">
+                <a href="${i.ozon}" target="_blank" class="buy-btn ozon">🛒 Ozon</a>
+                <a href="${i.wb}" target="_blank" class="buy-btn wb">🛍 Wildberries</a>
+                <a href="${i.iherb}" target="_blank" class="buy-btn iherb">🌿 iHerb</a>
+            </div>
+        </div>
+    `).join('');
+    
+    if (currentDisplayCount < items.length) {
+        html += `
+            <div class="load-more">
+                <button class="load-more-btn" onclick="loadMore()">
+                    🔽 Показать ещё добавки
+                </button>
+            </div>
+        `;
+    }
+    
+    c.innerHTML = html;
+}
+
+function loadMore() {
+    currentDisplayCount += 10;
+    renderResultsWithLoadMore(currentSearchResults);
+}
+
+function toggleDetails(id) {
+    const details = document.getElementById(`details-${id}`);
+    details.classList.toggle('show');
+}
+
+function addCombo(ids) {
+    ids.forEach(id => {
+        const item = supplementsDB.find(i => i.id == id);
+        if (item && !myStack.find(i => i.id == id)) {
+            myStack.push({...item, taken: false});
+        }
+    });
+    save('stack', myStack);
+    updateSchedule();
     document.getElementById('my-stack-section').scrollIntoView({behavior:'smooth'});
+    document.getElementById('my-stack-section').classList.add('visible');
+    alert('✅ Комбинация добавлена в ваш план!');
 }
+
+async function smartSearchWithProfile(query, age, weight) {
+    const resultsArea = document.getElementById('results-area');
+    
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                messages: [{
+                    role: "user",
+                    content: `Пользователь: возраст ${age} лет, вес ${weight} кг. Цель: "${query}". Найди ID добавок.`
+                }],
+                userId: currentUser
+            }),
+            signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        const data = await response.json();
+        
+        if (data.reply) {
+            const jsonMatch = data.reply.match(/\{[\s\S]*"ids"[\s\S]*\}/);
+            if (jsonMatch) {
+                const result = JSON.parse(jsonMatch[0]);
+                const items = supplementsDB.filter(item => result.ids.includes(item.id));
+                if (items.length > 0) {
+                    const personalizedHTML = `
+                        <div style="background: linear-gradient(135deg, #ecfdf5, #d1fae5); padding: 1.5rem; border-radius: 16px; margin-bottom: 2rem; border-left: 4px solid var(--primary);">
+                            <h3 style="margin:0 0 0.5rem; color:var(--primary-dark);">📋 Персональные рекомендации</h3>
+                            <p style="margin:0; color:var(--text);">
+                                <strong>Возраст:</strong> ${age} лет | <strong>Вес:</strong> ${weight} кг<br>
+                                <strong>Цель:</strong> ${query}<br><br>
+                                ${result.explanation || 'Подобрано на основе ваших параметров и цели.'}
+                            </p>
+                        </div>
+                    `;
+                    currentSearchResults = items;
+                    currentDisplayCount = 10;
+                    document.getElementById('results-area').innerHTML = personalizedHTML;
+                    renderResultsWithLoadMore(currentSearchResults);
+                    return;
+                }
+            }
+        }
+    } catch (err) {
+        console.log('AI failed:', err);
+    }
+    
+    fallbackSearch(query);
+}
+
+function generatePersonalPlan() {
+    const goal = document.getElementById('p-goal').value.trim();
+    const age = parseInt(document.getElementById('p-age').value) || 30;
+    const weight = parseInt(document.getElementById('p-weight').value) || 70;
+    
+    if (!goal) return alert('Укажите вашу цель');
+
+    const resultsArea = document.getElementById('results-area');
+    resultsArea.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sec);"><i>🤔 Анализирую ваш профиль и цель...</i></div>';
+    
+    smartSearchWithProfile(goal, age, weight);
+    
+    setTimeout(() => {
+        resultsArea.scrollIntoView({behavior: 'smooth'});
+    }, 100);
+}
+
+function renderResults(items) {
+    renderResultsWithLoadMore(items);
+}
+
+function addToStack(id) {
+    const newItem = supplementsDB.find(i => i.id === id);
+    
+    const existingItem = myStack.find(i => {
+        const newSubstance = newItem.substance.toLowerCase().split('(')[0].trim();
+        const existingSubstance = i.substance.toLowerCase().split('(')[0].trim();
+        
+        return (newSubstance.includes('магний') && existingSubstance.includes('магний')) ||
+               (newSubstance.includes('витамин') && existingSubstance.includes('витамин') && newSubstance === existingSubstance) ||
+               newItem.id === i.id;
+    });
+    
+    if (existingItem) {
+        const newDose = parseInt(newItem.dose.match(/\d+/g)?.[0] || '0');
+        const existingDose = parseInt(existingItem.dose.match(/\d+/g)?.[0] || '0');
+        const totalDose = newDose + existingDose;
+        
+        const confirmAdd = confirm(
+            `⚠️ Внимание!\n\n` +
+            `У вас уже есть "${existingItem.name}" в плане.\n` +
+            `Добавление "${newItem.name}" может привести к передозировке!\n\n` +
+            `Рекомендуемая суточная доза: 200-400 мг.\n` +
+            `У вас будет: ${existingDose} + ${newDose} = ${totalDose} мг\n\n` +
+            `Вы уверены, что хотите добавить?`
+        );
+        
+        if (!confirmAdd) return;
+    }
+    
+    if (myStack.find(i => i.id === id)) {
+        alert('✅ Эта добавка уже есть в вашем плане!');
+        return;
+    }
+    
+    myStack.push({...newItem, taken: false});
+    save('stack', myStack);
+    
+    if (!achievements.first && myStack.length >= 1) {
+        achievements.first = true;
+        alert('🌱 Достижение разблокировано: Первый шаг!');
+    }
+    if (!achievements.active && myStack.length >= 5) {
+        achievements.active = true;
+        alert('💪 Достижение разблокировано: Активный!');
+    }
+    save('achievements', achievements);
+    updateAchievements();
+    
+    updateSchedule();
+    document.getElementById('my-stack-section').scrollIntoView({behavior:'smooth'});
+    document.getElementById('my-stack-section').classList.add('visible');
+}
+
 function updateSchedule() {
-    const s = {'Утро':[],'День':[],'Вечер':[]};
-    myStack.forEach(i=>{if(i.time.includes('Утро')||i.time.includes('натощак'))s['Утро'].push(i);else if(i.time.includes('Вечер')||i.time.includes('сна'))s['Вечер'].push(i);else s['День'].push(i);});
-    const tk=myStack.filter(i=>i.taken).length, tt=myStack.length;
-    document.getElementById('progress-fill').style.width=(tt?(tk/tt*100):0)+'%';
-    document.getElementById('progress-text').textContent=`${tk} из ${tt} принято`;
-    document.getElementById('schedule-container').innerHTML=Object.entries(s).map(([t,items])=>items.length?`<div class="time-slot"><div class="time-label">${t==='Утро'?'🌅':'День'==='День'?'☀️':'🌙'} ${t}</div>${items.map(i=>`<span class="pill-tag ${i.taken?'taken':''}" onclick="toggleTaken(${i.id})">${i.taken?'✅':'⬜'} ${i.name}</span>`).join('')}</div>`:'').join('');
-    const today=new Date(); saveCalendarData(today, tk, tt, myStack.filter(i=>i.taken).map(i=>i.name));
+    const slots = {'Утро':[], 'День':[], 'Вечер':[]};
+    myStack.forEach(i => {
+        if(i.time.includes('Утро') || i.time.includes('натощак')) slots['Утро'].push(i);
+        else if(i.time.includes('Вечер') || i.time.includes('сна')) slots['Вечер'].push(i);
+        else slots['День'].push(i);
+    });
+    
+    const takenCount = myStack.filter(i => i.taken).length;
+    const totalCount = myStack.length;
+    const percent = totalCount > 0 ? (takenCount / totalCount * 100) : 0;
+    const takenList = myStack.filter(i => i.taken).map(i => i.name);
+    
+    document.getElementById('progress-fill').style.width = percent + '%';
+    document.getElementById('progress-text').textContent = `${takenCount} из ${totalCount} добавок принято`;
+    
+    document.getElementById('schedule-container').innerHTML = 
+        Object.entries(slots).map(([time, items]) => 
+            items.length ? `<div class="time-slot">
+                <div class="time-label">${getSlotIcon(time)} ${time}</div>
+                ${items.map(i => `
+                    <span class="pill-tag ${i.taken ? 'taken' : ''}" onclick="toggleTaken(${i.id})">
+                        ${i.taken ? '✅' : '⬜'} ${i.name}
+                    </span>
+                `).join('')}
+            </div>` : ''
+        ).join('');
+    
+    const today = new Date();
+    saveCalendarData(today, takenCount, totalCount, takenList);
 }
-function toggleTaken(id){const i=myStack.find(s=>s.id===id);if(i){i.taken=!i.taken;save('stack',myStack);updateSchedule();checkStreak();}}
-function checkStreak(){const t=new Date().toDateString();if(lastTakenDate!==t){const y=new Date();y.setDate(y.getDate()-1);if(lastTakenDate===y.toDateString())streakDays++;else streakDays=1;lastTakenDate=t;save('streak',streakDays);save('lastTaken',lastTakenDate);if(streakDays>=3&&!achievements.streak3){achievements.streak3=true;save('achievements',achievements);alert('🔥 3 дня!');updateAchievements();}if(streakDays>=10&&!achievements.streak10){achievements.streak10=true;save('achievements',achievements);alert('⭐ 10 дней!');updateAchievements();}}}
-function updateAchievements(){if(achievements.first)document.getElementById('ach-1').classList.add('unlocked');if(achievements.active)document.getElementById('ach-2').classList.add('unlocked');if(achievements.streak3)document.getElementById('ach-3').classList.add('unlocked');if(achievements.streak10)document.getElementById('ach-4').classList.add('unlocked');}
+
+function getSlotIcon(time) {
+    if (time === 'Утро') return '🌅';
+    if (time === 'День') return '☀️';
+    return '🌙';
+}
+
+function toggleTaken(id) {
+    const item = myStack.find(i => i.id === id);
+    if (item) {
+        item.taken = !item.taken;
+        save('stack', myStack);
+        updateSchedule();
+        checkStreak();
+    }
+}
+
+function checkStreak() {
+    const today = new Date().toDateString();
+    if (lastTakenDate !== today) {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        
+        if (lastTakenDate === yesterday.toDateString()) {
+            streakDays++;
+        } else if (lastTakenDate !== today) {
+            streakDays = 1;
+        }
+        
+        lastTakenDate = today;
+        save('streak', streakDays);
+        save('lastTaken', lastTakenDate);
+        
+        if (streakDays >= 3 && !achievements.streak3) {
+            achievements.streak3 = true;
+            save('achievements', achievements);
+            alert('🔥 Достижение разблокировано: Серия 3 дня!');
+            updateAchievements();
+        }
+        if (streakDays >= 10 && !achievements.streak10) {
+            achievements.streak10 = true;
+            save('achievements', achievements);
+            alert('⭐ Достижение разблокировано: Мастер 10 дней!');
+            updateAchievements();
+        }
+    }
+}
+
+function updateAchievements() {
+    if (achievements.first) document.getElementById('ach-1').classList.add('unlocked');
+    if (achievements.active) document.getElementById('ach-2').classList.add('unlocked');
+    if (achievements.streak3) document.getElementById('ach-3').classList.add('unlocked');
+    if (achievements.streak10) document.getElementById('ach-4').classList.add('unlocked');
+}
 
 // ==========================================
-// 📝 WELLNESS & CHAT
+// 📝 WELLNESS TRACKER
 // ==========================================
-function selectMood(m){document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));event.target.classList.add('selected');event.target.dataset.mood=m;}
-function saveWellness(){const n=document.getElementById('wellness-note').value,m=document.querySelector('.mood-btn.selected')?.dataset.mood;if(!n&&!m)return alert('Выберите настроение или заметку');wellnessLog.push({date:new Date().toLocaleDateString(),mood:m,note:n});save('wellness',wellnessLog);renderMoodChart();alert('✅ Сохранено');document.getElementById('wellness-note').value='';}
-function renderMoodChart(){const c=document.getElementById('mood-days'),l=wellnessLog.slice(-7);if(!l.length){c.innerHTML='<p style="color:#888;">Нет данных</p>';return;}c.innerHTML=l.map(l=>`<div class="mood-day ${l.mood}" title="${l.date}: ${l.note||''}">${{bad:'😫',ok:'😐',good:'🙂',great:'🤩'}[l.mood]||''}</div>`).join('');}
-function toggleChat(){document.getElementById('chat-modal').classList.toggle('open');}
-function sendMessage(){const i=document.getElementById('chat-input'),q=i.value.trim();if(!q)return;addMsg('user',q);i.value='';const l=document.createElement('div');l.className='msg ai';l.innerHTML='<i>🌿 Думаю...</i>';document.getElementById('chat-messages').appendChild(l);fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:"user",content:q}],userId:currentUser})}).then(r=>r.json()).then(d=>{l.remove();if(d.reply)addMsg('ai',d.reply.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'));else addMsg('ai','⚠️ Нет ответа');}).catch(()=>{l.remove();addMsg('ai','⚠️ Нет связи');});}
-function addMsg(r,t){const b=document.getElementById('chat-messages'),d=document.createElement('div');d.className=`msg ${r}`;d.innerHTML=t;b.appendChild(d);b.scrollTop=b.scrollHeight;chatHistory.push({role:r,text:t});if(chatHistory.length>50)chatHistory.shift();save('chat',chatHistory);}
-document.getElementById('chat-input').addEventListener('keypress',e=>{if(e.key==='Enter')sendMessage();});
-document.addEventListener('click',e=>{if(!e.target.closest('.autocomplete-container'))document.getElementById('autocomplete-list').style.display='none';});
+function selectMood(mood) {
+    document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+    event.target.classList.add('selected');
+    event.target.dataset.mood = mood;
+}
+
+function saveWellness() {
+    const note = document.getElementById('wellness-note').value;
+    const mood = document.querySelector('.mood-btn.selected')?.dataset.mood;
+    if (!note && !mood) return alert('Выберите настроение или напишите заметку');
+    
+    wellnessLog.push({date: new Date().toLocaleDateString(), mood, note});
+    save('wellness', wellnessLog);
+    renderMoodChart();
+    alert('✅ Сохранено!');
+    document.getElementById('wellness-note').value = '';
+}
+
+function renderMoodChart() {
+    const container = document.getElementById('mood-days');
+    const last7Days = wellnessLog.slice(-7);
+    
+    if (!last7Days.length) {
+        container.innerHTML = '<p style="color:#888;">Пока нет данных. Отмечайте самочувствие каждый день!</p>';
+        return;
+    }
+    
+    container.innerHTML = last7Days.map(log => {
+        const moodEmoji = {bad: '😫', ok: '😐', good: '🙂', great: '🤩'}[log.mood] || '😐';
+        return `<div class="mood-day ${log.mood}" title="${log.date}: ${log.note || 'без заметок'}">${moodEmoji}</div>`;
+    }).join('');
+}
+
+// ==========================================
+// 💬 CHAT
+// ==========================================
+function toggleChat() {
+    document.getElementById('chat-modal').classList.toggle('open');
+}
+
+function sendMessage() {
+    const inp = document.getElementById('chat-input');
+    const q = inp.value.trim();
+    if (!q) return;
+
+    addMsg('user', q);
+    inp.value = '';
+    
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'msg ai';
+    loadingDiv.innerHTML = '<i>🌿 Думаю...</i>';
+    document.getElementById('chat-messages').appendChild(loadingDiv);
+
+    fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            messages: [{ role: "user", content: q }],
+            userId: currentUser 
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        loadingDiv.remove();
+        if (data.reply) {
+            const formatted = data.reply.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+            addMsg('ai', formatted);
+        } else {
+            addMsg('ai', '⚠️ Ошибка: ' + (data.error || 'Нет ответа'));
+        }
+    })
+    .catch(err => {
+        loadingDiv.remove();
+        addMsg('ai', '⚠️ Нет связи с сервером. Проверьте подключение.');
+        console.error('Chat error:', err);
+    });
+}
+
+function addMsg(role, text) {
+    const box = document.getElementById('chat-messages');
+    const div = document.createElement('div');
+    div.className = `msg ${role}`;
+    div.innerHTML = text;
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
+    
+    chatHistory.push({role, text});
+    if(chatHistory.length > 50) chatHistory.shift();
+    save('chat', chatHistory);
+}
+
+document.getElementById('chat-input').addEventListener('keypress', e => {
+    if(e.key === 'Enter') sendMessage();
+});
+
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.autocomplete-container')) {
+        document.getElementById('autocomplete-list').style.display = 'none';
+    }
+});
 
 // ==========================================
 // 🚀 INIT
 // ==========================================
 window.onload = initApp;
 </script>
+
 </body>
 </html>
