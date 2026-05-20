@@ -1386,7 +1386,7 @@
 
 <script>
 // ==========================================
-// 📦 БАЗА ДАННЫХ (30 добавок) - ПОЛНАЯ ВЕРСИЯ
+// 📦 БАЗА ДАННЫХ (30 добавок)
 // ==========================================
 const supplementsDB = [
     {id:1,name:"Магний Глицинат",substance:"Магний (хелат)",time:"Вечер",dose:"200-400 мг",why:"Лучшая форма для сна и расслабления. Не вызывает расстройства ЖКТ.",goodWith:["Мелатонин","B6"],badWith:["Железо","Кальций"],tags:["сон","тревога","стресс","расслабление"],icon:"😴",details:"Магний глицинат — это хелатная форма магния, связанная с аминокислотой глицином. Обладает высокой биодоступностью (до 90%) и не вызывает диарею. Глицин дополнительно успокаивает нервную систему, улучшает качество сна и снижает тревожность. Рекомендуется принимать за 1-2 часа до сна для максимального расслабления мышц и нервной системы. Особенно полезен при хроническом стрессе, бессоннице и мышечных спазмах.",ozon:"https://ozon.ru/search/?text=магний+глицинат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+глицинат",iherb:"https://ru.iherb.com/c/magnesium-glycinate"},
@@ -1537,12 +1537,11 @@ function finishOnboarding() {
     startNotifications();
 }
 
-// Генерация рекомендаций квиза - ИСПРАВЛЕНО: без дубликатов
-// ИСПРАВЛЕННАЯ функция подбора - С КНОПКОЙ "ПОКАЗАТЬ ЕЩЁ"
+// ГЕНЕРАЦИЯ РЕКОМЕНДАЦИЙ С КНОПКОЙ "ПОКАЗАТЬ ЕЩЁ"
 function generateQuizRecommendations(goals) {
     const plan = [];
     const addedIds = new Set();
-    const addedSubstances = new Set();
+    const addedSubstances = new Set(); // Чтобы не добавлять 3 магния
     
     goals.forEach(goal => {
         const matches = supplementsDB.filter(s => {
@@ -1566,10 +1565,8 @@ function generateQuizRecommendations(goals) {
     }
 
     quizRecommendations = plan;
-    
-    // Сохраняем результаты в currentSearchResults для работы loadMore
     currentSearchResults = plan;
-    currentDisplayCount = 10; // Показываем первые 10
+    currentDisplayCount = 10; // Сброс счётчика на 10
     
     const container = document.getElementById('quiz-recommendations');
     const formContainer = document.getElementById('manual-plan-form');
@@ -1578,8 +1575,8 @@ function generateQuizRecommendations(goals) {
         <h3 style="margin:0 0 0.5rem; color:var(--primary-dark);">✨ ${currentUser}, мы подобрали ваш стартовый план</h3>
         <p style="margin:0; color:var(--text);">На основе ваших целей: <strong>${goals.join(', ')}</strong>. Найдено добавок: <strong>${plan.length}</strong>.</p>
     </div>`;
-    
-    // Используем renderResultsWithLoadMore для отображения с кнопкой "Показать ещё"
+
+    // Рендерим только первые currentDisplayCount элементов
     const displayedItems = plan.slice(0, currentDisplayCount);
     
     html += displayedItems.map(i => {
@@ -1598,13 +1595,12 @@ function generateQuizRecommendations(goals) {
         </div>`;
     }).join('');
     
-    // Кнопка "Показать ещё" если добавок больше 10
+    // Кнопка "Показать ещё"
     if (currentDisplayCount < plan.length) {
         html += `<div class="load-more"><button class="load-more-btn" onclick="loadMoreQuiz()">🔽 Показать ещё добавки (${plan.length - currentDisplayCount})</button></div>`;
     }
     
     html += `<button class="btn-primary" onclick="addQuizToStack()" style="margin-top:1.5rem; font-size:1.1rem;">✅ Добавить всё (${plan.length}) в расписание</button>`;
-    
     container.innerHTML = html;
     container.style.display = 'block';
     if(formContainer) formContainer.style.display = 'none';
@@ -1614,44 +1610,6 @@ function generateQuizRecommendations(goals) {
 function loadMoreQuiz() {
     currentDisplayCount += 10;
     generateQuizRecommendations(quizGoals);
-}
-        });
-    });
-
-    if (plan.length === 0) {
-        // Если ничего не найдено, показываем популярные комбинации
-        document.getElementById('popular-combos').style.display = 'block';
-        return;
-    }
-
-    quizRecommendations = plan;
-    const container = document.getElementById('quiz-recommendations');
-    const formContainer = document.getElementById('manual-plan-form');
-
-    let html = `<div style="background: linear-gradient(135deg, #ecfdf5, #d1fae5); padding: 1.5rem; border-radius: 16px; margin-bottom: 1.5rem; border-left: 4px solid var(--primary);">
-        <h3 style="margin:0 0 0.5rem; color:var(--primary-dark);">✨ ${currentUser}, мы подобрали ваш стартовый план</h3>
-        <p style="margin:0; color:var(--text);">На основе ваших целей: <strong>${goals.join(', ')}</strong>. Проверьте добавки и добавьте в расписание.</p>
-    </div>`;
-
-    plan.forEach(i => {
-        const tagsHtml = i.tags ? i.tags.map(t => `<span class="tag">${t}</span>`).join('') : '';
-        html += `<div class="result-card" style="margin-bottom:1rem;">
-            <div class="card-header"><div class="card-icon">${i.icon}</div><div><h3>${i.name}</h3><div class="substance">${i.substance}</div></div></div>
-            <p>${i.why}</p><p><strong>⏰</strong> ${i.time} | <strong>💊</strong> ${i.dose}</p>
-            ${tagsHtml ? `<div style="margin:8px 0;">${tagsHtml}</div>` : ''}
-            <button class="details-btn" onclick="toggleDetails(${i.id})">📖 Подробнее</button>
-            <div id="details-${i.id}" class="details-content"><p>${i.details}</p></div>
-            <div class="buy-buttons" style="margin-top:0.5rem;">
-                <a href="${i.ozon}" target="_blank" class="buy-btn ozon" style="font-size:0.8rem;">🛒 Ozon</a>
-                <a href="${i.wb}" target="_blank" class="buy-btn wb" style="font-size:0.8rem;">🛍 WB</a>
-                <a href="${i.iherb}" target="_blank" class="buy-btn iherb" style="font-size:0.8rem;">🌿 iHerb</a>
-            </div>
-        </div>`;
-    });
-    html += `<button class="btn-primary" onclick="addQuizToStack()" style="margin-top:1.5rem; font-size:1.1rem;">✅ Добавить всё в расписание</button>`;
-    container.innerHTML = html;
-    container.style.display = 'block';
-    if(formContainer) formContainer.style.display = 'none';
 }
 
 // Добавление всех рекомендаций квиза в стек
