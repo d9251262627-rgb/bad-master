@@ -1685,12 +1685,11 @@ function finishOnboarding() {
     updateStreakDisplay(); // Показываем серию
     initWaterTracker(); // Инициализируем воду
 }
-
-// ГЕНЕРАЦИЯ РЕКОМЕНДАЦИЙ С КНОПКОЙ "ПОКАЗАТЬ ЕЩЁ" И ОТДЕЛЬНЫМИ КНОПКАМИ "ДОБАВИТЬ"
+// ГЕНЕРАЦИЯ РЕКОМЕНДАЦИЙ С КНОПКОЙ "ПОКАЗАТЬ ЕЩЁ"
 function generateQuizRecommendations(goals) {
     const plan = [];
     const addedIds = new Set();
-    const addedSubstances = new Set(); // Чтобы не добавлять 3 магния
+    const addedSubstances = new Set(); 
     
     goals.forEach(goal => {
         const matches = supplementsDB.filter(s => {
@@ -1707,6 +1706,68 @@ function generateQuizRecommendations(goals) {
             }
         });
     });
+
+    if (plan.length === 0) {
+        document.getElementById('popular-combos').style.display = 'block';
+        return;
+    }
+
+    quizRecommendations = plan;
+    currentDisplayCount = 10; // Начинаем с 10
+    
+    renderQuizList(); // Вызываем функцию отрисовки
+}
+
+// Функция отрисовки списка рекомендаций
+function renderQuizList() {
+    const container = document.getElementById('quiz-recommendations');
+    const formContainer = document.getElementById('manual-plan-form');
+    const plan = quizRecommendations;
+
+    let html = `<div style="background: linear-gradient(135deg, #ecfdf5, #d1fae5); padding: 1.5rem; border-radius: 16px; margin-bottom: 1.5rem; border-left: 4px solid var(--primary);">
+        <h3 style="margin:0 0 0.5rem; color:var(--primary-dark);">✨ ${currentUser}, мы подобрали ваш стартовый план</h3>
+        <p style="margin:0; color:var(--text);">На основе ваших целей: <strong>${quizGoals.join(', ')}</strong>. Найдено добавок: <strong>${plan.length}</strong>.</p>
+    </div>`;
+
+    // Показываем столько, сколько указано в currentDisplayCount
+    const displayedItems = plan.slice(0, currentDisplayCount);
+    
+    html += displayedItems.map(i => {
+        const tagsHtml = i.tags ? i.tags.map(t => `<span class="tag">${t}</span>`).join('') : '';
+        return `<div class="result-card" style="margin-bottom:1rem;">
+            <div class="card-header"><div class="card-icon">${i.icon}</div><div><h3>${i.name}</h3><div class="substance">${i.substance}</div></div></div>
+            <p>${i.why}</p><p><strong>⏰</strong> ${i.time} | <strong>💊</strong> ${i.dose}</p>
+            ${tagsHtml ? `<div style="margin:8px 0;">${tagsHtml}</div>` : ''}
+            <button class="details-btn" onclick="toggleDetails(${i.id})">📖 Подробнее</button>
+            <div id="details-${i.id}" class="details-content"><p>${i.details}</p></div>
+            <button class="btn-primary" onclick="addToStack(${i.id})" style="margin-top:10px;">➕ В план</button>
+            <div class="buy-buttons" style="margin-top:0.5rem;">
+                <a href="${i.ozon}" target="_blank" class="buy-btn ozon" style="font-size:0.8rem;">🛒 Ozon</a>
+                <a href="${i.wb}" target="_blank" class="buy-btn wb" style="font-size:0.8rem;">🛍 WB</a>
+                <a href="${i.iherb}" target="_blank" class="buy-btn iherb" style="font-size:0.8rem;">🌿 iHerb</a>
+            </div>
+        </div>`;
+    }).join('');
+    
+    // Если есть еще скрытые добавки, показываем кнопку
+    if (currentDisplayCount < plan.length) {
+        const remaining = plan.length - currentDisplayCount;
+        html += `<div class="load-more"><button class="load-more-btn" onclick="loadMoreQuiz()">🔽 Показать ещё добавки (${remaining})</button></div>`;
+    }
+    
+    html += `<button class="btn-primary" onclick="addQuizToStack()" style="margin-top:1.5rem; font-size:1.1rem;">✅ Добавить всё (${plan.length}) в расписание</button>`;
+    
+    container.innerHTML = html;
+    container.style.display = 'block';
+    document.getElementById('manual-plan-form').style.display = 'none';
+}
+
+// Функция для кнопки "Показать ещё"
+function loadMoreQuiz() {
+    currentDisplayCount += 10; // Увеличиваем лимит на 10
+    renderQuizList(); // Перерисовываем список с новым лимитом
+}
+
 
     if (plan.length === 0) {
         document.getElementById('popular-combos').style.display = 'block';
@@ -1757,10 +1818,6 @@ function generateQuizRecommendations(goals) {
 }
 
 // Функция для кнопки "Показать ещё" в квизе
-function loadMoreQuiz() {
-    currentDisplayCount += 10;
-    generateQuizRecommendations(quizGoals);
-}
 
 // Добавление всех рекомендаций квиза в стек
 function addQuizToStack() {
