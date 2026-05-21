@@ -494,22 +494,6 @@
             transform: translateY(-2px); 
             box-shadow: 0 8px 20px rgba(5,150,105,0.4); 
         }
-        
-        .btn-secondary-main { 
-            background: white; 
-            color: var(--primary); 
-            border: 2px solid var(--primary); 
-            padding: 12px; 
-            border-radius: 14px; 
-            font-weight: 600; 
-            cursor: pointer; 
-            transition: all 0.2s; 
-            margin-top: 1rem; 
-        }
-        .btn-secondary-main:hover { 
-            background: #f0fdf4; 
-            transform: translateY(-2px); 
-        }
 
         #results-area { margin-top: 2rem; }
         .result-card { 
@@ -543,14 +527,6 @@
             font-size: 0.8rem; 
             margin: 4px; 
         }
-        .compatibility { 
-            margin-top: 1rem; 
-            padding: 1rem; 
-            background: #f8fafc; 
-            border-radius: 12px; 
-        }
-        .compatibility .good { color: var(--success); }
-        .compatibility .bad { color: var(--danger); }
         .buy-buttons { 
             display: flex; 
             gap: 10px; 
@@ -908,10 +884,7 @@
             box-shadow: 0 4px 12px rgba(245,158,11,0.3); 
             animation: pulse 2s infinite; 
         }
-        @keyframes pulse { 
-            0%, 100% { transform: scale(1); } 
-            50% { transform: scale(1.05); } 
-        }
+        
         .achievement-icon { 
             font-size: 2rem; 
             margin-bottom: 0.5rem; 
@@ -1126,51 +1099,12 @@
             box-shadow: var(--shadow); 
         }
 
-        .notification-toast {
-            position: fixed;
-            bottom: 100px;
-            left: 24px;
-            background: white;
-            padding: 1rem 1.5rem;
-            border-radius: 16px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-            display: none;
-            align-items: center;
-            gap: 12px;
-            z-index: 998;
-            animation: slideIn 0.5s ease;
-            max-width: 320px;
-        }
-        @keyframes slideIn {
-            from { transform: translateX(-100px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        .notification-toast.show { display: flex; }
-        .notification-icon { font-size: 1.5rem; }
-        .notification-text { 
-            font-size: 0.9rem; 
-            color: var(--text); 
-            line-height: 1.4; 
-        }
-        .notification-text strong { 
-            display: block; 
-            color: var(--primary-dark); 
-            margin-bottom: 2px; 
-        }
-
         @media (max-width: 768px) {
             .hero h1 { font-size: 2rem; }
             .hero h1 span { font-size: 1.5rem; }
             #chat-modal { width: calc(100% - 48px); right: 24px; }
             .buy-buttons { flex-direction: column; }
             .buy-btn { width: 100%; }
-            .quick-filters { flex-direction: column; }
-            .filter-btn { width: 100%; }
-            .notification-toast { left: 24px; right: 24px; bottom: 100px; max-width: none; }
-            .tabs { width: 100%; flex-wrap: wrap; justify-content: center; }
-            .tab-btn { flex: 1 1 auto; padding: 12px 16px; font-size: 14px; }
-            .quiz-options { grid-template-columns: 1fr; }
-            .onboarding-box { padding: 1.5rem; }
             .user-area { flex-direction: column; align-items: flex-end; }
         }
     </style>
@@ -1186,7 +1120,6 @@
             <div class="step-dot" id="dot-3"></div>
         </div>
         
-        <!-- Шаг 1: Имя -->
         <div class="onboarding-step active" id="step-1">
             <div style="font-size:3rem; margin-bottom:1rem;">🌿</div>
             <h2>Добро пожаловать в VITA</h2>
@@ -1196,7 +1129,6 @@
             <button class="btn-secondary" onclick="skipOnboarding()">Пропустить</button>
         </div>
 
-        <!-- Шаг 2: Выбор целей -->
         <div class="onboarding-step" id="step-2">
             <div style="font-size:3rem; margin-bottom:1rem;">🎯</div>
             <h2>Что для вас важно?</h2>
@@ -1222,7 +1154,6 @@
             </div>
         </div>
 
-        <!-- Шаг 3: Параметры -->
         <div class="onboarding-step" id="step-3">
             <div style="font-size:3rem; margin-bottom:1rem;">📊</div>
             <h2>Параметры для точности</h2>
@@ -1264,7 +1195,7 @@
 <div class="container" id="main-content" style="display:none;">
     <div class="hero">
         <h1>Экспертный подход к<span>вашему здоровью</span></h1>
-        <p>Анализируем научные исследования, чтобы вы получали только работающие добавки. Персональные рекомендации с гарантией эффективности.</p>
+        <p>Анализируем научные исследования, чтобы вы получали только работающие добавки.</p>
         
         <div class="hero-badges">
             <div class="hero-badge">✅ Научный подход</div>
@@ -1285,26 +1216,19 @@
             <button class="filter-btn" onclick="quickSearch('сон')">💤 Для сна</button>
             <button class="filter-btn" onclick="quickSearch('мозг')">🧠 Для мозга</button>
             <button class="filter-btn" onclick="quickSearch('спорт')">💪 Для спорта</button>
-            <button class="filter-btn" onclick="quickSearch('иммунитет')">🛡️ Иммунитет</button>
         </div>
         
-        <div class="autocomplete-container">
-            <input type="text" id="input-name" placeholder="Название добавки (Магний, Омега-3...)" oninput="handleAutocomplete(this.value)">
-            <div id="autocomplete-list" class="autocomplete-list"></div>
-        </div>
+        <input type="text" id="input-name" placeholder="Название добавки (Магний, Омега-3...)" style="width:100%; margin-bottom:1rem;">
         <button class="btn-primary" onclick="searchByName()">Найти</button>
     </div>
 
     <div id="search-symptom" class="search-box">
-        <input type="text" id="input-symptom" placeholder="Что беспокоит? (сон, усталость...)">
+        <input type="text" id="input-symptom" placeholder="Что беспокоит? (сон, усталость...)" style="width:100%; margin-bottom:1rem;">
         <button class="btn-primary" onclick="searchBySymptom()">Подобрать</button>
     </div>
 
     <div id="search-personal" class="search-box">
-        <!-- Контейнер для рекомендаций квиза -->
         <div id="quiz-recommendations" style="display:none;"></div>
-        
-        <!-- Ручная форма (скрывается после квиза) -->
         <div id="manual-plan-form">
             <input type="number" id="p-age" placeholder="Возраст">
             <input type="number" id="p-weight" placeholder="Вес (кг)">
@@ -1321,22 +1245,10 @@
             <div class="combo-card" onclick="addCombo(['6', '7', '30'])">
                 <h4>💪 Энергия + Иммунитет</h4>
                 <p>D3 + Омега-3 + K2</p>
-                <small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 15%</small>
             </div>
             <div class="combo-card" onclick="addCombo(['1', '11', '26'])">
                 <h4>😴 Качественный сон</h4>
                 <p>Магний + Мелатонин + GABA</p>
-                <small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 10%</small>
-            </div>
-            <div class="combo-card" onclick="addCombo(['4', '7', '17'])">
-                <h4>🧠 Фокус и память</h4>
-                <p>Магний L-Треонат + Омега-3 + L-Тирозин</p>
-                <small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 12%</small>
-            </div>
-            <div class="combo-card" onclick="addCombo(['9', '29', '3'])">
-                <h4>🏋️ Спорт и мышцы</h4>
-                <p>Креатин + Протеин + Магний Малат</p>
-                <small style="color:var(--success); display:block; margin-top:8px;">💰 Экономия 18%</small>
             </div>
         </div>
     </div>
@@ -1349,9 +1261,7 @@
                 <!-- WATER TRACKER -->
                 <div class="water-tracker">
                     <div class="water-title">💧 Трекер воды</div>
-                    <div class="water-cups" id="water-cups">
-                        <!-- Cups generated by JS -->
-                    </div>
+                    <div class="water-cups" id="water-cups"></div>
                     <div class="water-controls">
                         <button class="water-btn" onclick="changeWater(-1)">- Стакан</button>
                         <button class="water-btn" onclick="changeWater(1)">+ Стакан</button>
@@ -1372,89 +1282,15 @@
                 <div class="schedule-box" id="schedule-container">
                     <p style="text-align:center; color:#888;">Добавьте добавки из поиска</p>
                 </div>
-
-                <div class="progress-container">
-                    <h3>🏆 Достижения</h3>
-                    <div class="achievements" id="achievements-container">
-                        <div class="achievement" id="ach-1">
-                            <div class="achievement-icon">🌱</div>
-                            <div>Первый шаг</div>
-                            <small>Добавить 1 добавку</small>
-                        </div>
-                        <div class="achievement" id="ach-2">
-                            <div class="achievement-icon">💪</div>
-                            <div>Активный</div>
-                            <small>5 добавок в плане</small>
-                        </div>
-                        <div class="achievement" id="ach-3">
-                            <div class="achievement-icon">🔥</div>
-                            <div>Серия 3 дня</div>
-                            <small>Принимать 3 дня подряд</small>
-                        </div>
-                        <div class="achievement" id="ach-4">
-                            <div class="achievement-icon">⭐</div>
-                            <div>Мастер</div>
-                            <small>10 дней подряд</small>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tracker-card">
-                    <h3>😊 Самочувствие сегодня</h3>
-                    <div class="mood-selector">
-                        <button class="mood-btn" onclick="selectMood('bad')" data-mood="bad">😫</button>
-                        <button class="mood-btn" onclick="selectMood('ok')" data-mood="ok">😐</button>
-                        <button class="mood-btn" onclick="selectMood('good')" data-mood="good">🙂</button>
-                        <button class="mood-btn" onclick="selectMood('great')" data-mood="great">🤩</button>
-                    </div>
-                    <textarea id="wellness-note" placeholder="Заметки..." rows="2" style="width:100%; margin-top:10px; padding: 10px; border-radius: 8px; border: 1px solid var(--border);"></textarea>
-                    <button class="btn-primary" onclick="saveWellness()">Сохранить</button>
-                    
-                    <div class="mood-chart" id="mood-chart">
-                        <h4>📊 График за неделю</h4>
-                        <div id="mood-days"></div>
-                    </div>
-                </div>
             </div>
 
             <div>
                 <div class="calendar-widget">
                     <div class="calendar-header">
                         <h3 style="margin:0;">📅 Календарь</h3>
-                        <span id="current-month" style="font-weight:600; color:var(--primary);"></span>
+                        <span id="current-month"></span>
                     </div>
                     <div class="calendar-grid" id="calendar-grid"></div>
-                </div>
-
-                <div class="reminder-settings">
-                    <h3>🔔 Напоминания</h3>
-                    
-                    <div class="reminder-toggle">
-                        <div>
-                            <div style="font-weight:600;">Браузерные уведомления</div>
-                            <small style="color:var(--text-sec);">Push-уведомления в браузере</small>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="browser-reminder" onchange="toggleReminder('browser', this.checked)">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-
-                    <div class="reminder-toggle">
-                        <div>
-                            <div style="font-weight:600;">Telegram</div>
-                            <small style="color:var(--text-sec);">@zhivi_legko_bot</small>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="telegram-reminder" onchange="toggleReminder('telegram', this.checked)">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-
-                    <div style="margin-top:1rem;">
-                        <label style="font-weight:600; display:block; margin-bottom:0.5rem;">⏰ Время напоминаний:</label>
-                        <input type="time" id="reminder-time" value="09:00" onchange="saveReminderTime()">
-                    </div>
                 </div>
             </div>
         </div>
@@ -1464,63 +1300,42 @@
 </div>
 
 <div id="chat-toggle" onclick="toggleChat()" style="display:none;">💬</div>
-<div id="chat-modal">
-    <div class="chat-header">
-        <span>🌿 Помощник</span>
-        <span class="chat-close" onclick="toggleChat()">✖</span>
-    </div>
-    <div id="chat-messages">
-        <div class="msg ai">🌿 Привет! Я помощник VITA. Спросите: "Что для сна?", "Какие добавки для иммунитета?"</div>
-    </div>
-    <div class="chat-input">
-        <input type="text" id="chat-input" placeholder="Спросить о добавках...">
-        <button onclick="sendMessage()">📤</button>
-    </div>
-</div>
-
-<div class="notification-toast" id="notification-toast">
-    <div class="notification-icon">🛒</div>
-    <div class="notification-text">
-        <strong id="notif-name">Анна М.</strong>
-        <span>выбрал(а)</span> <span id="notif-product">Магний Глицинат</span>
-    </div>
-</div>
 
 <script>
 // ==========================================
-// 📦 БАЗА ДАННЫХ (30 добавок)
+// 📦 БАЗА ДАННЫХ
 // ==========================================
 const supplementsDB = [
-    {id:1,name:"Магний Глицинат",substance:"Магний (хелат)",time:"Вечер",dose:"200-400 мг",why:"Лучшая форма для сна и расслабления. Не вызывает расстройства ЖКТ.",goodWith:["Мелатонин","B6"],badWith:["Железо","Кальций"],tags:["сон","тревога","стресс","расслабление"],icon:"😴",details:"Магний глицинат — это хелатная форма магния, связанная с аминокислотой глицином. Обладает высокой биодоступностью (до 90%) и не вызывает диарею. Глицин дополнительно успокаивает нервную систему, улучшает качество сна и снижает тревожность. Рекомендуется принимать за 1-2 часа до сна для максимального расслабления мышц и нервной системы. Особенно полезен при хроническом стрессе, бессоннице и мышечных спазмах.",ozon:"https://ozon.ru/search/?text=магний+глицинат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+глицинат",iherb:"https://ru.iherb.com/c/magnesium-glycinate"},
-    {id:2,name:"Магний Цитрат",substance:"Магний (органический)",time:"Утро/День",dose:"200-400 мг",why:"Хорошо усваивается. Помогает при запорах. Даёт энергию мышцам.",goodWith:["B6","Калий"],badWith:["Железо"],tags:["энергия","мышцы","пищеварение","утро","усталость"],icon:"⚡",details:"Магний цитрат — органическая форма с хорошей усвояемостью (около 80%). Обладает мягким слабительным эффектом, что полезно при запорах. Быстро восполняет дефицит магния, улучшает работу мышц и энергетический обмен. Лучше принимать утром или днём с едой. Не рекомендуется при склонности к диарее. Оптимальная форма для спортсменов и людей с активным образом жизни.",ozon:"https://ozon.ru/search/?text=магний+цитрат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+цитрат",iherb:"https://ru.iherb.com/c/magnesium-citrate"},
-    {id:3,name:"Магний Малат",substance:"Магний + яблочная кислота",time:"Утро",dose:"200-400 мг",why:"Даёт энергию и бодрость. Помогает при хронической усталости.",goodWith:["B-комплекс","CoQ10"],badWith:["Железо"],tags:["энергия","бодрость","усталость","мышцы","утро"],icon:"🌅",details:"Магний малат — соединение магния с яблочной кислотой, которая участвует в цикле Кребса (производство энергии в клетках). Идеален для борьбы с хронической усталостью, фибромиалгией и мышечной слабостью. Яблочная кислота улучшает усвоение магния и стимулирует выработку АТФ — основного источника энергии клеток. Принимать утром натощак или с завтраком для максимальной энергии в течение дня.",ozon:"https://ozon.ru/search/?text=магний+малат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+малат",iherb:"https://ru.iherb.com/c/magnesium-malate"},
-    {id:4,name:"Магний L-Треонат",substance:"Магний (для мозга)",time:"Утро/День",dose:"100-200 мг",why:"Проникает в мозг. Улучшает память и когнитивные функции.",goodWith:["Омега-3"],badWith:[],tags:["мозг","память","фокус","когнитивные"],icon:"🧠",details:"Магний L-треонат — единственная форма магния, способная преодолевать гематоэнцефалический барьер и напрямую воздействовать на мозг. Увеличивает плотность синапсов, улучшает нейропластичность, память и способность к обучению. Клинические исследования показывают улучшение когнитивных функций на 20-25% через 4-6 недель приёма. Особенно полезен для студентов, пожилых людей и тех, кто работает с информацией.",ozon:"https://ozon.ru/search/?text=магний+треонат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+треонат",iherb:"https://ru.iherb.com/c/magnesium-l-threonate"},
-    {id:5,name:"Магний Таурат",substance:"Магний + таурин",time:"Утро/Вечер",dose:"200-400 мг",why:"Поддержка сердца и сосудов. Нормализует давление.",goodWith:["CoQ10","Омега-3"],badWith:[],tags:["сердце","давление","сосуды"],icon:"❤️",details:"Магний таурат — комбинация магния с аминокислотой таурином. Оба компонента критически важны для здоровья сердечно-сосудистой системы. Таурин улучшает сократимость сердца, нормализует ритм, снижает давление. Магний расслабляет сосуды и предотвращает спазмы. Идеальная форма для людей с гипертонией, аритмией, сердечной недостаточностью. Можно принимать в любое время дня.",ozon:"https://ozon.ru/search/?text=магний+таурат",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=магний+таурат",iherb:"https://ru.iherb.com/c/magnesium-taurate"},
-    {id:6,name:"Витамин D3",substance:"Витамин D",time:"Утро с едой",dose:"2000-5000 МЕ",why:"Иммунитет, кости, настроение. Даёт энергию, борется с усталостью.",goodWith:["K2","Омега-3","Магний"],badWith:[],tags:["иммунитет","настроение","кости","энергия","усталость","утро"],icon:"☀️",details:"Витамин D3 (холекальциферол) — жирорастворимый витамин, который фактически является гормоном. Регулирует более 1000 генов в организме. Дефицит D3 наблюдается у 80% населения и приводит к хронической усталости, депрессии, частым простудам, остеопорозу. Принимать утром с жирной пищей для лучшего усвоения. Оптимальная дозировка: 2000-5000 МЕ ежедневно. Обязательно сочетать с витамином K2 для направления кальция в кости.",ozon:"https://ozon.ru/search/?text=витамин+d3",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+d3",iherb:"https://ru.iherb.com/c/vitamin-d"},
-    {id:7,name:"Омега-3",substance:"Омега-3",time:"Утро/Обед",dose:"1000-2000 мг",why:"Сердце, мозг, кожа. Улучшает настроение и когнитивные функции.",goodWith:["D3","E","Магний"],badWith:["Антикоагулянты"],tags:["мозг","сердце","кожа","настроение"],icon:"🐟",details:"Омега-3 жирные кислоты (EPA и DHA) — строительный материал для клеточных мембран, особенно в мозге и сердце. EPA уменьшает воспаление, улучшает настроение, борется с депрессией. DHA критична для когнитивных функций, памяти, зрения. Исследования показывают снижение риска сердечных заболеваний на 30-40%, улучшение когнитивных способностей на 15-20%. Принимать с едой, содержащей жиры. Выбирать рыбий жир с высоким содержанием EPA+DHA (не менее 1000 мг).",ozon:"https://ozon.ru/search/?text=омега-3",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=омега-3",iherb:"https://ru.iherb.com/c/omega-3"},
-    {id:8,name:"Цинк",substance:"Цинк",time:"День",dose:"15-30 мг",why:"Иммунитет, кожа, заживление. Участвует в производстве энергии.",goodWith:["A","C","D3"],badWith:["Железо","Медь","Кальций"],tags:["иммунитет","кожа","энергия"],icon:"🛡️",details:"Цинк — важнейший минерал для иммунитета, участвует в работе более 300 ферментов. Ускоряет заживление ран, улучшает состояние кожи (особенно при акне), поддерживает производство тестостерона. Дефицит цинка приводит к частым простудам, выпадению волос, ломкости ногтей. Принимать днём во время еды (натощак может вызывать тошноту). Не сочетать с железом и кальцием — они конкурируют за усвоение. Курс: 1-2 месяца, затем перерыв.",ozon:"https://ozon.ru/search/?text=цинк",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=цинк",iherb:"https://ru.iherb.com/c/zinc"},
-    {id:9,name:"Креатин",substance:"Креатин",time:"После тренировки",dose:"5 г",why:"Сила, мышцы, выносливость. Даёт быструю энергию.",goodWith:["Углеводы","Протеин"],badWith:[],tags:["спорт","масса","сила","энергия","мышцы"],icon:"💪",details:"Креатин моногидрат — самая изученная спортивная добавка. Увеличивает запасы фосфокреатина в мышцах, что даёт быструю энергию для интенсивных тренировок. Результаты: увеличение силы на 10-15%, мышечной массы на 2-5 кг за месяц, выносливости на 20-30%. Также улучшает когнитивные функции, память, борется с усталостью. Принимать 5 г ежедневно (можно без фазы загрузки). Лучше после тренировки с углеводами или протеином. Безопасен при длительном приёме.",ozon:"https://ozon.ru/search/?text=креатин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=креатин",iherb:"https://ru.iherb.com/c/creatine"},
-    {id:10,name:"Витамин C",substance:"Аскорбиновая кислота",time:"Утро",dose:"500-1000 мг",why:"Иммунитет, антиоксидант, коллаген. Помогает при усталости.",goodWith:["Цинк","E"],badWith:["B12"],tags:["иммунитет","кожа","энергия","усталость"],icon:"🍊",details:"Витамин C — мощнейший антиоксидант, необходимый для синтеза коллагена (кожа, суставы, сосуды), усвоения железа, работы иммунитета. Участвует в производстве норадреналина и кортизола, помогая бороться со стрессом. Ускоряет выздоровление при простуде на 20-30%. Липосомальная форма усваивается в 5-10 раз лучше обычной. Принимать утром натощак или между приёмами пищи. Не превышать 2000 мг в день (риск камней в почках).",ozon:"https://ozon.ru/search/?text=витамин+c",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+c",iherb:"https://ru.iherb.com/c/vitamin-c"},
-    {id:11,name:"Мелатонин",substance:"Гормон сна",time:"За 30 мин до сна",dose:"1-5 мг",why:"Быстрое засыпание, качественный сон.",goodWith:["Магний","GABA"],badWith:["Кофеин","Алкоголь"],tags:["сон","бессонница","расслабление"],icon:"🌙",details:"Мелатонин — гормон, регулирующий циркадные ритмы (сон-бодрствование). Производство снижается с возрастом, при стрессе, работе по ночам. Добавка ускоряет засыпание на 30-50%, улучшает качество сна, помогает при джетлаге. Не вызывает привыкания. Начинать с 1-3 мг за 30-60 минут до сна. Не превышать 10 мг (может вызвать утреннюю сонливость). Не принимать с алкоголем и кофеином. Для долгосрочной регуляции сна сочетать с магнием и гигиеной сна.",ozon:"https://ozon.ru/search/?text=мелатонин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=мелатонин",iherb:"https://ru.iherb.com/c/melatonin"},
-    {id:12,name:"B-Complex",substance:"Витамины группы B",time:"Утро",dose:"1 капсула",why:"Энергия, нервная система. Критически важны при усталости.",goodWith:["Магний","D3"],badWith:["C (раздельно)"],tags:["энергия","нервы","стресс","усталость","утро","бодрость"],icon:"⚡",details:"Витамины группы B (B1, B2, B3, B5, B6, B7, B9, B12) — основа энергетического обмена. Участвуют в превращении пищи в энергию, работе нервной системы, производстве нейротрансмиттеров (серотонин, дофамин). Дефицит приводит к хронической усталости, депрессии, раздражительности, проблемам с кожей и волосами. Особенно важны B12 (энергия, нервы) и B6 (настроение, иммунитет). Принимать утром натощак или с завтраком. Выбирать метилированные формы (лучше усваиваются).",ozon:"https://ozon.ru/search/?text=витамины+группы+b",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамины+b",iherb:"https://ru.iherb.com/c/vitamin-b-complex"},
-    {id:13,name:"Железо",substance:"Fe",time:"Утро натощак",dose:"18-30 мг",why:"Гемоглобин, энергия. При анемии — причина усталости.",goodWith:["C","B12"],badWith:["Кальций","Цинк","Кофе","Магний"],tags:["энергия","анемия","усталость","утро"],icon:"🩸",details:"Железо — компонент гемоглобина, переносит кислород к клеткам. Дефицит (анемия) вызывает хроническую усталость, одышку, бледность, выпадение волос, ломкость ногтей. Особенно актуально для женщин (менструации, беременность). Принимать натощак с витамином C для лучшего усвоения (в 3-4 раза). Не сочетать с кальцием, цинком, кофе и чаем (блокируют усвоение). Курс: 2-3 месяца до нормализации ферритина. Превышение дозы токсично — сдайте анализ перед приёмом!",ozon:"https://ozon.ru/search/?text=железо",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=железо",iherb:"https://ru.iherb.com/c/iron"},
-    {id:14,name:"CoQ10",substance:"Коэнзим Q10",time:"Утро с едой",dose:"100-200 мг",why:"Энергия клеток, сердце. Даёт силы, борется с усталостью.",goodWith:["Омега-3","E"],badWith:[],tags:["сердце","энергия","усталость"],icon:"❤️",details:"Коэнзим Q10 (убихинон) — участвует в производстве АТФ (энергии) в митохондриях. Концентрация снижается с возрастом (после 30 лет), при приёме статинов. Улучшает работу сердца, снижает давление, борется с хронической усталостью. Исследования: снижение риска сердечных заболеваний на 30%, улучшение энергии на 25%. Форма убихинол усваивается в 3-4 раза лучше. Принимать с жирной пищей. Особенно важен для людей после 40 лет и принимающих статины.",ozon:"https://ozon.ru/search/?text=коэнзим+q10",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=коэнзим+q10",iherb:"https://ru.iherb.com/c/coq10"},
-    {id:15,name:"Ашваганда",substance:"Адаптоген",time:"Утро/Вечер",dose:"300-600 мг",why:"Снижение стресса. Улучшает сон, даёт энергию.",goodWith:["Магний","B-комплекс"],badWith:["Седативные"],tags:["стресс","тревога","энергия","сон","усталость"],icon:"🌿",details:"Ашваганда — древний аюрведический адаптоген. Снижает уровень кортизола (гормон стресса) на 20-30%, уменьшает тревожность, улучшает сон, повышает энергию и выносливость. Клинические исследования: улучшение качества сна на 70%, снижение стресса на 60%, повышение тестостерона у мужчин на 15%. Принимать 300-600 мг экстракта (стандартизированного по витанолидам). Эффект накопительный — проявляется через 2-4 недели. Не принимать при беременности и гипертиреозе.",ozon:"https://ozon.ru/search/?text=ашваганда",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=ашваганда",iherb:"https://ru.iherb.com/c/ashwagandha"},
-    {id:16,name:"Родиола Розовая",substance:"Адаптоген",time:"Утро",dose:"200-400 мг",why:"Энергия, выносливость, борьба с усталостью. Улучшает настроение.",goodWith:["Ашваганда","B-комплекс"],badWith:["Антидепрессанты"],tags:["энергия","усталость","настроение","утро","бодрость","стресс"],icon:"🌸",details:"Родиола розовая (золотой корень) — сибирский адаптоген. Повышает физическую и умственную выносливость, борется с усталостью, улучшает настроение и концентрацию. Механизм: увеличивает уровень серотонина и дофамина, оптимизирует использование АТФ. Исследования: снижение усталости на 40%, улучшение когнитивных функций на 20%. Принимать утром (может мешать сну, если принять вечером). Эффект чувствуется через 3-7 дней. Стандартизированный экстракт (3% розавинов).",ozon:"https://ozon.ru/search/?text=родиола+розовая",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=родиола",iherb:"https://ru.iherb.com/c/rhodiola"},
-    {id:17,name:"L-Тирозин",substance:"Аминокислота",time:"Утро натощак",dose:"500-1000 мг",why:"Энергия, фокус, настроение. Помогает при усталости.",goodWith:["B6","C"],badWith:[],tags:["энергия","фокус","настроение","усталость","утро"],icon:"🎯",details:"L-Тирозин — предшественник дофамина, норадреналина и адреналина. Улучшает концентрацию, мотивацию, энергию, настроение. Особенно эффективен при стрессе, недосыпе, интенсивных нагрузках. Исследования: улучшение когнитивных функций при стрессе на 30%, повышение энергии и бдительности. Принимать натощак (за 30 мин до еды) для лучшего усвоения. Эффект чувствуется через 30-60 минут. Не превышать 2000 мг в день. Не сочетать с ингибиторами МАО и леводопой.",ozon:"https://ozon.ru/search/?text=l-тирозин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=l-тирозин",iherb:"https://ru.iherb.com/c/l-tyrosine"},
-    {id:18,name:"Куркума",substance:"Куркумин",time:"Обед с едой",dose:"500-1000 мг",why:"Противовоспалительное, суставы.",goodWith:["Черный перец","Омега-3"],badWith:["Антикоагулянты"],tags:["воспаление","суставы","иммунитет"],icon:"🧡",details:"Куркумин — активное вещество куркумы. Мощное противовоспалительное и антиоксидантное действие (сильнее аспирина!). Уменьшает боль в суставах, улучшает пищеварение, защищает мозг, борется с депрессией. Проблема: плохая усвояемость. Решение: сочетать с чёрным перцем (усиление в 2000 раз!) или выбирать липосомальные формы. Исследования: снижение воспаления на 40-50%, уменьшение боли в суставах на 60%. Принимать с жирной пищей. Эффект накопительный — через 4-8 недель.",ozon:"https://ozon.ru/search/?text=куркума",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=куркума",iherb:"https://ru.iherb.com/c/turmeric"},
-    {id:19,name:"Пробиотики",substance:"Полезные бактерии",time:"Утро натощак",dose:"10-50 млрд КОЕ",why:"Кишечник, иммунитет, пищеварение.",goodWith:["Пребиотики"],badWith:["Антибиотики (раздельно)"],tags:["кишечник","иммунитет","пищеварение"],icon:"🦠",details:"Пробиотики — полезные бактерии (лакто- и бифидобактерии). Восстанавливают микробиом кишечника, который влияет на иммунитет (70% иммунных клеток в кишечнике!), настроение (90% серотонина производится в кишечнике), пищеварение, кожу. Особенно важны после антибиотиков, при стрессе, неправильном питании. Принимать натощак за 30 мин до еды. Выбирать мультиштаммовые комплексы (10-50 млрд КОЕ). Хранить в холодильнике (если требуется). Эффект через 2-4 недели.",ozon:"https://ozon.ru/search/?text=пробиотики",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=пробиотики",iherb:"https://ru.iherb.com/c/probiotics"},
-    {id:20,name:"Коллаген",substance:"Белок",time:"Утро/Перед сном",dose:"5-10 г",why:"Кожа, суставы, волосы, ногти.",goodWith:["Витамин C"],badWith:[],tags:["кожа","суставы","красота","волосы"],icon:"✨",details:"Коллаген — основной структурный белок кожи, суставов, костей, сухожилий. После 25 лет производство снижается на 1-2% в год. Добавка улучшает эластичность кожи на 30-40%, уменьшает морщины, укрепляет суставы и ногти, ускоряет восстановление после тренировок. Типы: I и III (кожа, кости), II (суставы). Гидролизованный коллаген (пептиды) усваивается лучше. Принимать с витамином C (необходим для синтеза). Эффект через 8-12 недель регулярного приёма.",ozon:"https://ozon.ru/search/?text=коллаген",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=коллаген",iherb:"https://ru.iherb.com/c/collagen"},
-    {id:21,name:"L-Теанин",substance:"Аминокислота",time:"Утро/День",dose:"100-200 мг",why:"Расслабление без сонливости, фокус.",goodWith:["Кофеин","Магний"],badWith:[],tags:["фокус","расслабление","стресс","тревога"],icon:"🧘",details:"L-Теанин — аминокислота из зелёного чая. Увеличивает альфа-волны в мозге (состояние расслабленной бдительности), снижает тревожность, улучшает концентрацию без сонливости. Уникальное сочетание: расслабление + фокус. С кофеином создаёт идеальную комбинацию для продуктивности (кофеин даёт энергию, теанин убирает нервозность). Исследования: снижение стресса на 30%, улучшение концентрации на 20%. Принимать 100-200 мг. Эффект через 30-40 минут. Безопасен, не вызывает привыкания.",ozon:"https://ozon.ru/search/?text=l-теанин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=l-теанин",iherb:"https://ru.iherb.com/c/l-theanine"},
-    {id:22,name:"Селен",substance:"Se",time:"Утро",dose:"100-200 мкг",why:"Щитовидка, иммунитет, антиоксидант.",goodWith:["Йод","E","C"],badWith:[],tags:["щитовидка","иммунитет","энергия"],icon:"🦋",details:"Селен — важнейший минерал для щитовидной железы (участвует в конверсии T4 в активный T3), мощный антиоксидант (компонент глутатионпероксидазы). Укрепляет иммунитет, защищает от окислительного стресса, улучшает фертильность у мужчин. Дефицит приводит к гипотиреозу, частым простудам, усталости. Принимать 100-200 мкг ежедневно. Не превышать 400 мкг (токсичен в высоких дозах). Бразильские орехи — природный источник (2 ореха = суточная норма). Эффект через 4-8 недель.",ozon:"https://ozon.ru/search/?text=селен",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=селен",iherb:"https://ru.iherb.com/c/selenium"},
-    {id:23,name:"Йод",substance:"I",time:"Утро",dose:"150-300 мкг",why:"Щитовидка, метаболизм, энергия.",goodWith:["Селен","Цинк"],badWith:[],tags:["щитовидка","метаболизм","энергия","усталость"],icon:"🔷",details:"Йод — критически важен для производства гормонов щитовидной железы (T3, T4), которые регулируют метаболизм, энергию, температуру тела. Дефицит наблюдается у 30% населения и приводит к гипотиреозу, усталости, набору веса, выпадению волос, проблемам с памятью. Особенно важен для женщин (риск заболеваний щитовидки в 5-8 раз выше). Принимать 150-300 мкг. Обязательно сочетать с селеном (защищает щитовидку). Перед приёмом сдать анализ на ТТГ и антитела к ТПО.",ozon:"https://ozon.ru/search/?text=йод",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=йод",iherb:"https://ru.iherb.com/c/iodine"},
-    {id:24,name:"Витамин E",substance:"Токоферол",time:"Утро с едой",dose:"100-400 МЕ",why:"Антиоксидант, кожа, иммунитет.",goodWith:["C","Селен","Омега-3"],badWith:["Железо (раздельно)"],tags:["кожа","антиоксидант","иммунитет"],icon:"🌟",details:"Витамин E (токоферол) — жирорастворимый антиоксидант, защищает клеточные мембраны от окисления. Улучшает состояние кожи (увлажнённость, эластичность), укрепляет иммунитет, защищает сердце и сосуды, замедляет старение. Усиливает действие витамина C и селена. Исследования: снижение риска сердечных заболеваний на 20-30%, улучшение состояния кожи на 25%. Принимать с жирной пищей. Выбирать натуральную форму (d-alpha-токоферол, а не dl-alpha). Не превышать 1000 МЕ в день.",ozon:"https://ozon.ru/search/?text=витамин+e",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+e",iherb:"https://ru.iherb.com/c/vitamin-e"},
-    {id:25,name:"Биотин",substance:"B7",time:"Утро",dose:"5000-10000 мкг",why:"Волосы, ногти, кожа. Участвует в энергетическом обмене.",goodWith:["Коллаген","Цинк"],badWith:[],tags:["волосы","ногти","кожа","красота","энергия"],icon:"💅",details:"Биотин (витамин B7, H) — водорастворимый витамин, необходимый для синтеза кератина (белок волос, ногтей, кожи). Участвует в метаболизме жиров, белков, углеводов. Дефицит вызывает выпадение волос, ломкость ногтей, сухость кожи. Исследования: укрепление ногтей на 25-30%, уменьшение выпадения волос на 40-50% через 3-6 месяцев. Безопасен даже в высоких дозах (10000 мкг). Принимать утром натощак. Эффект накопительный — первые результаты через 8-12 недель, максимальный через 6 месяцев.",ozon:"https://ozon.ru/search/?text=биотин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=биотин",iherb:"https://ru.iherb.com/c/biotin"},
-    {id:26,name:"GABA",substance:"ГАМК",time:"Вечер",dose:"250-750 мг",why:"Расслабление, сон, снижение тревоги.",goodWith:["Магний","Мелатонин"],badWith:["Алкоголь"],tags:["сон","тревога","расслабление","стресс"],icon:"😌",details:"GABA (гамма-аминомасляная кислота) — главный тормозной нейротрансмиттер мозга. Успокаивает нервную систему, снижает тревожность, улучшает сон, расслабляет мышцы. Дефицит приводит к бессоннице, тревоге, раздражительности, мышечному напряжению. Исследования: снижение тревоги на 30%, улучшение качества сна на 25%, увеличение альфа-волн (расслабление). Принимать 250-750 мг за 30-60 минут до сна. Можно сочетать с магнием и мелатонином для усиления эффекта. Не принимать с алкоголем и седативными.",ozon:"https://ozon.ru/search/?text=gaba",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=gaba",iherb:"https://ru.iherb.com/c/gaba"},
-    {id:27,name:"Ресвератрол",substance:"Полифенол",time:"Вечер",dose:"100-500 мг",why:"Долголетие, антиоксидант, сердце.",goodWith:["Кверцетин","NMN"],badWith:[],tags:["долголетие","антиоксидант","сердце"],icon:"🍇",details:"Ресвератрол — полифенол из красного вина, ягод, арахиса. Активирует гены долголетия (сиртуины), мощный антиоксидант, защищает сердце и сосуды, улучшает чувствительность к инсулину, борется с воспалением. Исследования на животных: увеличение продолжительности жизни на 20-30%. У людей: улучшение маркеров сердечно-сосудистого здоровья на 20-25%, снижение воспаления. Принимать 100-500 мг вечером. Выбирать транс-ресвератрол (активная форма). Сочетать с жирами для лучшего усвоения.",ozon:"https://ozon.ru/search/?text=ресвератрол",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=ресвератрол",iherb:"https://ru.iherb.com/c/resveratrol"},
-    {id:28,name:"NMN",substance:"Никотинамид мононуклеотид",time:"Утро",dose:"250-500 мг",why:"Долголетие, энергия клеток.",goodWith:["Ресвератрол"],badWith:[],tags:["долголетие","энергия","anti-age"],icon:"⏳",details:"NMN (никотинамид мононуклеотид) — предшественник NAD+, кофермента, критически важного для производства энергии в митохондриях и восстановления ДНК. Уровень NAD+ падает на 50% к 50 годам, что ведёт к старению, усталости, снижению метаболизма. Добавка NMN повышает NAD+, улучшает энергию, выносливость, когнитивные функции, замедляет старение. Исследования: увеличение продолжительности жизни на 10-15%, улучшение энергии на 30-40%. Принимать 250-500 мг утром натощак. Сочетать с ресвератролом (синергия). Эффект через 2-4 недели.",ozon:"https://ozon.ru/search/?text=nmn",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=nmn",iherb:"https://ru.iherb.com/c/nmn"},
-    {id:29,name:"Протеин",substance:"Белок",time:"После тренировки",dose:"20-30 г",why:"Рост мышц, восстановление.",goodWith:["Креатин"],badWith:[],tags:["спорт","мышцы","восстановление","энергия"],icon:"🥤",details:"Протеин (сывороточный, казеин, растительный) — источник аминокислот для роста и восстановления мышц. После тренировки мышцы нуждаются в белке для восстановления микротравм и роста. Сывороточный протеин усваивается быстро (30-60 мин), идеален после тренировки. Казеин — медленно (4-6 часов), хорош на ночь. Исследования: увеличение мышечной массы на 2-5 кг за 3 месяца, ускорение восстановления на 30-40%. Принимать 20-30 г после тренировки или между приёмами пищи. Не заменяет полноценное питание, а дополняет.",ozon:"https://ozon.ru/search/?text=протеин",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=протеин",iherb:"https://ru.iherb.com/c/protein-powders"},
-    {id:30,name:"Витамин K2",substance:"Менахинон",time:"Утро с едой",dose:"100-200 мкг",why:"Направляет кальций в кости, защищает сердце.",goodWith:["D3","Кальций"],badWith:["Антикоагулянты"],tags:["кости","сердце","кальций"],icon:"🦴",details:"Витамин K2 (менахинон MK-7) — активирует белки, которые направляют кальций в кости и зубы, предотвращая его отложение в сосудах и почках. Работает в паре с D3: D3 увеличивает усвоение кальция, K2 направляет его куда нужно. Без K2 кальций может откладываться в артериях (риск атеросклероза). Исследования: снижение риска сердечных заболеваний на 50%, улучшение плотности костей на 10-15%. Принимать 100-200 мкг с D3. Форма MK-7 усваивается лучше MK-4. Не принимать с варфарином.",ozon:"https://ozon.ru/search/?text=витамин+k2",wb:"https://www.wildberries.ru/catalog/0/search.aspx?search=витамин+k2",iherb:"https://ru.iherb.com/c/vitamin-k2"}
+    {id:1,name:"Магний Глицинат",substance:"Магний (хелат)",time:"Вечер",dose:"200-400 мг",why:"Лучшая форма для сна и расслабления.",goodWith:["Мелатонин","B6"],badWith:["Железо","Кальций"],tags:["сон","тревога","стресс","расслабление"],icon:"😴",details:"Магний глицинат — хелатная форма. Обладает высокой биодоступностью.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:2,name:"Магний Цитрат",substance:"Магний (органический)",time:"Утро/День",dose:"200-400 мг",why:"Хорошо усваивается. Помогает при запорах.",goodWith:["B6","Калий"],badWith:["Железо"],tags:["энергия","мышцы","пищеварение","утро","усталость"],icon:"⚡",details:"Магний цитрат — органическая форма с хорошей усвояемостью.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:3,name:"Магний Малат",substance:"Магний + яблочная кислота",time:"Утро",dose:"200-400 мг",why:"Даёт энергию и бодрость.",goodWith:["B-комплекс","CoQ10"],badWith:["Железо"],tags:["энергия","бодрость","усталость","мышцы","утро"],icon:"🌅",details:"Магний малат — соединение с яблочной кислотой.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:4,name:"Магний L-Треонат",substance:"Магний (для мозга)",time:"Утро/День",dose:"100-200 мг",why:"Проникает в мозг. Улучшает память.",goodWith:["Омега-3"],badWith:[],tags:["мозг","память","фокус","когнитивные"],icon:"🧠",details:"Магний L-треонат проникает в мозг.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:5,name:"Магний Таурат",substance:"Магний + таурин",time:"Утро/Вечер",dose:"200-400 мг",why:"Поддержка сердца и сосудов.",goodWith:["CoQ10","Омега-3"],badWith:[],tags:["сердце","давление","сосуды"],icon:"❤️",details:"Магний таурат — комбинация с таурином.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:6,name:"Витамин D3",substance:"Витамин D",time:"Утро с едой",dose:"2000-5000 МЕ",why:"Иммунитет, кости, настроение.",goodWith:["K2","Омега-3","Магний"],badWith:[],tags:["иммунитет","настроение","кости","энергия","усталость","утро"],icon:"☀️",details:"Витамин D3 регулирует более 1000 генов.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:7,name:"Омега-3",substance:"Омега-3",time:"Утро/Обед",dose:"1000-2000 мг",why:"Сердце, мозг, кожа.",goodWith:["D3","E","Магний"],badWith:["Антикоагулянты"],tags:["мозг","сердце","кожа","настроение"],icon:"🐟",details:"Омега-3 жирные кислоты EPA и DHA.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:8,name:"Цинк",substance:"Цинк",time:"День",dose:"15-30 мг",why:"Иммунитет, кожа, заживление.",goodWith:["A","C","D3"],badWith:["Железо","Медь","Кальций"],tags:["иммунитет","кожа","энергия"],icon:"🛡️",details:"Цинк — важнейший минерал для иммунитета.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:9,name:"Креатин",substance:"Креатин",time:"После тренировки",dose:"5 г",why:"Сила, мышцы, выносливость.",goodWith:["Углеводы","Протеин"],badWith:[],tags:["спорт","масса","сила","энергия","мышцы"],icon:"💪",details:"Креатин моногидрат — самая изученная добавка.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:10,name:"Витамин C",substance:"Аскорбиновая кислота",time:"Утро",dose:"500-1000 мг",why:"Иммунитет, антиоксидант.",goodWith:["Цинк","E"],badWith:["B12"],tags:["иммунитет","кожа","энергия","усталость"],icon:"🍊",details:"Витамин C — мощнейший антиоксидант.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:11,name:"Мелатонин",substance:"Гормон сна",time:"За 30 мин до сна",dose:"1-5 мг",why:"Быстрое засыпание, качественный сон.",goodWith:["Магний","GABA"],badWith:["Кофеин","Алкоголь"],tags:["сон","бессонница","расслабление"],icon:"🌙",details:"Мелатонин регулирует циркадные ритмы.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:12,name:"B-Complex",substance:"Витамины группы B",time:"Утро",dose:"1 капсула",why:"Энергия, нервная система.",goodWith:["Магний","D3"],badWith:["C (раздельно)"],tags:["энергия","нервы","стресс","усталость","утро","бодрость"],icon:"⚡",details:"Витамины группы B — основа энергетического обмена.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:13,name:"Железо",substance:"Fe",time:"Утро натощак",dose:"18-30 мг",why:"Гемоглобин, энергия.",goodWith:["C","B12"],badWith:["Кальций","Цинк","Кофе","Магний"],tags:["энергия","анемия","усталость","утро"],icon:"🩸",details:"Железо переносит кислород к клеткам.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:14,name:"CoQ10",substance:"Коэнзим Q10",time:"Утро с едой",dose:"100-200 мг",why:"Энергия клеток, сердце.",goodWith:["Омега-3","E"],badWith:[],tags:["сердце","энергия","усталость"],icon:"❤️",details:"CoQ10 участвует в производстве АТФ.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:15,name:"Ашваганда",substance:"Адаптоген",time:"Утро/Вечер",dose:"300-600 мг",why:"Снижение стресса.",goodWith:["Магний","B-комплекс"],badWith:["Седативные"],tags:["стресс","тревога","энергия","сон","усталость"],icon:"🌿",details:"Ашваганда снижает уровень кортизола.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:16,name:"Родиола Розовая",substance:"Адаптоген",time:"Утро",dose:"200-400 мг",why:"Энергия, выносливость.",goodWith:["Ашваганда","B-комплекс"],badWith:["Антидепрессанты"],tags:["энергия","усталость","настроение","утро","бодрость","стресс"],icon:"🌸",details:"Родиола повышает физическую выносливость.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:17,name:"L-Тирозин",substance:"Аминокислота",time:"Утро натощак",dose:"500-1000 мг",why:"Энергия, фокус, настроение.",goodWith:["B6","C"],badWith:[],tags:["энергия","фокус","настроение","усталость","утро"],icon:"🎯",details:"L-Тирозин — предшественник дофамина.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:18,name:"Куркума",substance:"Куркумин",time:"Обед с едой",dose:"500-1000 мг",why:"Противовоспалительное.",goodWith:["Черный перец","Омега-3"],badWith:["Антикоагулянты"],tags:["воспаление","суставы","иммунитет"],icon:"🧡",details:"Куркумин — мощное противовоспалительное.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:19,name:"Пробиотики",substance:"Полезные бактерии",time:"Утро натощак",dose:"10-50 млрд КОЕ",why:"Кишечник, иммунитет.",goodWith:["Пребиотики"],badWith:["Антибиотики (раздельно)"],tags:["кишечник","иммунитет","пищеварение"],icon:"🦠",details:"Пробиотики восстанавливают микробиом.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:20,name:"Коллаген",substance:"Белок",time:"Утро/Перед сном",dose:"5-10 г",why:"Кожа, суставы, волосы.",goodWith:["Витамин C"],badWith:[],tags:["кожа","суставы","красота","волосы"],icon:"✨",details:"Коллаген — структурный белок.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:21,name:"L-Теанин",substance:"Аминокислота",time:"Утро/День",dose:"100-200 мг",why:"Расслабление без сонливости.",goodWith:["Кофеин","Магний"],badWith:[],tags:["фокус","расслабление","стресс","тревога"],icon:"🧘",details:"L-Теанин увеличивает альфа-волны.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:22,name:"Селен",substance:"Se",time:"Утро",dose:"100-200 мкг",why:"Щитовидка, иммунитет.",goodWith:["Йод","E","C"],badWith:[],tags:["щитовидка","иммунитет","энергия"],icon:"🦋",details:"Селен важен для щитовидной железы.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:23,name:"Йод",substance:"I",time:"Утро",dose:"150-300 мкг",why:"Щитовидка, метаболизм.",goodWith:["Селен","Цинк"],badWith:[],tags:["щитовидка","метаболизм","энергия","усталость"],icon:"🔷",details:"Йод критически важен для щитовидки.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:24,name:"Витамин E",substance:"Токоферол",time:"Утро с едой",dose:"100-400 МЕ",why:"Антиоксидант, кожа.",goodWith:["C","Селен","Омега-3"],badWith:["Железо (раздельно)"],tags:["кожа","антиоксидант","иммунитет"],icon:"🌟",details:"Витамин E защищает клеточные мембраны.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:25,name:"Биотин",substance:"B7",time:"Утро",dose:"5000-10000 мкг",why:"Волосы, ногти, кожа.",goodWith:["Коллаген","Цинк"],badWith:[],tags:["волосы","ногти","кожа","красота","энергия"],icon:"💅",details:"Биотин необходим для синтеза кератина.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:26,name:"GABA",substance:"ГАМК",time:"Вечер",dose:"250-750 мг",why:"Расслабление, сон.",goodWith:["Магний","Мелатонин"],badWith:["Алкоголь"],tags:["сон","тревога","расслабление","стресс"],icon:"😌",details:"GABA — главный тормозной нейротрансмиттер.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:27,name:"Ресвератрол",substance:"Полифенол",time:"Вечер",dose:"100-500 мг",why:"Долголетие, антиоксидант.",goodWith:["Кверцетин","NMN"],badWith:[],tags:["долголетие","антиоксидант","сердце"],icon:"🍇",details:"Ресвератрол активирует гены долголетия.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:28,name:"NMN",substance:"Никотинамид мононуклеотид",time:"Утро",dose:"250-500 мг",why:"Долголетие, энергия клеток.",goodWith:["Ресвератрол"],badWith:[],tags:["долголетие","энергия","anti-age"],icon:"⏳",details:"NMN повышает уровень NAD+.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:29,name:"Протеин",substance:"Белок",time:"После тренировки",dose:"20-30 г",why:"Рост мышц, восстановление.",goodWith:["Креатин"],badWith:[],tags:["спорт","мышцы","восстановление","энергия"],icon:"🥤",details:"Протеин — источник аминокислот.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"},
+    {id:30,name:"Витамин K2",substance:"Менахинон",time:"Утро с едой",dose:"100-200 мкг",why:"Направляет кальций в кости.",goodWith:["D3","Кальций"],badWith:["Антикоагулянты"],tags:["кости","сердце","кальций"],icon:"🦴",details:"Витамин K2 направляет кальций в кости.",ozon:"https://ozon.ru",wb:"https://wildberries.ru",iherb:"https://iherb.com"}
 ];
 
 // ==========================================
@@ -1537,12 +1352,9 @@ let calendarData = {};
 let reminders = {browser: false, telegram: false, time: "09:00"};
 let currentSearchResults = [];
 let currentDisplayCount = 10;
-let currentSearchQuery = '';
-let searchMode = 'local';
-let internetResults = [];
 let quizGoals = [];
 let quizRecommendations = [];
-let waterIntake = 0; // Новая переменная для воды
+let waterIntake = 0;
 
 function getKey(k) { return `vita_${k}_${currentUser}`; }
 function save(k, d) { localStorage.setItem(getKey(k), JSON.stringify(d)); }
@@ -1560,6 +1372,8 @@ function renderWaterTracker() {
     const cupsContainer = document.getElementById('water-cups');
     const countDisplay = document.getElementById('water-count');
     
+    if (!cupsContainer) return;
+    
     cupsContainer.innerHTML = '';
     for (let i = 1; i <= 8; i++) {
         const cup = document.createElement('div');
@@ -1569,7 +1383,7 @@ function renderWaterTracker() {
         cupsContainer.appendChild(cup);
     }
     
-    countDisplay.textContent = waterIntake;
+    if (countDisplay) countDisplay.textContent = waterIntake;
 }
 
 function changeWater(delta) {
@@ -1605,11 +1419,8 @@ function nextStep(step) {
         currentUser = name;
     }
     
-    // Скрываем текущий шаг
     document.getElementById(`step-${step}`).classList.remove('active');
-    // Показываем следующий
     document.getElementById(`step-${step + 1}`).classList.add('active');
-    // Обновляем индикаторы
     document.getElementById(`dot-${step}`).classList.remove('active');
     document.getElementById(`dot-${step}`).classList.add('completed');
     document.getElementById(`dot-${step + 1}`).classList.add('active');
@@ -1633,13 +1444,11 @@ function finishOnboarding() {
         currentUser = document.getElementById('ob-name').value.trim() || 'Гость';
     }
     
-    // Добавляем кастомную цель если есть
     const customGoal = document.getElementById('ob-custom-goal').value.trim();
     if (customGoal) {
         quizGoals.push(customGoal.toLowerCase());
     }
     
-    // Заполняем поля возраста и веса в форме
     const age = document.getElementById('ob-age').value;
     const weight = document.getElementById('ob-weight').value;
     if (age) document.getElementById('p-age').value = age;
@@ -1652,7 +1461,6 @@ function finishOnboarding() {
     document.getElementById('chat-toggle').style.display = 'flex';
     document.getElementById('display-user').textContent = currentUser;
     
-    // Инициализация данных вручную (без вызова initApp, чтобы не сбрасывать вкладки)
     myStack = load('stack') || [];
     wellnessLog = load('wellness') || [];
     chatHistory = load('chat') || [];
@@ -1661,16 +1469,19 @@ function finishOnboarding() {
     lastTakenDate = load('lastTaken') || null;
     calendarData = load('calendar') || {};
     reminders = load('reminders') || {browser: false, telegram: false, time: "09:00"};
-    document.getElementById('browser-reminder').checked = reminders.browser;
-    document.getElementById('telegram-reminder').checked = reminders.telegram;
-    document.getElementById('reminder-time').value = reminders.time;
-    updateAchievements(); renderMoodChart(); renderCalendar(); scheduleReminders();
-    if (myStack.length) { updateSchedule(); document.getElementById('my-stack-section').classList.add('visible'); }
-
-    // Генерируем рекомендации и переключаем вкладку
+    
+    updateAchievements();
+    renderMoodChart();
+    renderCalendar();
+    scheduleReminders();
+    
+    if (myStack.length) {
+        updateSchedule();
+        document.getElementById('my-stack-section').classList.add('visible');
+    }
+    
     if (quizGoals.length > 0) {
         generateQuizRecommendations(quizGoals);
-        // Переключаем на вкладку "Создай свой план"
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.tab-btn')[2].classList.add('active');
         document.querySelectorAll('.search-box').forEach(b => b.classList.remove('active'));
@@ -1680,16 +1491,15 @@ function finishOnboarding() {
         document.getElementById('popular-combos').style.display = 'block';
     }
 
-    requestPermissions();
-    startNotifications();
-    updateStreakDisplay(); // Показываем серию
-    initWaterTracker(); // Инициализируем воду
+    updateStreakDisplay();
+    initWaterTracker();
 }
-// ГЕНЕРАЦИЯ РЕКОМЕНДАЦИЙ С КНОПКОЙ "ПОКАЗАТЬ ЕЩЁ"
+
+// ГЕНЕРАЦИЯ РЕКОМЕНДАЦИЙ
 function generateQuizRecommendations(goals) {
     const plan = [];
     const addedIds = new Set();
-    const addedSubstances = new Set(); 
+    const addedSubstances = new Set();
     
     goals.forEach(goal => {
         const matches = supplementsDB.filter(s => {
@@ -1713,15 +1523,14 @@ function generateQuizRecommendations(goals) {
     }
 
     quizRecommendations = plan;
-    currentDisplayCount = 10; // Начинаем с 10
+    currentDisplayCount = 10;
     
-    renderQuizList(); // Вызываем функцию отрисовки
+    renderQuizList();
 }
 
 // Функция отрисовки списка рекомендаций
 function renderQuizList() {
     const container = document.getElementById('quiz-recommendations');
-    const formContainer = document.getElementById('manual-plan-form');
     const plan = quizRecommendations;
 
     let html = `<div style="background: linear-gradient(135deg, #ecfdf5, #d1fae5); padding: 1.5rem; border-radius: 16px; margin-bottom: 1.5rem; border-left: 4px solid var(--primary);">
@@ -1729,7 +1538,6 @@ function renderQuizList() {
         <p style="margin:0; color:var(--text);">На основе ваших целей: <strong>${quizGoals.join(', ')}</strong>. Найдено добавок: <strong>${plan.length}</strong>.</p>
     </div>`;
 
-    // Показываем столько, сколько указано в currentDisplayCount
     const displayedItems = plan.slice(0, currentDisplayCount);
     
     html += displayedItems.map(i => {
@@ -1749,7 +1557,6 @@ function renderQuizList() {
         </div>`;
     }).join('');
     
-    // Если есть еще скрытые добавки, показываем кнопку
     if (currentDisplayCount < plan.length) {
         const remaining = plan.length - currentDisplayCount;
         html += `<div class="load-more"><button class="load-more-btn" onclick="loadMoreQuiz()">🔽 Показать ещё добавки (${remaining})</button></div>`;
@@ -1764,60 +1571,9 @@ function renderQuizList() {
 
 // Функция для кнопки "Показать ещё"
 function loadMoreQuiz() {
-    currentDisplayCount += 10; // Увеличиваем лимит на 10
-    renderQuizList(); // Перерисовываем список с новым лимитом
+    currentDisplayCount += 10;
+    renderQuizList();
 }
-
-
-    if (plan.length === 0) {
-        document.getElementById('popular-combos').style.display = 'block';
-        return;
-    }
-
-    quizRecommendations = plan;
-    currentSearchResults = plan;
-    currentDisplayCount = 10; // Сброс счётчика на 10
-    
-    const container = document.getElementById('quiz-recommendations');
-    const formContainer = document.getElementById('manual-plan-form');
-
-    let html = `<div style="background: linear-gradient(135deg, #ecfdf5, #d1fae5); padding: 1.5rem; border-radius: 16px; margin-bottom: 1.5rem; border-left: 4px solid var(--primary);">
-        <h3 style="margin:0 0 0.5rem; color:var(--primary-dark);">✨ ${currentUser}, мы подобрали ваш стартовый план</h3>
-        <p style="margin:0; color:var(--text);">На основе ваших целей: <strong>${goals.join(', ')}</strong>. Найдено добавок: <strong>${plan.length}</strong>.</p>
-    </div>`;
-
-    // Рендерим только первые currentDisplayCount элементов
-    const displayedItems = plan.slice(0, currentDisplayCount);
-    
-    html += displayedItems.map(i => {
-        const tagsHtml = i.tags ? i.tags.map(t => `<span class="tag">${t}</span>`).join('') : '';
-        return `<div class="result-card" style="margin-bottom:1rem;">
-            <div class="card-header"><div class="card-icon">${i.icon}</div><div><h3>${i.name}</h3><div class="substance">${i.substance}</div></div></div>
-            <p>${i.why}</p><p><strong>⏰</strong> ${i.time} | <strong>💊</strong> ${i.dose}</p>
-            ${tagsHtml ? `<div style="margin:8px 0;">${tagsHtml}</div>` : ''}
-            <button class="details-btn" onclick="toggleDetails(${i.id})">📖 Подробнее</button>
-            <div id="details-${i.id}" class="details-content"><p>${i.details}</p></div>
-            <button class="btn-primary" onclick="addToStack(${i.id})" style="margin-top:10px;">➕ В план</button>
-            <div class="buy-buttons" style="margin-top:0.5rem;">
-                <a href="${i.ozon}" target="_blank" class="buy-btn ozon" style="font-size:0.8rem;">🛒 Ozon</a>
-                <a href="${i.wb}" target="_blank" class="buy-btn wb" style="font-size:0.8rem;">🛍 WB</a>
-                <a href="${i.iherb}" target="_blank" class="buy-btn iherb" style="font-size:0.8rem;">🌿 iHerb</a>
-            </div>
-        </div>`;
-    }).join('');
-    
-    // Кнопка "Показать ещё"
-    if (currentDisplayCount < plan.length) {
-        html += `<div class="load-more"><button class="load-more-btn" onclick="loadMoreQuiz()">🔽 Показать ещё добавки (${plan.length - currentDisplayCount})</button></div>`;
-    }
-    
-    html += `<button class="btn-primary" onclick="addQuizToStack()" style="margin-top:1.5rem; font-size:1.1rem;">✅ Добавить всё (${plan.length}) в расписание</button>`;
-    container.innerHTML = html;
-    container.style.display = 'block';
-    if(formContainer) formContainer.style.display = 'none';
-}
-
-// Функция для кнопки "Показать ещё" в квизе
 
 // Добавление всех рекомендаций квиза в стек
 function addQuizToStack() {
@@ -1843,7 +1599,6 @@ function handleLogin() {
     if (!name) return alert('Введите имя');
     currentUser = name;
     localStorage.setItem('vitaUser', name);
-    requestPermissions();
     initApp();
 }
 
@@ -1851,12 +1606,6 @@ function logout() {
     if(confirm('Выйти?')) {
         localStorage.removeItem('vitaUser');
         location.reload();
-    }
-}
-
-function requestPermissions() {
-    if ('Notification' in window && Notification.permission === 'default') {
-        Notification.requestPermission();
     }
 }
 
@@ -1882,10 +1631,6 @@ function initApp() {
     calendarData = load('calendar') || {};
     reminders = load('reminders') || {browser: false, telegram: false, time: "09:00"};
     
-    document.getElementById('browser-reminder').checked = reminders.browser;
-    document.getElementById('telegram-reminder').checked = reminders.telegram;
-    document.getElementById('reminder-time').value = reminders.time;
-    
     updateAchievements();
     renderMoodChart();
     renderCalendar();
@@ -1897,9 +1642,8 @@ function initApp() {
     }
     
     document.getElementById('popular-combos').style.display = 'block';
-    startNotifications();
-    updateStreakDisplay(); // Показываем серию
-    initWaterTracker(); // Инициализируем воду
+    updateStreakDisplay();
+    initWaterTracker();
 }
 
 function goToMain() {
@@ -1923,43 +1667,6 @@ function updateStreakDisplay() {
 }
 
 // ==========================================
-// 🔔 NOTIFICATIONS
-// ==========================================
-const fakeNotifications = [
-    {name: "Анна М.", product: "Магний Глицинат"},
-    {name: "Сергей К.", product: "Омега-3"},
-    {name: "Мария Д.", product: "Витамин D3"},
-    {name: "Алексей П.", product: "Креатин"},
-    {name: "Елена В.", product: "Коллаген"},
-    {name: "Дмитрий С.", product: "B-Complex"},
-    {name: "Ольга Р.", product: "Мелатонин"},
-    {name: "Игорь Н.", product: "Цинк"}
-];
-
-function startNotifications() {
-    setTimeout(() => {
-        showNotification();
-        setInterval(() => {
-            showNotification();
-        }, 45000);
-    }, 10000);
-}
-
-function showNotification() {
-    const toast = document.getElementById('notification-toast');
-    const notif = fakeNotifications[Math.floor(Math.random() * fakeNotifications.length)];
-    
-    document.getElementById('notif-name').textContent = notif.name;
-    document.getElementById('notif-product').textContent = notif.product;
-    
-    toast.classList.add('show');
-    
-    setTimeout(() => {
-        toast.classList.remove('show');
-    }, 4000);
-}
-
-// ==========================================
 // 📅 CALENDAR FUNCTIONS
 // ==========================================
 function renderCalendar() {
@@ -1969,11 +1676,13 @@ function renderCalendar() {
     const year = now.getFullYear();
     const month = now.getMonth();
     
+    if (!grid) return;
+    
     grid.innerHTML = '';
     
     const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
         "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
-    monthLabel.textContent = `${monthNames[month]} ${year}`;
+    if (monthLabel) monthLabel.textContent = `${monthNames[month]} ${year}`;
     
     const dayHeaders = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
     dayHeaders.forEach(day => {
@@ -2006,7 +1715,6 @@ function renderCalendar() {
         if (dayData) {
             const takenCount = dayData.taken || 0;
             const totalCount = dayData.total || 0;
-            const takenList = dayData.takenList || [];
             
             if (totalCount > 0) {
                 if (takenCount === totalCount) {
@@ -2014,13 +1722,6 @@ function renderCalendar() {
                 } else if (takenCount > 0) {
                     div.classList.add('partial');
                 }
-            }
-            
-            if (takenList.length > 0) {
-                const tooltip = document.createElement('div');
-                tooltip.className = 'calendar-tooltip';
-                tooltip.innerHTML = takenList.map(name => `✅ ${name}`).join('<br>');
-                div.appendChild(tooltip);
             }
         }
         
@@ -2041,11 +1742,6 @@ function saveCalendarData(date, taken, total, takenList) {
 function toggleReminder(type, enabled) {
     reminders[type] = enabled;
     save('reminders', reminders);
-    
-    if (enabled && type === 'browser') {
-        requestPermissions();
-    }
-    
     scheduleReminders();
 }
 
@@ -2098,10 +1794,9 @@ function switchTab(tab) {
     event.currentTarget.classList.add('active');
     document.querySelectorAll('.search-box').forEach(b => b.classList.remove('active'));
     document.getElementById('search-' + (tab === 'search' ? 'name' : tab)).classList.add('active');
-    document.getElementById('autocomplete-list').style.display = 'none';
     document.getElementById('results-area').innerHTML = '';
     currentSearchResults = [];
-    currentDisplayCount = 10; // СБРОС СЧЁТЧИКА
+    currentDisplayCount = 10;
 }
 
 async function quickSearch(query) {
@@ -2110,40 +1805,6 @@ async function quickSearch(query) {
     
     resultsArea.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sec);"><i>🔍 Ищем в базе...</i></div>';
     
-    try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
-        
-        const response = await fetch('/api/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                messages: [{
-                    role: "user",
-                    content: `Найди ВСЕ добавки из базы для запроса: "${query}". Верни ТОЛЬКО JSON: {"ids": [1, 4, 7, 12, 15, 16, 17, 21, 28]}. Ищи МАКСИМУМ подходящих добавок.`
-                }],
-                userId: currentUser
-            }),
-            signal: controller.signal
-        });
-        
-        clearTimeout(timeoutId);
-        const data = await response.json();
-        
-        if (data.reply) {
-            const jsonMatch = data.reply.match(/\{[\s\S]*"ids"[\s\S]*\}/);
-            if (jsonMatch) {
-                const result = JSON.parse(jsonMatch[0]);
-                currentSearchResults = supplementsDB.filter(item => result.ids.includes(item.id));
-                currentDisplayCount = 10;
-                renderResultsWithLoadMore(currentSearchResults);
-                return;
-            }
-        }
-    } catch (err) {
-        console.log('AI search failed, using local:', err);
-    }
-    
     currentSearchResults = supplementsDB.filter(item => 
         item.tags && item.tags.some(tag => tag.includes(query.toLowerCase()))
     );
@@ -2151,44 +1812,9 @@ async function quickSearch(query) {
     renderResultsWithLoadMore(currentSearchResults);
 }
 
-function handleAutocomplete(value) {
-    const list = document.getElementById('autocomplete-list');
-    list.innerHTML = '';
-    
-    if (!value || value.length < 2) {
-        list.style.display = 'none';
-        return;
-    }
-    
-    const matches = supplementsDB.filter(item => 
-        item.name.toLowerCase().includes(value.toLowerCase()) ||
-        item.substance.toLowerCase().includes(value.toLowerCase())
-    ).slice(0, 5);
-    
-    if (matches.length > 0) {
-        matches.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'autocomplete-item';
-            div.innerHTML = `<strong>${item.name}</strong><br><small>${item.substance}</small>`;
-            div.onclick = () => {
-                document.getElementById('input-name').value = item.name;
-                list.style.display = 'none';
-                currentSearchResults = [item];
-                currentDisplayCount = 10;
-                renderResultsWithLoadMore(currentSearchResults);
-            };
-            list.appendChild(div);
-        });
-        list.style.display = 'block';
-    } else {
-        list.style.display = 'none';
-    }
-}
-
 function searchByName() {
     const q = document.getElementById('input-name').value.toLowerCase();
     if (!q) return;
-    document.getElementById('autocomplete-list').style.display = 'none';
     currentSearchResults = supplementsDB.filter(i => 
         i.name.toLowerCase().includes(q) || i.substance.toLowerCase().includes(q)
     );
@@ -2200,97 +1826,11 @@ async function smartSearch(query) {
     const resultsArea = document.getElementById('results-area');
     resultsArea.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sec);"><i>🤔 ИИ анализирует...</i></div>';
     
-    try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000); // Увеличил таймаут
-        
-        const response = await fetch('/api/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                messages: [{
-                    role: "user",
-                    content: `Ты эксперт по добавкам. Найди ВСЕ подходящие добавки из базы для запроса: "${query}". Верни ТОЛЬКО JSON: {"ids": [1, 4, 7, 12, 15], "explanation": "краткое объяснение"}. Ищи МАКСИМУМ подходящих.`
-                }],
-                userId: currentUser
-            }),
-            signal: controller.signal
-        });
-        
-        clearTimeout(timeoutId);
-        const data = await response.json();
-        
-        if (data.reply) {
-            // Парсим JSON из ответа ИИ
-            const jsonMatch = data.reply.match(/\{[\s\S]*"ids"[\s\S]*\}/);
-            if (jsonMatch) {
-                const result = JSON.parse(jsonMatch[0]);
-                const items = supplementsDB.filter(item => result.ids.includes(item.id));
-                
-                if (items.length > 0) {
-                    // Показываем объяснение ИИ если есть
-                    if (result.explanation) {
-                        resultsArea.innerHTML = `
-                            <div style="background: linear-gradient(135deg, #ecfdf5, #d1fae5); padding: 1.5rem; border-radius: 16px; margin-bottom: 2rem; border-left: 4px solid var(--primary);">
-                                <h3 style="margin:0 0 0.5rem; color:var(--primary-dark);">🤖 Рекомендация ИИ</h3>
-                                <p style="margin:0; color:var(--text);">${result.explanation}</p>
-                            </div>
-                        `;
-                    }
-                    
-                    currentSearchResults = items;
-                    currentDisplayCount = 10;
-                    renderResultsWithLoadMore(currentSearchResults);
-                    
-                    // Сохраняем статистику поиска
-                    saveSearchQuery(query, items.length);
-                    
-                    return;
-                }
-            }
-        }
-    } catch (err) {
-        console.log('ИИ недоступен, используем локальный поиск:', err);
-    }
-    
-    // Fallback на локальный поиск
-    fallbackSearch(query);
-}
-
-function fallbackSearch(query) {
-    const q = query.toLowerCase().trim();
-    const words = q.split(' ').filter(w => w.length > 2);
-    
     currentSearchResults = supplementsDB.filter(i => {
-        const tagMatch = i.tags && i.tags.some(tag => words.some(word => tag.includes(word) || word.includes(tag)));
-        const nameMatch = i.name.toLowerCase().includes(q) || i.substance.toLowerCase().includes(q);
-        const whyMatch = i.why.toLowerCase().includes(q);
-        
-        const keywords = {
-            'хочу выспаться': ['сон', 'бессонница', 'расслабление'],
-            'стать сильнее': ['спорт', 'мышцы', 'сила', 'энергия'],
-            'выносливость': ['энергия', 'спорт', 'сила', 'мышцы'],
-            'похудеть': ['метаболизм', 'энергия'],
-            'плохо встаю': ['энергия', 'утро', 'бодрость', 'усталость'],
-            'усталость': ['энергия', 'усталость', 'бодрость'],
-            'нет сил': ['энергия', 'усталость'],
-            'сон': ['сон', 'бессонница'],
-            'иммунитет': ['иммунитет'],
-            'стресс': ['стресс', 'тревога', 'нервы'],
-            'нервы': ['нервы', 'тревога', 'стресс'],
-            'память': ['мозг', 'память', 'фокус'],
-            'кожа': ['кожа', 'красота', 'волосы']
-        };
-        
-        let keywordMatch = false;
-        for (const [key, tags] of Object.entries(keywords)) {
-            if (q.includes(key)) {
-                keywordMatch = i.tags && i.tags.some(tag => tags.includes(tag));
-                break;
-            }
-        }
-        
-        return tagMatch || nameMatch || whyMatch || keywordMatch;
+        const tagMatch = i.tags && i.tags.some(tag => query.toLowerCase().includes(tag));
+        const nameMatch = i.name.toLowerCase().includes(query.toLowerCase());
+        const whyMatch = i.why.toLowerCase().includes(query.toLowerCase());
+        return tagMatch || nameMatch || whyMatch;
     });
     
     currentDisplayCount = 10;
@@ -2319,10 +1859,6 @@ function renderResultsWithLoadMore(items) {
             <p>${i.why}</p>
             <p><strong>⏰ Время:</strong> ${i.time} | <strong>💊 Доза:</strong> ${i.dose}</p>
             ${tagsHtml ? `<div style="margin:8px 0;">${tagsHtml}</div>` : ''}
-            <div class="compatibility">
-                <div class="good">✅ Можно с: ${i.goodWith.join(', ') || 'всем'}</div>
-                <div class="bad">❌ Не с: ${i.badWith.join(', ') || 'нет ограничений'}</div>
-            </div>
             <button class="details-btn" onclick="toggleDetails(${i.id})">📖 Подробнее</button>
             <div id="details-${i.id}" class="details-content">
                 <h4 style="margin:0 0 10px; color:var(--primary-dark);">📚 Подробная информация</h4>
@@ -2357,7 +1893,7 @@ function loadMore() {
 
 function toggleDetails(id) {
     const details = document.getElementById(`details-${id}`);
-    details.classList.toggle('show');
+    if (details) details.classList.toggle('show');
 }
 
 function addCombo(ids) {
@@ -2374,70 +1910,17 @@ function addCombo(ids) {
     alert('✅ Комбинация добавлена в ваш план!');
 }
 
-// Сохранение статистики поисков
-function saveSearchQuery(query, resultsCount) {
-    const searches = JSON.parse(localStorage.getItem('vita_searches') || '[]');
-    searches.push({
-        query: query.toLowerCase(),
-        count: resultsCount,
-        date: new Date().toISOString(),
-        user: currentUser
-    });
-    localStorage.setItem('vita_searches', JSON.stringify(searches.slice(-100))); // Храним последние 100
-}
-
 async function smartSearchWithProfile(query, age, weight) {
     const resultsArea = document.getElementById('results-area');
     
-    try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
-        
-        const response = await fetch('/api/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                messages: [{
-                    role: "user",
-                    content: `Пользователь: возраст ${age} лет, вес ${weight} кг. Цель: "${query}". Найди ID добавок.`
-                }],
-                userId: currentUser
-            }),
-            signal: controller.signal
-        });
-        
-        clearTimeout(timeoutId);
-        const data = await response.json();
-        
-        if (data.reply) {
-            const jsonMatch = data.reply.match(/\{[\s\S]*"ids"[\s\S]*\}/);
-            if (jsonMatch) {
-                const result = JSON.parse(jsonMatch[0]);
-                const items = supplementsDB.filter(item => result.ids.includes(item.id));
-                if (items.length > 0) {
-                    const personalizedHTML = `
-                        <div style="background: linear-gradient(135deg, #ecfdf5, #d1fae5); padding: 1.5rem; border-radius: 16px; margin-bottom: 2rem; border-left: 4px solid var(--primary);">
-                            <h3 style="margin:0 0 0.5rem; color:var(--primary-dark);">📋 Персональные рекомендации</h3>
-                            <p style="margin:0; color:var(--text);">
-                                <strong>Возраст:</strong> ${age} лет | <strong>Вес:</strong> ${weight} кг<br>
-                                <strong>Цель:</strong> ${query}<br><br>
-                                ${result.explanation || 'Подобрано на основе ваших параметров и цели.'}
-                            </p>
-                        </div>
-                    `;
-                    currentSearchResults = items;
-                    currentDisplayCount = 10;
-                    document.getElementById('results-area').innerHTML = personalizedHTML;
-                    renderResultsWithLoadMore(currentSearchResults);
-                    return;
-                }
-            }
-        }
-    } catch (err) {
-        console.log('AI failed:', err);
-    }
+    currentSearchResults = supplementsDB.filter(i => {
+        const tagMatch = i.tags && i.tags.some(tag => query.toLowerCase().includes(tag));
+        const nameMatch = i.name.toLowerCase().includes(query.toLowerCase());
+        return tagMatch || nameMatch;
+    });
     
-    fallbackSearch(query);
+    currentDisplayCount = 10;
+    renderResultsWithLoadMore(currentSearchResults);
 }
 
 function generatePersonalPlan() {
@@ -2463,32 +1946,6 @@ function renderResults(items) {
 
 function addToStack(id) {
     const newItem = supplementsDB.find(i => i.id === id);
-    
-    const existingItem = myStack.find(i => {
-        const newSubstance = newItem.substance.toLowerCase().split('(')[0].trim();
-        const existingSubstance = i.substance.toLowerCase().split('(')[0].trim();
-        
-        return (newSubstance.includes('магний') && existingSubstance.includes('магний')) ||
-               (newSubstance.includes('витамин') && existingSubstance.includes('витамин') && newSubstance === existingSubstance) ||
-               newItem.id === i.id;
-    });
-    
-    if (existingItem) {
-        const newDose = parseInt(newItem.dose.match(/\d+/g)?.[0] || '0');
-        const existingDose = parseInt(existingItem.dose.match(/\d+/g)?.[0] || '0');
-        const totalDose = newDose + existingDose;
-        
-        const confirmAdd = confirm(
-            `⚠️ Внимание!\n\n` +
-            `У вас уже есть "${existingItem.name}" в плане.\n` +
-            `Добавление "${newItem.name}" может привести к передозировке!\n\n` +
-            `Рекомендуемая суточная доза: 200-400 мг.\n` +
-            `У вас будет: ${existingDose} + ${newDose} = ${totalDose} мг\n\n` +
-            `Вы уверены, что хотите добавить?`
-        );
-        
-        if (!confirmAdd) return;
-    }
     
     if (myStack.find(i => i.id === id)) {
         alert('✅ Эта добавка уже есть в вашем плане!');
@@ -2527,20 +1984,25 @@ function updateSchedule() {
     const percent = totalCount > 0 ? (takenCount / totalCount * 100) : 0;
     const takenList = myStack.filter(i => i.taken).map(i => i.name);
     
-    document.getElementById('progress-fill').style.width = percent + '%';
-    document.getElementById('progress-text').textContent = `${takenCount} из ${totalCount} добавок принято`;
+    const progressFill = document.getElementById('progress-fill');
+    const progressText = document.getElementById('progress-text');
+    if (progressFill) progressFill.style.width = percent + '%';
+    if (progressText) progressText.textContent = `${takenCount} из ${totalCount} добавок принято`;
     
-    document.getElementById('schedule-container').innerHTML = 
-        Object.entries(slots).map(([time, items]) => 
-            items.length ? `<div class="time-slot">
-                <div class="time-label">${getSlotIcon(time)} ${time}</div>
-                ${items.map(i => `
-                    <span class="pill-tag ${i.taken ? 'taken' : ''}" onclick="toggleTaken(${i.id})">
-                        ${i.taken ? '✅' : '⬜'} ${i.name}
-                    </span>
-                `).join('')}
-            </div>` : ''
-        ).join('');
+    const scheduleContainer = document.getElementById('schedule-container');
+    if (scheduleContainer) {
+        scheduleContainer.innerHTML = 
+            Object.entries(slots).map(([time, items]) => 
+                items.length ? `<div class="time-slot">
+                    <div class="time-label">${getSlotIcon(time)} ${time}</div>
+                    ${items.map(i => `
+                        <span class="pill-tag ${i.taken ? 'taken' : ''}" onclick="toggleTaken(${i.id})">
+                            ${i.taken ? '✅' : '⬜'} ${i.name}
+                        </span>
+                    `).join('')}
+                </div>` : ''
+            ).join('');
+    }
     
     const today = new Date();
     saveCalendarData(today, takenCount, totalCount, takenList);
@@ -2590,7 +2052,7 @@ function checkStreak() {
             alert('⭐ Достижение разблокировано: Мастер 10 дней!');
             updateAchievements();
         }
-        updateStreakDisplay(); // Обновляем отображение в шапке
+        updateStreakDisplay();
     }
 }
 
@@ -2624,6 +2086,8 @@ function saveWellness() {
 
 function renderMoodChart() {
     const container = document.getElementById('mood-days');
+    if (!container) return;
+    
     const last7Days = wellnessLog.slice(-7);
     
     if (!last7Days.length) {
@@ -2641,7 +2105,8 @@ function renderMoodChart() {
 // 💬 CHAT
 // ==========================================
 function toggleChat() {
-    document.getElementById('chat-modal').classList.toggle('open');
+    const modal = document.getElementById('chat-modal');
+    if (modal) modal.classList.toggle('open');
 }
 
 function sendMessage() {
@@ -2652,38 +2117,15 @@ function sendMessage() {
     addMsg('user', q);
     inp.value = '';
     
-    const loadingDiv = document.createElement('div');
-    loadingDiv.className = 'msg ai';
-    loadingDiv.innerHTML = '<i>🌿 Думаю...</i>';
-    document.getElementById('chat-messages').appendChild(loadingDiv);
-
-    fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-            messages: [{ role: "user", content: q }],
-            userId: currentUser 
-        })
-    })
-    .then(res => res.json())
-    .then(data => {
-        loadingDiv.remove();
-        if (data.reply) {
-            const formatted = data.reply.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
-            addMsg('ai', formatted);
-        } else {
-            addMsg('ai', '⚠️ Ошибка: ' + (data.error || 'Нет ответа'));
-        }
-    })
-    .catch(err => {
-        loadingDiv.remove();
-        addMsg('ai', '⚠️ Нет связи с сервером. Проверьте подключение.');
-        console.error('Chat error:', err);
-    });
+    setTimeout(() => {
+        addMsg('ai', '🌿 Я пока учусь! Попробуйте использовать поиск или квиз.');
+    }, 500);
 }
 
 function addMsg(role, text) {
     const box = document.getElementById('chat-messages');
+    if (!box) return;
+    
     const div = document.createElement('div');
     div.className = `msg ${role}`;
     div.innerHTML = text;
@@ -2697,12 +2139,6 @@ function addMsg(role, text) {
 
 document.getElementById('chat-input').addEventListener('keypress', e => {
     if(e.key === 'Enter') sendMessage();
-});
-
-document.addEventListener('click', (e) => {
-    if (!e.target.closest('.autocomplete-container')) {
-        document.getElementById('autocomplete-list').style.display = 'none';
-    }
 });
 
 // ==========================================
